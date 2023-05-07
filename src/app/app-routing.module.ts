@@ -8,7 +8,7 @@ import { MainComponent } from './components/main/main.component';
 const routes: Routes = [
   {
     path: '',
-    component: AppComponent
+    component: MainComponent
   },
   {
     path: 'fs/main',

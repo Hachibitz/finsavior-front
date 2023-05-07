@@ -7,14 +7,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  title = 'FinSavior';
+  title: string = 'FinSavior';
 
   constructor(private router: Router){
-
+    
   }
 
   ngOnInit(){
-    this.navigateToMain();
+    
   }
 
   private navigateToMain(): void{
