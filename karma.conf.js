@@ -15,6 +15,35 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
+    webpack: {
+      module: {
+        rules: [
+          {
+            test: /\.css$/,
+            use: [
+              'style-loader',
+              'css-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  postcssOptions: {
+                    ident: 'postcss',
+                    plugins: [
+                      require('postcss-import'),
+                      require('postcss-preset-env')({
+                        stage: 1,
+                        browsers: ['last 2 versions', '> 1%'],
+                      }),
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      // outras configurações do webpack...
+    },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/FinSavior'),
       reports: ['html', 'lcovonly', 'text-summary'],
