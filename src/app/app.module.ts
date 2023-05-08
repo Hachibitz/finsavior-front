@@ -8,6 +8,11 @@ import { CadastrarComponent } from './components/cadastrar/cadastrar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +25,12 @@ import { MatTabsModule } from '@angular/material/tabs';
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
-    MatTabsModule
+    MatTabsModule,
+    SplitButtonModule,
+    DropdownModule,
+    ButtonModule,
+    InputTextModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

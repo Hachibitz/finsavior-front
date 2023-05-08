@@ -184,9 +184,6 @@
   </div>
    -->
 
-   <script src="https://unpkg.com/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css">
-
    <div class="box">
     <header>
       <img class="profile-img" src="https://via.placeholder.com/50" alt="Imagem de perfil">
@@ -194,15 +191,18 @@
         <button class="dropdown-toggle" type="button" data-toggle="dropdown">
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu">
-          <li *ngFor="let month of months">
-            <a>{{month}}</a>
-          </li>
-        </ul>
+        <p-dropdown [options]="months" 
+          [(ngModel)]="selectedMonth"
+          (onChange)="selectMonth()">
+        </p-dropdown>
       </div>
-      <div class="register-account">
-        <button class="btn-register">Cadastrar conta</button>
-        <input class="input-box" type="text" placeholder="Nome da conta">
+      <div class="register-account d-flex">
+        <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="tipoConta">
+        <p-dropdown [options]="tiposConta" [(ngModel)]="tipoConta" (onChange)="addRegister()"></p-dropdown>
+        <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
+        <p-splitButton label="Seu perfil" [model]="items" class="profile-split-button">
+          <i class="pi pi-user profile-icon"></i>
+        </p-splitButton>
       </div>
     </header>
     <div class="main">
@@ -232,16 +232,5 @@
           <p>R$ 35.000,00</p>
         </div>
       </div>
-    </div>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Opções
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Opção 1</a>
-            <a class="dropdown-item" href="#">Opção 2</a>
-            <a class="dropdown-item" href="#">Opção 3</a>
-        </div>
     </div>
   </div>

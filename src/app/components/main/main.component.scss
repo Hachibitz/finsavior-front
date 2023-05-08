@@ -504,6 +504,8 @@ body {
 .box header .register-account {
     display: flex;
     align-items: center;
+    padding: 0.5rem;
+    border-radius: 50%;
 }
 
 .box header .input-box {
@@ -654,4 +656,42 @@ body {
 
 .dropdown-item:hover {
     background-color: #f5f5f5;
+}
+
+:host ::ng-deep .p-splitbutton {
+    width: 200px;
+    margin-left: 30px;
+}
+
+:host ::ng-deep .p-splitbutton .p-splitbutton-icon {
+    margin-right: 0.5rem;
+}
+
+.profile-button img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+
+.profile-button:hover {
+    background-color: #d9e6f2;
+}
+
+.profile-split-button button {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.profile-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: #f7c8d0;
 }
