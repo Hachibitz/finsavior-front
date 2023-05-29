@@ -3,7 +3,6 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { MenuItem } from 'primeng/api';
 import { TipoConta, SelectedMonth } from 'src/app/model/main.model';
-//declare var $: any;
 
 const tabAnimation = trigger('tabAnimation', [
   transition(':enter', [
