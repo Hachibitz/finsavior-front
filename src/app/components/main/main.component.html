@@ -1,16 +1,14 @@
 <div class="box">
   <header>
-    <img class="profile-img" src="https://via.placeholder.com/50" alt="Imagem de perfil">
-    <div class="dropdown">
-      <button class="dropdown-toggle" type="button" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <p-dropdown [options]="months" [(ngModel)]="selectedMonth" (onChange)="selectMonth()">
-      </p-dropdown>
-    </div>
-    <div class="register-account d-flex">
-      <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="tipoConta">
-      <p-dropdown [options]="tiposConta" [(ngModel)]="tipoConta" (onChange)="addRegister()"></p-dropdown>
+    <div class="new-register">
+      <label>Selecione o mês: </label>
+      <select [(ngModel)]="selectedMonth" (ngModelChange)="selectMonth()">
+        <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+      </select>
+      <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="nomeConta">
+      <select [(ngModel)]="selectedOption" (ngModelChange)="selectRegisterType()">
+        <option *ngFor="let tpConta of tiposConta" [value]="tpConta.value">{{ tpConta.label }}</option>
+      </select>
       <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
     </div>
     <div>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { MenuItem } from 'primeng/api';
 import { TipoConta, SelectedMonth } from 'src/app/model/main.model';
 
 const tabAnimation = trigger('tabAnimation', [
@@ -27,7 +26,7 @@ export class MainComponent implements OnInit {
   selectedMonth: string;
   
   nomeConta: string = '';
-  tipoConta: string = '';
+
   tiposConta: TipoConta[] = [
     { label: 'Ativo', value: 'ativo' },
     { label: 'Passivo', value: 'passivo' },
@@ -37,40 +36,29 @@ export class MainComponent implements OnInit {
   months: SelectedMonth[] = [
     { label: 'Janeiro', value: '1' },
     { label: 'Fevereiro', value: '2' },
-    { label: 'Março', value: '3' }
+    { label: 'Março', value: '3' },
+    { label: 'Abril', value: '4' },
+    { label: 'Maio', value: '5' },
+    { label: 'Junho', value: '6' },
+    { label: 'Julho', value: '7' },
+    { label: 'Agosto', value: '8' },
+    { label: 'Setembro', value: '9' },
+    { label: 'Outubro', value: '10' },
+    { label: 'Novembro', value: '11' },
+    { label: 'Dezembro', value: '12' }
   ];
-
-  tabs = [
-    { titulo: 'Aba 1', conteudo: 'Conteúdo da aba 1' },
-    { titulo: 'Aba 2', conteudo: 'Conteúdo da aba 2' },
-    { titulo: 'Aba 3', conteudo: 'Conteúdo da aba 3' }
-  ];
-  currentTab = this.tabs[0];
-
-  items: MenuItem[];
-
-  constructor(config: NgbDropdownConfig) {
-    this.items = [
-      { icon: 'pi pi-user', label: 'Perfil' },
-      { separator: true },
-      { icon: 'pi pi-cog', label: 'Configurações' },
-      { icon: 'pi pi-sign-out', label: 'Sair' },
-    ];
-
-    config.placement = 'top-right';
-  }
 
   ngOnInit() {
-    //$('.dropdown-toggle').dropdown();
-  }
 
-  selectTab(tab) {
-    this.currentTab = tab;
   }
 
   addRegister() {
-    console.log(this.tipoConta);
-    switch (this.tipoConta) {
+    //todo
+  }
+
+  selectRegisterType() {
+    console.log(this.selectedOption);
+    switch (this.selectedOption) {
       case 'ativo':
         this.selectedOption = this.tiposConta[0].label;
         break;
@@ -90,13 +78,13 @@ export class MainComponent implements OnInit {
     console.log(this.selectedMonth);
     switch (this.selectedMonth) {
       case '1':
-        this.selectedOption = this.months[0].label;
+        this.selectedMonth = this.months[0].label;
         break;
       case '2':
-        this.selectedOption = this.months[1].label;
+        this.selectedMonth = this.months[1].label;
         break;
       case '3':
-        this.selectedOption = this.months[2].label;
+        this.selectedMonth = this.months[2].label;
         break;
       default:
         console.log('Tipo de conta inválido');
