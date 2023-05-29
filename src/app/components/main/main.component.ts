@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { TipoConta, SelectedMonth } from 'src/app/model/main.model';
+import { ColumnMode } from '@swimlane/ngx-datatable';
 
 const tabAnimation = trigger('tabAnimation', [
   transition(':enter', [
@@ -21,6 +22,20 @@ const tabAnimation = trigger('tabAnimation', [
   animations: [tabAnimation]
 })
 export class MainComponent implements OnInit {
+
+  ColumnMode = ColumnMode;
+
+  rows = [
+    { passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'R$ 5.000,00' },
+    { passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'R$ 5.000,00' },
+    { passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'R$ 5.000,00' }
+  ];
+
+  columns = [
+    { prop: 'passivos', name: 'Passivos' },
+    { prop: 'ativos', name: 'Ativos' },
+    { prop: 'caixa', name: 'Caixa' }
+  ];
 
   selectedOption: string;
   selectedMonth: string;
@@ -52,8 +67,13 @@ export class MainComponent implements OnInit {
 
   }
 
-  addRegister() {
-    //todo
+  constructor(private cdRef: ChangeDetectorRef) {
+
+  }
+
+  addRegister() {  
+    this.rows.push({ passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'TESTESTE' });
+    this.cdRef.detectChanges();
   }
 
   selectRegisterType() {

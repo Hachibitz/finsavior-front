@@ -14,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { LoginDropdownComponent } from './components/login-dropdown/login-dropdown.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { LoginDropdownComponent } from './components/login-dropdown/login-dropdo
     DropdownModule,
     ButtonModule,
     InputTextModule,
-    FormsModule
+    FormsModule,
+    NgxDatatableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
