@@ -200,9 +200,9 @@
         <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="tipoConta">
         <p-dropdown [options]="tiposConta" [(ngModel)]="tipoConta" (onChange)="addRegister()"></p-dropdown>
         <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
-        <p-splitButton label="Seu perfil" [model]="items" class="profile-split-button">
-          <i class="pi pi-user profile-icon"></i>
-        </p-splitButton>
+      </div>
+      <div>
+        <app-login-dropdown></app-login-dropdown>
       </div>
     </header>
     <div class="main">

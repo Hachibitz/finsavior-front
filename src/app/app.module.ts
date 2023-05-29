@@ -13,12 +13,14 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { LoginDropdownComponent } from './components/login-dropdown/login-dropdown.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    CadastrarComponent
+    CadastrarComponent,
+    LoginDropdownComponent
   ],
   imports: [
     BrowserModule,
