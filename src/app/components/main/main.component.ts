@@ -26,21 +26,17 @@ export class MainComponent implements OnInit {
   ColumnMode = ColumnMode;
 
   rows = [
-    { passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'R$ 5.000,00' },
-    { passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'R$ 5.000,00' },
-    { passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'R$ 5.000,00' }
+    { Nome: 'R$ 10.000,00', Valor: 'R$ 20.000,00', Tipo: 'R$ 5.000,00', Comentario: 'DescTeste' },
+    { Nome: 'R$ 10.000,00', Valor: 'R$ 20.000,00', Tipo: 'R$ 5.000,00', Comentario: 'DescTeste' },
+    { Nome: 'R$ 10.000,00', Valor: 'R$ 20.000,00', Tipo: 'R$ 5.000,00', Comentario: 'DescTeste' }
   ];
 
-  columns = [
-    { prop: 'passivos', name: 'Passivos' },
-    { prop: 'ativos', name: 'Ativos' },
-    { prop: 'caixa', name: 'Caixa' }
-  ];
-
-  selectedOption: string;
+  selectedType: string;
   selectedMonth: string;
   
   nomeConta: string = '';
+  valorConta: number;
+  descricaoConta: string;
 
   tiposConta: TipoConta[] = [
     { label: 'Ativo', value: 'ativo' },
@@ -72,44 +68,16 @@ export class MainComponent implements OnInit {
   }
 
   addRegister() {  
-    this.rows.push({ passivos: 'R$ 10.000,00', ativos: 'R$ 20.000,00', caixa: 'TESTESTE' });
+    this.rows.push({ Nome: this.nomeConta, Valor: 'R$ '+this.valorConta, Tipo: this.selectedType, Comentario: this.descricaoConta });
     this.cdRef.detectChanges();
   }
 
   selectRegisterType() {
-    console.log(this.selectedOption);
-    switch (this.selectedOption) {
-      case 'ativo':
-        this.selectedOption = this.tiposConta[0].label;
-        break;
-      case 'passivo':
-        this.selectedOption = this.tiposConta[1].label;
-        break;
-      case 'caixa':
-        this.selectedOption = this.tiposConta[2].label;
-        break;
-      default:
-        console.log('Tipo de conta inválido');
-        break;
-    }
+    console.log(this.selectedType);
   }
 
   selectMonth() {
     console.log(this.selectedMonth);
-    switch (this.selectedMonth) {
-      case '1':
-        this.selectedMonth = this.months[0].label;
-        break;
-      case '2':
-        this.selectedMonth = this.months[1].label;
-        break;
-      case '3':
-        this.selectedMonth = this.months[2].label;
-        break;
-      default:
-        console.log('Tipo de conta inválido');
-        break;
-    }
   }
 
 }
