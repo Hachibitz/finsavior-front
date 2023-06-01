@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { DropdownModule } from 'primeng/dropdown';
+import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
@@ -34,7 +35,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     ButtonModule,
     InputTextModule,
     FormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    PanelModule
   ],
   providers: [],
   bootstrap: [AppComponent]

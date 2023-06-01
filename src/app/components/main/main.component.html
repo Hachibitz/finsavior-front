@@ -1,23 +1,31 @@
-<div class="box">
-  <header>
-    <div class="new-register">
-      <label>Selecione o mês: </label>
-      <select [(ngModel)]="selectedMonth" (ngModelChange)="selectMonth()">
-        <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
-      </select>
-      <label>Selecione o tipo: </label>
-      <select [(ngModel)]="selectedType" (ngModelChange)="selectRegisterType()">
-        <option *ngFor="let tpConta of tiposConta" [value]="tpConta.value">{{ tpConta.label }}</option>
-      </select>
-      <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="nomeConta">
-      <input class="input-box" type="number" min="1" step="any" placeholder="Valor da conta (XXXX,XX)" [(ngModel)]="valorConta" >
-      <input class="input-box" type="text" placeholder="Descrição" [(ngModel)]="descricaoConta">
-      <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
+<div class="p-grid">
+  <div class="p-col-10">
+    <div class="box">
+      <header>
+        <div class="new-register">
+          <label>Selecione o mês: </label>
+          <select class="custom-dropdown" [(ngModel)]="selectedMonth" (ngModelChange)="selectMonth()">
+            <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+          </select>
+          <label>Selecione o tipo: </label>
+          <select class="custom-dropdown" [(ngModel)]="selectedType" (ngModelChange)="selectRegisterType()">
+            <option *ngFor="let tpConta of tiposConta" [value]="tpConta.value">{{ tpConta.label }}</option>
+          </select>
+          <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="nomeConta">
+          <input class="input-box" type="number" min="1" step="any" placeholder="Valor da conta (XXXX,XX)" [(ngModel)]="valorConta" >
+          <input class="input-box" type="text" placeholder="Descrição" [(ngModel)]="descricaoConta">
+          <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
+        </div>
+      </header>
     </div>
-    <div>
-      <app-login-dropdown></app-login-dropdown>
+  </div>
+  <div class="p-col-2">
+    <div class="box">
+      <div class="login-wrapper">
+        <app-login-dropdown class="login-dropdown"></app-login-dropdown>
+      </div>
     </div>
-  </header>
+  </div>
 </div>
 <div class="box">
   <div class="main">

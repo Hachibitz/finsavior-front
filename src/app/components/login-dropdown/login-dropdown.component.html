@@ -3,8 +3,8 @@
       <img [src]="userProfilePicture" class="profile-picture" alt="Profile Picture">
       <span>{{ userName }}</span>
     </button>
-    <div class="dropdown-menu" *ngIf="dropdownOpen">
-        <form class="px-4 py-3">
+    <div class="dropdown-menu" *ngIf="dropdownOpen" (click)="stopPropagation($event)" (mouseleave)="closeDropdown($event)">
+        <form class="px-4 py-3" (click)="preventClose($event)">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" placeholder="email@example.com">

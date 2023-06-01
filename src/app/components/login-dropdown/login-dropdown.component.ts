@@ -13,4 +13,16 @@ export class LoginDropdownComponent {
   toggleDropdown(event: MouseEvent) {
     this.dropdownOpen = !this.dropdownOpen;
   }
+
+  stopPropagation(event: Event): void {
+    event.stopPropagation();
+  }
+  
+  preventClose(event: Event): void {
+    event.preventDefault();
+  }  
+
+  closeDropdown(event: MouseEvent) {
+    this.dropdownOpen = false;
+  }
 }
