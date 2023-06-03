@@ -26,19 +26,27 @@ export class MainComponent implements OnInit {
   ColumnMode = ColumnMode;
 
   rows = [
-    { Nome: 'R$ 10.000,00', Valor: 'R$ 20.000,00', Tipo: 'R$ 5.000,00', Comentario: 'DescTeste' },
-    { Nome: 'R$ 10.000,00', Valor: 'R$ 20.000,00', Tipo: 'R$ 5.000,00', Comentario: 'DescTeste' },
-    { Nome: 'R$ 10.000,00', Valor: 'R$ 20.000,00', Tipo: 'R$ 5.000,00', Comentario: 'DescTeste' }
+    { Nome: 'Conta 1', Valor: 'R$ 20.000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1' },
+    { Nome: 'Conta 2', Valor: 'R$ 20.000,00', Tipo: 'Passivo', Comentario: 'DescTeste 2' },
+    { Nome: 'Conta 3', Valor: 'R$ 20.000,00', Tipo: 'Caixa', Comentario: 'DescTeste 3' }
+  ];
+
+  cardRows = [
+    { Nome: 'Conta 1', Valor: 'R$ 20.000,00'},
+    { Nome: 'Conta 2', Valor: 'R$ 20.000,00'},
+    { Nome: 'Conta 3', Valor: 'R$ 20.000,00'}
   ];
 
   selectedType: string;
   selectedMonth: string;
   
-  nomeConta: string = '';
-  valorConta: number;
-  descricaoConta: string;
+  billName: string = '';
+  billValue: number;
+  billDescription: string;
+  cardBillName: string;
+  cardBillValue: number;
 
-  tiposConta: TipoConta[] = [
+  billTypes: TipoConta[] = [
     { label: 'Ativo', value: 'ativo' },
     { label: 'Passivo', value: 'passivo' },
     { label: 'Caixa', value: 'caixa' }
@@ -68,7 +76,12 @@ export class MainComponent implements OnInit {
   }
 
   addRegister() {  
-    this.rows.push({ Nome: this.nomeConta, Valor: 'R$ '+this.valorConta, Tipo: this.selectedType, Comentario: this.descricaoConta });
+    this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Comentario: this.billDescription });
+    this.cdRef.detectChanges();
+  }
+
+  addRegisterCard() {
+    this.cardRows.push({ Nome: this.cardBillName, Valor: 'R$ '+this.cardBillValue });
     this.cdRef.detectChanges();
   }
 

@@ -1,5 +1,24 @@
-<div class="p-grid">
-  <div class="p-col-10">
+<div class="grid">
+  <div class="col-10">
+    <div class="box-header-nav">
+      <div class="nav-header">
+        <a href="link1">HOME</a>
+        <a href="link2">CONFIGURAÇÕES</a>
+        <a href="link3">CADASTRO</a>
+        <a href="link4">CONTATO</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-2">
+    <div class="box-header-nav">
+      <div class="nav-header-login">
+        <app-login-dropdown class="login-dropdown"></app-login-dropdown>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-8">
     <div class="box">
       <header>
         <div class="new-register">
@@ -9,52 +28,74 @@
           </select>
           <label>Selecione o tipo: </label>
           <select class="custom-dropdown" [(ngModel)]="selectedType" (ngModelChange)="selectRegisterType()">
-            <option *ngFor="let tpConta of tiposConta" [value]="tpConta.value">{{ tpConta.label }}</option>
+            <option *ngFor="let billType of billTypes" [value]="billType.value">{{ billType.label }}</option>
           </select>
-          <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="nomeConta">
-          <input class="input-box" type="number" min="1" step="any" placeholder="Valor da conta (XXXX,XX)" [(ngModel)]="valorConta" >
-          <input class="input-box" type="text" placeholder="Descrição" [(ngModel)]="descricaoConta">
+          <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="billName">
+          <input class="input-box" type="number" min="1" step="any" placeholder="Valor da conta"
+            [(ngModel)]="billValue">
+          <input class="input-box" type="text" placeholder="Descrição" [(ngModel)]="billDescription">
           <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
         </div>
       </header>
     </div>
   </div>
-  <div class="p-col-2">
+  <div class="col-4">
     <div class="box">
-      <div class="login-wrapper">
-        <app-login-dropdown class="login-dropdown"></app-login-dropdown>
-      </div>
+      <header>
+        <div class="new-register">
+          <input class="input-box-card" type="text" placeholder="Conta" [(ngModel)]="cardBillName">
+          <input class="input-box-card" type="number" min="1" step="any" placeholder="Valor"
+            [(ngModel)]="cardBillValue">
+          <button class="btn-register small-btn" (click)="addRegisterCard()">Adicionar débito</button>
+        </div>
+      </header>
     </div>
   </div>
 </div>
-<div class="box">
-  <div class="main">
-    <div class="main">
-      <table id="registerTable">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Valor</th>
-            <th>Tipo</th>
-            <th>Comentário</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of rows">
-            <td>{{ item.Nome }}</td>
-            <td>{{ item.Valor }}</td>
-            <td>{{ item.Tipo }}</td>
-            <td>{{ item.Comentario }}</td>
-          </tr>
-        </tbody>
-      </table>
+<div class="grid">
+  <div class="left-table">
+    <div class="box">
+      <div class="main">
+        <table id="registerTable">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+              <th>Tipo</th>
+              <th>Comentário</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of rows">
+              <td>{{ item.Nome }}</td>
+              <td>{{ item.Valor }}</td>
+              <td>{{ item.Tipo }}</td>
+              <td>{{ item.Comentario }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <!-- 
-      <div class="datatable-container">
-    <ngx-datatable class="datatable" [rows]="rows" [columns]="columns">
-    </ngx-datatable>
   </div>
-    -->
+  <div class="right-table">
+    <div class="box">
+      <div class="main">
+        <table id="cardTable">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cartao of cardRows">
+              <td>{{ cartao.Nome }}</td>
+              <td>{{ cartao.Valor }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 <div class="box">

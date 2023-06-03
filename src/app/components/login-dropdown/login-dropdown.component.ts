@@ -21,8 +21,4 @@ export class LoginDropdownComponent {
   preventClose(event: Event): void {
     event.preventDefault();
   }  
-
-  closeDropdown(event: MouseEvent) {
-    this.dropdownOpen = false;
-  }
 }
