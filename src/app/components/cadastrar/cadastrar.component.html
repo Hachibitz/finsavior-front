@@ -1,1 +1,29 @@
-<p>cadastrar works!</p>
+<app-header-bar></app-header-bar>
+<div class="grid">
+  <div class="col-8">
+    <div class="box">
+      <header>
+        <div class="new-register">
+          <label>Email:</label>
+          <input class="input-box" type="email" placeholder="Email" [(ngModel)]="email">
+
+          <label>Nome:</label>
+          <input class="input-box" type="text" placeholder="Nome" [(ngModel)]="name">
+
+          <label>Sobrenome:</label>
+          <input class="input-box" type="text" placeholder="Sobrenome" [(ngModel)]="lastname">
+
+          <label>Senha:</label>
+          <input class="input-box" type="password" placeholder="Senha" [(ngModel)]="password">
+
+          <div class="checkbox">
+            <input type="checkbox" id="terms" [(ngModel)]="termsAcceptance">
+            <label for="terms">Aceitar termos e condições</label>
+          </div>
+
+          <button class="btn-register" (click)="register()">Cadastrar</button>
+        </div>
+      </header>
+    </div>
+  </div>
+</div>

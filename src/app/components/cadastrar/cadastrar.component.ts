@@ -12,4 +12,14 @@ export class CadastrarComponent implements OnInit {
   ngOnInit() {
   }
 
+  email: string;
+  name: string;
+  lastname: string;
+  password: string;
+  termsAcceptance: boolean;
+
+  register() {
+    // Lógica para cadastrar o usuário
+  }
+
 }

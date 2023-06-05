@@ -16,13 +16,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { LoginDropdownComponent } from './components/login-dropdown/login-dropdown.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { HeaderBarComponent } from './components/header-bar/header-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     CadastrarComponent,
-    LoginDropdownComponent
+    LoginDropdownComponent,
+    HeaderBarComponent
   ],
   imports: [
     BrowserModule,
