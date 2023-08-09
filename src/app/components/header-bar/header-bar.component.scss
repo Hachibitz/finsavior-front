@@ -9,14 +9,28 @@
 
 .nav-header {
     display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-    padding: 20px;
+    justify-content: space-between;
+    border-radius: 25px;
+    align-items: center;
+    padding: 10px;
     border-bottom: none;
+    //background-color: #0099ff; /* Cor de fundo da barra de navegação */
+    color: #fff; /* Cor do texto na barra de navegação */
 }
 
 .nav-header a {
-    margin-right: 15px;
+    color: #4285f4;
+    text-decoration: none;
+    font-size: 1.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 25px;
+    padding: 8px 16px;
+}
+
+.nav-header a:hover {
+    color: #f0f0f0;
+    background-color: #0f4d82;
 }
 
 .nav-header-login {

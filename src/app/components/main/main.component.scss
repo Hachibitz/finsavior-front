@@ -1,14 +1,34 @@
 html,
 body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
 }
 
-.box {
-    width: 100%;
+body {
+    background-image: url('https://i.postimg.cc/T17m72gx/DALL-E-2023-08-08-16-08-10-A-background-for-a-website-with-tech-financial-theme.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+    border-radius: 25px;
+    margin: 0;
+    padding-left: 10px;
+}
+
+.bottom-box-left {
+    width: 49%;
     max-height: 55vh;
-    margin: 20px auto;
+    margin: 10px auto;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+}
+
+.bottom-box-right {
+    width: 49%;
+    max-height: 55vh;
+    margin: 10px auto;
     background-color: #f2f2f2;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -20,7 +40,31 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
+    background-color: #fff;
     border-bottom: 1px solid #e5e5e5;
+}
+
+.box-input {
+    width: 100%;
+    max-height: 7.3vh;
+    min-height: 72px;
+    margin: 20px auto;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    overflow-x: auto;
+    display: flex;
+    align-items: center;
+}
+
+.box-middle {
+    width: 100%;
+    height: 55vh;
+    margin: 20px auto;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
 }
 
 .input-box {
@@ -38,13 +82,18 @@ body {
     border-radius: 5px;
 }
 
-.btn-register {
-    background-color: #0099ff;
-    color: #fff;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.btn-register, .small-btn {
+  background-color: #0099ff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-register:hover, .small-btn:hover {
+  background-color: #0077cc;
 }
 
 .grid {
@@ -85,12 +134,18 @@ body {
 }
 
 .left-table {
-    flex: 0 0 66.67%;
+    flex: 0 0 14.00%;
+    margin-right: 20px;
+}
+
+.center-table {
+    flex: 0 0 51.70%;
     margin-right: 20px;
 }
 
 .right-table {
-    flex: 0 0 31.70%;
+    flex: 0 0 32.30%;
+    padding-right: 10px;
 }
 
 .main {
@@ -160,6 +215,11 @@ table td:first-child {
     font-size: 24px;
 }
 
+.bottom-page {
+    display: flex;
+    justify-content: space-between;
+}
+
 .custom-dropdown select {
     width: auto;
     padding: 10px;
@@ -180,6 +240,7 @@ table td:first-child {
 }
 
 .new-register {
+    margin-left: 30px;
     display: flex;
     justify-content: space-between;
 }
@@ -196,4 +257,38 @@ table td:first-child {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
+a {
+    color: #4285f4;
+    text-decoration: none;
+    font-size: 1.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+ul {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+li {
+    list-style-type: none;
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: #d3d3d3;
+    border-radius: 5px;
+    //display: flex;
+    //justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.description {
+    color: #6c6c6c;
+}
