@@ -3,6 +3,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { TipoConta, SelectedMonth } from 'src/app/model/main.model';
 import { ColumnMode } from '@swimlane/ngx-datatable';
+import { delay } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 const tabAnimation = trigger('tabAnimation', [
   transition(':enter', [
@@ -95,7 +97,7 @@ export class MainComponent implements OnInit {
   }
 
   isLoading() {
-    return !this.loading;
+    this.loading = !this.loading;
   }
 
 }
