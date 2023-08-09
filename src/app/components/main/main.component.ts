@@ -24,6 +24,7 @@ const tabAnimation = trigger('tabAnimation', [
 export class MainComponent implements OnInit {
 
   ColumnMode = ColumnMode;
+  loading: boolean = false;
 
   rows = [
     { Nome: 'Conta 1', Valor: 'R$ 20.000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1' },
@@ -68,7 +69,7 @@ export class MainComponent implements OnInit {
   ];
 
   ngOnInit() {
-
+    //this.isLoading();
   }
 
   constructor(private cdRef: ChangeDetectorRef) {
@@ -91,6 +92,10 @@ export class MainComponent implements OnInit {
 
   selectMonth() {
     console.log(this.selectedMonth);
+  }
+
+  isLoading() {
+    return !this.loading;
   }
 
 }
