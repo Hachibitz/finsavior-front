@@ -23,6 +23,11 @@ export class LoginDropdownComponent {
 
   toggleDropdown(event: MouseEvent) {
     this.dropdownOpen = !this.dropdownOpen;
+
+    if (!this.dropdownOpen) {
+      this.username = '';
+      this.password = '';
+    }
   }
 
   stopPropagation(event: Event): void {
