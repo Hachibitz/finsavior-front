@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-cadastrar',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CadastrarComponent implements OnInit {
 
-  constructor() { }
+  darkMode: boolean = false;
+
+  constructor(private themeService: ThemeService) { }
 
   ngOnInit() {
+    this.darkMode = this.themeService.checkDarkMode();
   }
 
   email: string;

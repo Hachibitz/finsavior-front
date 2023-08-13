@@ -5,6 +5,8 @@ import { TipoConta, SelectedMonth } from 'src/app/model/main.model';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { delay } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { HeaderBarComponent } from '../header-bar/header-bar.component';
+import { ThemeService } from 'src/app/services/theme.service';
 
 const tabAnimation = trigger('tabAnimation', [
   transition(':enter', [
@@ -20,13 +22,14 @@ const tabAnimation = trigger('tabAnimation', [
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
-  providers: [NgbDropdownConfig],
+  providers: [NgbDropdownConfig, HeaderBarComponent],
   animations: [tabAnimation]
 })
 export class MainComponent implements OnInit {
 
   ColumnMode = ColumnMode;
   loading: boolean = false;
+  darkMode:boolean = false;
 
   rows = [
     { Nome: 'Conta 1', Valor: 'R$ 20.000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1' },
@@ -70,15 +73,28 @@ export class MainComponent implements OnInit {
     { label: 'Dezembro', value: '12' }
   ];
 
-  ngOnInit() {
-    //this.isLoading();
+  ngOnInit(): void {
+    this.darkMode = this.themeService.checkDarkMode();
   }
 
-  constructor(private cdRef: ChangeDetectorRef) {
+  constructor(private cdRef: ChangeDetectorRef, private headerBarComponent: HeaderBarComponent, private themeService: ThemeService) {
 
+  }
+
+  toggleDarkMode() {
+    let darkModeSessionSet: string = this.darkMode == true ? 'true' : 'false';
+    sessionStorage.setItem('dark-mode', darkModeSessionSet);
+    console.log(sessionStorage.getItem('dark-mode'));
+    const body = document.getElementById('mainBody');
+    body.classList.toggle('dark-mode', this.darkMode);
+    this.headerBarComponent.toggleDarkMode();
   }
 
   addRegister() {  
+    /*this.isLoading();
+    of('Após 2 segundos').pipe(delay(2000)).subscribe(result => {
+      this.isLoading();
+    });*/
     this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Comentario: this.billDescription });
     this.cdRef.detectChanges();
   }

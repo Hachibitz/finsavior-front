@@ -2,146 +2,157 @@
   <div class="custom-loader"></div>
 </div>
 <app-header-bar></app-header-bar>
-<div class="grid">
-  <div class="col-8">
-    <div class="box-input">
-      <header>
-        <div class="new-register">
-          <label>Selecione o mês: </label>
-          <select class="custom-dropdown" [(ngModel)]="selectedMonth" (ngModelChange)="selectMonth()">
-            <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
-          </select>
-          <label>Selecione o tipo: </label>
-          <select class="custom-dropdown" [(ngModel)]="selectedType" (ngModelChange)="selectRegisterType()">
-            <option *ngFor="let billType of billTypes" [value]="billType.value">{{ billType.label }}</option>
-          </select>
-          <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="billName">
-          <input class="input-box" type="number" min="1" step="any" placeholder="Valor da conta"
-            [(ngModel)]="billValue">
-          <input class="input-box" type="text" placeholder="Descrição" [(ngModel)]="billDescription">
-          <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
-        </div>
-      </header>
+<div id="mainBody" class="fadeInUp" [class]="darkMode ? 'dark-mode' : 'light-mode'">
+  <div class="grid">
+    <div class="col-8">
+      <div class="box-input">
+        <header>
+          <div class="new-register">
+            <label>Selecione o mês: </label>
+            <select class="custom-dropdown" [(ngModel)]="selectedMonth" (ngModelChange)="selectMonth()">
+              <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+            </select>
+            <label>Selecione o tipo: </label>
+            <select class="custom-dropdown" [(ngModel)]="selectedType" (ngModelChange)="selectRegisterType()">
+              <option *ngFor="let billType of billTypes" [value]="billType.value">{{ billType.label }}</option>
+            </select>
+            <input class="input-box" type="text" placeholder="Nome da conta" [(ngModel)]="billName">
+            <input class="input-box" type="number" min="1" step="any" placeholder="Valor da conta"
+              [(ngModel)]="billValue">
+            <input class="input-box" type="text" placeholder="Descrição" [(ngModel)]="billDescription">
+            <button class="btn-register" (click)="addRegister()">Cadastrar conta</button>
+          </div>
+        </header>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="box-input">
+        <header>
+          <div class="new-register">
+            <input class="input-box-card" type="text" placeholder="Conta" [(ngModel)]="cardBillName">
+            <input class="input-box-card" type="number" min="1" step="any" placeholder="Valor"
+              [(ngModel)]="cardBillValue">
+            <button class="btn-register small-btn" (click)="addRegisterCard()">Adicionar débito</button>
+          </div>
+        </header>
+      </div>
     </div>
   </div>
-  <div class="col-4">
-    <div class="box-input">
-      <header>
-        <div class="new-register">
-          <input class="input-box-card" type="text" placeholder="Conta" [(ngModel)]="cardBillName">
-          <input class="input-box-card" type="number" min="1" step="any" placeholder="Valor"
-            [(ngModel)]="cardBillValue">
-          <button class="btn-register small-btn" (click)="addRegisterCard()">Adicionar débito</button>
+  <div class="grid">
+    <div class="left-table">
+      <div class="box-middle">
+        <div class="main">
+          <a>Guia de contas</a>
+          <ul>
+            <li>
+              <span class="title">Ativo</span><br><br>
+              <span class="description">Direito ou valor que ficará disponível para ser encorporado à liquidez no futuro,
+                exemplo: vale-alimentação, pagamento de empréstimo a receber, restituição de imposto, etc...</span>
+            </li>
+            <li>
+              <span class="title">Passivo</span><br><br>
+              <span class="description">Obrigação ou valor a diminuir da liquidez, exemplo: aluguel, parcela de carro,
+                iptu, etc...</span>
+            </li>
+            <li>
+              <span class="title">Caixa</span><br><br>
+              <span class="description">Representa a injeção de valor valor imediato e disponível na liquidez, por
+                exemplo: saldo de conta em banco.</span>
+            </li>
+            <li>
+              <span class="title">Liquidez</span><br><br>
+              <span class="description">Representa o seu estado financeiro atual: Liquidez=(Ativo+Caixa)-Passivo. </span>
+            </li>
+          </ul>
         </div>
-      </header>
+      </div>
+    </div>
+    <div class="center-table">
+      <div class="box-middle">
+        <div class="main">
+          <a>
+            Tabela principal
+          </a>
+          <table id="registerTable" style="margin-top: 10px;">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+                <th>Comentário</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of rows">
+                <td>{{ item.Nome }}</td>
+                <td>{{ item.Valor }}</td>
+                <td>{{ item.Tipo }}</td>
+                <td>{{ item.Comentario }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="right-table">
+      <div class="box-middle">
+        <div class="main">
+          <a>
+            Tabela de cartão de crédito
+          </a>
+          <table id="cardTable" style="margin-top: 10px;">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cartao of cardRows">
+                <td>{{ cartao.Nome }}</td>
+                <td>{{ cartao.Valor }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-page">
+    <div class="bottom-box-left">
+      <div class="main">
+        <div class="bottom-boxes">
+          <div class="status-box">
+            <h3>Status líquido</h3>
+            <p>R$ 15.000,00</p>
+          </div>
+          <div class="status-box">
+            <p>Dicas e insights gerados por IA</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-box-right">
+      <div class="main">
+        <div class="bottom-boxes">
+          <div class="status-box">
+            <h3>Status + ativos</h3>
+            <p>R$ 35.000,00</p>
+          </div>
+          <div class="status-box">
+            <p>Dicas e insights gerados por IA</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<div class="grid">
-  <div class="left-table">
-    <div class="box-middle">
-      <div class="main">
-        <a>Guia de contas</a>
-        <ul>
-          <li>
-            <span class="title">Ativo</span><br><br>
-            <span class="description">Direito ou valor que ficará disponível para ser encorporado à liquidez no futuro,
-              exemplo: vale-alimentação, pagamento de empréstimo a receber, restituição de imposto, etc...</span>
-          </li>
-          <li>
-            <span class="title">Passivo</span><br><br>
-            <span class="description">Obrigação ou valor a diminuir da liquidez, exemplo: aluguel, parcela de carro,
-              iptu, etc...</span>
-          </li>
-          <li>
-            <span class="title">Caixa</span><br><br>
-            <span class="description">Representa a injeção de valor valor imediato e disponível na liquidez, por
-              exemplo: saldo de conta em banco.</span>
-          </li>
-          <li>
-            <span class="title">Liquidez</span><br><br>
-            <span class="description">Representa o seu estado financeiro atual: Liquidez=(Ativo+Caixa)-Passivo. </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="center-table">
-    <div class="box-middle">
-      <div class="main">
-        <a>
-          Tabela principal
-        </a>
-        <table id="registerTable" style="margin-top: 10px;">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Valor</th>
-              <th>Tipo</th>
-              <th>Comentário</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of rows">
-              <td>{{ item.Nome }}</td>
-              <td>{{ item.Valor }}</td>
-              <td>{{ item.Tipo }}</td>
-              <td>{{ item.Comentario }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="right-table">
-    <div class="box-middle">
-      <div class="main">
-        <a>
-          Tabela de cartão de crédito
-        </a>
-        <table id="cardTable" style="margin-top: 10px;">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let cartao of cardRows">
-              <td>{{ cartao.Nome }}</td>
-              <td>{{ cartao.Valor }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+<div class="dark-mode-toggle">
+  <label class="switch">
+    <input type="checkbox" [(ngModel)]="darkMode" (ngModelChange)="toggleDarkMode()">
+    <span class="slider round"></span>
+  </label>
 </div>
-<div class="bottom-page">
-  <div class="bottom-box-left">
-    <div class="main">
-      <div class="bottom-boxes">
-        <div class="status-box">
-          <h3>Status líquido</h3>
-          <p>R$ 15.000,00</p>
-        </div>
-        <div class="status-box">
-          <p>Dicas e insights gerados por IA</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="bottom-box-right">
-    <div class="main">
-      <div class="bottom-boxes">
-        <div class="status-box">
-          <h3>Status + ativos</h3>
-          <p>R$ 35.000,00</p>
-        </div>
-        <div class="status-box">
-          <p>Dicas e insights gerados por IA</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<!--<div class="dark-mode-toggle" (click)="toggleDarkMode()">
+  <div class="slider round" [class.checked]="darkMode"></div>
+</div>-->

@@ -1,3 +1,40 @@
+.dark-mode {
+    .box-header-nav {
+        padding: 0.5rem;
+        width: 100%;
+        margin: 20px auto;
+        background-color: #333;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    }
+    
+    .nav-header {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 25px;
+        align-items: center;
+        padding: 10px;
+        border-bottom: none;
+        //background-color: #0099ff; /* Cor de fundo da barra de navegação */
+        color: #333; /* Cor do texto na barra de navegação */
+    }
+    
+    .nav-header a {
+        color: #4285f4;
+        text-decoration: none;
+        font-size: 1.5em;
+        text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        transition: color 0.3s ease, background-color 0.3s ease;
+        border-radius: 25px;
+        padding: 8px 16px;
+    }
+    
+    .nav-header a:hover {
+        color: #f0f0f0;
+        background-color: #6db7f8;
+    }
+}
+
 .box-header-nav {
     padding: 0.5rem;
     width: 100%;

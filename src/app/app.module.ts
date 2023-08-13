@@ -19,6 +19,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from './components/header-bar/header-bar.component';
 import { LoginService } from './services/login.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import { HttpClientModule } from '@angular/common/http';
     PanelModule,
     HttpClientModule
   ],
-  providers: [LoginService],
+  providers: [LoginService, ThemeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
