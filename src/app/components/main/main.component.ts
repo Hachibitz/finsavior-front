@@ -125,7 +125,7 @@ export class MainComponent implements OnInit {
       billType: this.selectedType,
       billName: this.billName,
       billValue: this.billValue,
-      billDesc: this.billDescription
+      billDescription: this.billDescription
     };
 
     this.isLoading();

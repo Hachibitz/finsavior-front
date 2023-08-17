@@ -18,5 +18,5 @@ export interface SaveRequest {
     billType: string;
     billName: string;
     billValue: number;
-    billDesc: string;
+    billDescription: string;
 }
