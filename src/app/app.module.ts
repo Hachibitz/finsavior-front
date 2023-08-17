@@ -13,13 +13,18 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import { LoginDropdownComponent } from './components/login-dropdown/login-dropdown.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from './components/header-bar/header-bar.component';
 import { LoginService } from './services/login.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ThemeService } from './services/theme.service';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MainService } from './services/main.service';
 
 @NgModule({
   declarations: [
@@ -42,9 +47,13 @@ import { ThemeService } from './services/theme.service';
     FormsModule,
     NgxDatatableModule,
     PanelModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
-  providers: [LoginService, ThemeService],
+  providers: [LoginService, ThemeService, MainService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

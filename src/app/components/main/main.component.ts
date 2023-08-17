@@ -1,12 +1,30 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { TipoConta, SelectedMonth } from 'src/app/model/main.model';
+import { SaveRequest, TipoConta } from 'src/app/model/main.model';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { delay } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { ThemeService } from 'src/app/services/theme.service';
+import { MainService } from 'src/app/services/main.service';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import * as _moment from 'moment';
+import {default as _rollupMoment, Moment} from 'moment';
+import { MatDatepicker } from '@angular/material/datepicker';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 const tabAnimation = trigger('tabAnimation', [
   transition(':enter', [
@@ -22,7 +40,15 @@ const tabAnimation = trigger('tabAnimation', [
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
-  providers: [NgbDropdownConfig, HeaderBarComponent],
+  providers: [
+    NgbDropdownConfig, 
+    HeaderBarComponent,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},],
   animations: [tabAnimation]
 })
 export class MainComponent implements OnInit {
@@ -32,9 +58,9 @@ export class MainComponent implements OnInit {
   darkMode:boolean = false;
 
   rows = [
-    { Nome: 'Conta 1', Valor: 'R$ 20.000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1' },
-    { Nome: 'Conta 2', Valor: 'R$ 20.000,00', Tipo: 'Passivo', Comentario: 'DescTeste 2' },
-    { Nome: 'Conta 3', Valor: 'R$ 20.000,00', Tipo: 'Caixa', Comentario: 'DescTeste 3' }
+    { Nome: 'Conta 1', Valor: 'R$ 20.000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1', Data: '' },
+    { Nome: 'Conta 2', Valor: 'R$ 20.000,00', Tipo: 'Passivo', Comentario: 'DescTeste 2', Data: '' },
+    { Nome: 'Conta 3', Valor: 'R$ 20.000,00', Tipo: 'Caixa', Comentario: 'DescTeste 3', Data: '' }
   ];
 
   cardRows = [
@@ -44,41 +70,37 @@ export class MainComponent implements OnInit {
   ];
 
   selectedType: string;
-  selectedMonth: string;
   
   billName: string = '';
   billValue: number;
   billDescription: string;
+  billDate: Moment;
   cardBillName: string;
   cardBillValue: number;
 
   billTypes: TipoConta[] = [
-    { label: 'Ativo', value: 'ativo' },
-    { label: 'Passivo', value: 'passivo' },
-    { label: 'Caixa', value: 'caixa' }
-  ];
-
-  months: SelectedMonth[] = [
-    { label: 'Janeiro', value: '1' },
-    { label: 'Fevereiro', value: '2' },
-    { label: 'Março', value: '3' },
-    { label: 'Abril', value: '4' },
-    { label: 'Maio', value: '5' },
-    { label: 'Junho', value: '6' },
-    { label: 'Julho', value: '7' },
-    { label: 'Agosto', value: '8' },
-    { label: 'Setembro', value: '9' },
-    { label: 'Outubro', value: '10' },
-    { label: 'Novembro', value: '11' },
-    { label: 'Dezembro', value: '12' }
+    { label: 'Ativo', value: 'Ativo' },
+    { label: 'Passivo', value: 'Passivo' },
+    { label: 'Caixa', value: 'Caixa' }
   ];
 
   ngOnInit(): void {
     this.darkMode = this.themeService.checkDarkMode();
+    const anoAtual = _moment().year();
+    const mesAtual = _moment().month() + 1; // Os meses em Moment.js são indexados a partir de 0
+    this.billDate = _moment(`${anoAtual}-${mesAtual}`, "YYYY-MM");
   }
 
-  constructor(private cdRef: ChangeDetectorRef, private headerBarComponent: HeaderBarComponent, private themeService: ThemeService) {
+  constructor(private cdRef: ChangeDetectorRef, 
+              private headerBarComponent: HeaderBarComponent, 
+              private themeService: ThemeService,
+              private mainService: MainService) {
 
+  }
+
+  onSelectDate(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
+    this.billDate = normalizedMonthAndYear.clone();
+    datepicker.close();
   }
 
   toggleDarkMode() {
@@ -90,13 +112,30 @@ export class MainComponent implements OnInit {
     this.headerBarComponent.toggleDarkMode();
   }
 
-  addRegister() {  
+  addRegisterMain() {  
     /*this.isLoading();
     of('Após 2 segundos').pipe(delay(2000)).subscribe(result => {
       this.isLoading();
     });*/
-    this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Comentario: this.billDescription });
+    this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Comentario: this.billDescription, Data: this.formatData(this.billDate) });
     this.cdRef.detectChanges();
+
+    let saveRequest: SaveRequest = {
+      billDate: this.formatData(this.billDate),
+      billType: this.selectedType,
+      billName: this.billName,
+      billValue: this.billValue,
+      billDesc: this.billDescription
+    };
+
+    this.isLoading();
+    this.mainService.billRegister(saveRequest)
+      .then(result => {
+        this.isLoading();
+      })
+      .catch(error => {
+        this.isLoading();
+      });
   }
 
   addRegisterCard() {
@@ -108,12 +147,18 @@ export class MainComponent implements OnInit {
     console.log(this.selectedType);
   }
 
-  selectMonth() {
-    console.log(this.selectedMonth);
-  }
-
   isLoading() {
     this.loading = !this.loading;
+  }
+
+  formatData(date: Moment): string {
+    const dateString = date.toString();
+    const parts = dateString.split(' ');
+
+    const month = parts[1];
+    const year = parts[3];
+
+    return month+' '+year;
   }
 
 }
