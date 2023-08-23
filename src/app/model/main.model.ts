@@ -13,10 +13,11 @@ export interface LoginRequest {
     password: string;
 }
 
-export interface SaveRequest {
+export interface BillRegisterRequest {
     billDate: string;
     billType: string;
     billName: string;
     billValue: number;
     billDescription: string;
+    billTable: string;
 }

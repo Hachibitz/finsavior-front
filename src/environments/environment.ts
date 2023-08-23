@@ -18,7 +18,7 @@ export const URL_BASE_DEV = 'http://localhost:8080'
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
 
 export const USER_SERVICE = "/user";
-export const MAIN_SERVICE = "/main";
+export const BILL_SERVICE = "/bill";
 
 export const SERVICE_LOGIN = URL_BASE_DEV + USER_SERVICE + '/login-auth';
-export const MAIN_SERVICE_BILL_REGISTER = URL_BASE_DEV + MAIN_SERVICE + '/bill-register';
+export const MAIN_SERVICE_BILL_REGISTER = URL_BASE_DEV + BILL_SERVICE + '/bill-register';

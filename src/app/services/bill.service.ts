@@ -4,14 +4,14 @@ import {
     HttpClient,
     HttpErrorResponse
 } from '@angular/common/http';
-import { SaveRequest } from '../model/main.model';
+import { BillRegisterRequest } from '../model/main.model';
 
 @Injectable({ providedIn: 'root' })
-export class MainService {
+export class BillService {
 
     constructor(private http: HttpClient) { }
 
-    billRegister(saveRequest: SaveRequest): Promise<string> {
+    billRegister(saveRequest: BillRegisterRequest): Promise<string> {
         const promessa = new Promise<string>((resolve, reject) => {
             this.http.post(MAIN_SERVICE_BILL_REGISTER, saveRequest, { responseType: 'json' }).subscribe({
                 next: (result: string) => {

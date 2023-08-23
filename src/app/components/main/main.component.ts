@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { SaveRequest, TipoConta } from 'src/app/model/main.model';
+import { BillRegisterRequest, TipoConta } from 'src/app/model/main.model';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { delay } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { ThemeService } from 'src/app/services/theme.service';
-import { MainService } from 'src/app/services/main.service';
+import { BillService } from 'src/app/services/bill.service';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
@@ -94,7 +94,7 @@ export class MainComponent implements OnInit {
   constructor(private cdRef: ChangeDetectorRef, 
               private headerBarComponent: HeaderBarComponent, 
               private themeService: ThemeService,
-              private mainService: MainService) {
+              private billService: BillService) {
 
   }
 
@@ -120,16 +120,17 @@ export class MainComponent implements OnInit {
     this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Comentario: this.billDescription, Data: this.formatData(this.billDate) });
     this.cdRef.detectChanges();
 
-    let saveRequest: SaveRequest = {
+    let billRegisterRequest: BillRegisterRequest = {
       billDate: this.formatData(this.billDate),
       billType: this.selectedType,
       billName: this.billName,
       billValue: this.billValue,
-      billDescription: this.billDescription
+      billDescription: this.billDescription,
+      billTable: ''
     };
 
     this.isLoading();
-    this.mainService.billRegister(saveRequest)
+    this.billService.billRegister(billRegisterRequest)
       .then(result => {
         this.isLoading();
       })
