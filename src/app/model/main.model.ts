@@ -8,11 +8,6 @@ export interface SelectedMonth {
     value: string;
 }
 
-export interface LoginRequest {
-    username: string;
-    password: string;
-}
-
 export interface BillRegisterRequest {
     billDate: string;
     billType: string;

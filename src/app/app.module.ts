@@ -17,7 +17,7 @@ import { FormControl, FormsModule } from '@angular/forms';
 import { LoginDropdownComponent } from './components/login-dropdown/login-dropdown.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from './components/header-bar/header-bar.component';
-import { LoginService } from './services/login.service';
+import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ThemeService } from './services/theme.service';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -53,7 +53,7 @@ import { BillService } from './services/bill.service';
     MatInputModule,
     MatFormFieldModule
   ],
-  providers: [LoginService, ThemeService, BillService],
+  providers: [UserService, ThemeService, BillService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

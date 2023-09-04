@@ -21,4 +21,5 @@ export const USER_SERVICE = "/user";
 export const BILL_SERVICE = "/bill";
 
 export const SERVICE_LOGIN = URL_BASE_DEV + USER_SERVICE + '/login-auth';
+export const SIGNUP_SERVICE = URL_BASE_DEV + USER_SERVICE + '/signup';
 export const MAIN_SERVICE_BILL_REGISTER = URL_BASE_DEV + BILL_SERVICE + '/bill-register';

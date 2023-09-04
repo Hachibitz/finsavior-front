@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { LoginRequest } from 'src/app/model/main.model';
-import { LoginService } from 'src/app/services/login.service';
+import { LoginRequest } from 'src/app/model/user.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login-dropdown',
@@ -13,7 +13,7 @@ export class LoginDropdownComponent {
   username: string;
   password: string;
 
-  constructor(private loginService: LoginService){
+  constructor(private userService: UserService){
     
   }
 
@@ -46,7 +46,7 @@ export class LoginDropdownComponent {
 
     console.log("loginRequest -> ", this.loginRequest);
     
-    this.loginService.login(this.loginRequest).then((token) => {
+    this.userService.login(this.loginRequest).then((token) => {
       console.log(token);
     });
   }
