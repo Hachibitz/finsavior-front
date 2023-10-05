@@ -104,12 +104,9 @@ export class MainComponent implements OnInit {
   }
 
   toggleDarkMode() {
-    let darkModeSessionSet: string = this.darkMode == true ? 'true' : 'false';
-    sessionStorage.setItem('dark-mode', darkModeSessionSet);
-    console.log(sessionStorage.getItem('dark-mode'));
-    const body = document.getElementById('mainBody');
-    body.classList.toggle('dark-mode', this.darkMode);
-    this.headerBarComponent.toggleDarkMode();
+    /*this.darkMode = sessionStorage.getItem('dark-mode') == 'true' ? true : false;
+    const mainBody = document.getElementById('mainBody');
+    headerBar.classList.toggle('dark-mode', this.darkMode);*/
   }
 
   addRegisterMain() {  

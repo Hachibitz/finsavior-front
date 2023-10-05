@@ -3,7 +3,7 @@
       <img [src]="userProfilePicture" class="profile-picture" alt="Profile Picture">
       <span>{{ userName }}</span>
     </button>
-    <div class="dropdown-menu" *ngIf="dropdownOpen" (click)="stopPropagation($event)" (mouseleave)="toggleDropdown($event)">
+    <div class="dropdown-menu" *ngIf="dropdownOpen && !isLoggedIn" (click)="stopPropagation($event)" (mouseleave)="toggleDropdown($event)">
         <form class="px-4 py-3" (click)="preventClose($event)">
             <div class="form-group">
                 <label for="email">Email</label>
@@ -22,5 +22,11 @@
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#">Forgot password?</a>
         <a class="dropdown-item" href="#">Create an account</a>
+    </div>
+    <div class="dropdown-menu" *ngIf="dropdownOpen && isLoggedIn" (click)="stopPropagation($event)" (mouseleave)="toggleDropdown($event)">
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="http://localhost:4200/fs/account">Minha conta</a>
+        <a class="dropdown-item" href="#">Sair</a>
+        <div class="dropdown-divider"></div>
     </div>
 </div>

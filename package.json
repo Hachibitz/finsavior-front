@@ -30,6 +30,7 @@
     "bootstrap": "^5.3.1",
     "jquery": "^3.7.0",
     "ng-bootstrap": "^1.6.3",
+    "ngx-cookie-service": "^16.0.1",
     "popper.js": "^1.16.1",
     "primeicons": "^6.0.1",
     "primeng": "^16.2.0",

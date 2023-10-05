@@ -18,13 +18,22 @@ import { LoginDropdownComponent } from './components/login-dropdown/login-dropdo
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from './components/header-bar/header-bar.component';
 import { UserService } from './services/user.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ThemeService } from './services/theme.service';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { BillService } from './services/bill.service';
+import { MyAccountComponent } from './components/my-account/my-account.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { TokenInterceptor } from './security/TokenInterceptor'
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +41,8 @@ import { BillService } from './services/bill.service';
     MainComponent,
     CadastrarComponent,
     LoginDropdownComponent,
-    HeaderBarComponent
+    HeaderBarComponent,
+    MyAccountComponent
   ],
   imports: [
     BrowserModule,
@@ -51,9 +61,24 @@ import { BillService } from './services/bill.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatOptionModule
   ],
-  providers: [UserService, ThemeService, BillService],
+  providers: [
+    UserService, 
+    ThemeService, 
+    BillService,
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

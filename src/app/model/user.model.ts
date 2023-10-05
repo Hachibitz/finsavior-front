@@ -14,3 +14,13 @@ export interface SignUpRequest {
 export interface SignUpResponse {
     message: string;
 }
+
+export interface DeleteAccountAndDataRequest {
+    username: string;
+    password: string;
+    confirmation: boolean;
+}
+
+export interface DeleteAccountAndDataResponse {
+    message: string;
+}

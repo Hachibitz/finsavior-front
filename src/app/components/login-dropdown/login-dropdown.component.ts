@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginRequest } from 'src/app/model/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -7,14 +8,28 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './login-dropdown.component.html',
   styleUrls: ['./login-dropdown.component.scss']
 })
-export class LoginDropdownComponent {
+export class LoginDropdownComponent implements OnInit{
 
   loginRequest: LoginRequest;
   username: string;
   password: string;
+  isLoggedIn: boolean = false;
 
-  constructor(private userService: UserService){
+  constructor(private userService: UserService, private authService: AuthService){
     
+  }
+
+  ngOnInit(): void {
+    const token = this.authService.getToken();
+
+    this.authService.validateToken(token).then(
+      (isValid) => {
+        this.isLoggedIn = isValid;
+      })
+      .catch((error) => {
+        this.isLoggedIn = false;
+      }
+    );
   }
 
   userName: string = 'John Doe';
@@ -46,8 +61,23 @@ export class LoginDropdownComponent {
 
     console.log("loginRequest -> ", this.loginRequest);
     
-    this.userService.login(this.loginRequest).then((token) => {
+    this.authService.login(this.loginRequest).then((token) => {
+      this.isLoggedIn = true;
+      this.setTokenCookie(token);
       console.log(token);
-    });
+    })
+    .catch((error) => {
+      console.log("Erro no login");
+      this.isLoggedIn = false;
+    })
+  }
+
+  setTokenCookie(tokenValue: string) {
+    const cookieName = 'token';
+    const cookieValue = tokenValue;
+    const expires = new Date();
+    expires.setHours(expires.getHours() + 1);
+
+    document.cookie = `${cookieName}=${cookieValue};expires=${expires.toUTCString()};path=/`;
   }
 }

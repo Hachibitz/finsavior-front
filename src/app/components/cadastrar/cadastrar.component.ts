@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SignUpRequest } from 'src/app/model/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-cadastrar',
@@ -19,7 +19,7 @@ export class CadastrarComponent implements OnInit {
   termsAcceptance: boolean;
   signUpRequest: SignUpRequest
 
-  constructor(private themeService: ThemeService, private userService: UserService) { }
+  constructor(private themeService: ThemeService, private authService: AuthService) { }
 
   ngOnInit() {
     this.darkMode = this.themeService.checkDarkMode();
@@ -34,7 +34,7 @@ export class CadastrarComponent implements OnInit {
       password: this.password
     }
 
-    this.userService.signUp(this.signUpRequest);
+    this.authService.signUp(this.signUpRequest);
   }
 
 }

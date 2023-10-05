@@ -1,0 +1,64 @@
+<app-header-bar></app-header-bar>
+
+<div class="box" id="myAccount" [class]="darkMode ? 'dark-mode' : ''">
+  <!-- Menu de Expansão -->
+  <mat-accordion class="expansion-menu">
+    <!-- Submenu "Minha Conta" -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Minha Conta </mat-panel-title>
+      </mat-expansion-panel-header>
+      <!-- Submenu "Configurações" -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Configurações </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="submenu-content">
+          <!-- Conteúdo do submenu "Configurações" aqui -->
+          <mat-form-field>
+            <mat-label>Tema</mat-label>
+            <mat-select>
+              <mat-option value="light-mode" #matOptionLight (click)="toggleDarkMode(matOptionLight.value)">Light Mode</mat-option>
+              <mat-option value="dark-mode" #matOptionDark (click)="toggleDarkMode(matOptionDark.value)">Dark Mode</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+      <!-- Submenu "Mudar Senha" -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Mudar Senha </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="submenu-content">
+          <!-- Conteúdo do submenu "Mudar Senha" aqui -->
+          <mat-form-field>
+            <input matInput placeholder="Senha Atual" type="password" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Nova Senha" type="password" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Repetir Nova Senha" type="password" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+      <!-- Submenu "Excluir Conta" -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Excluir Conta </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="submenu-content">
+          <!-- Conteúdo do submenu "Excluir Conta" aqui -->
+          <mat-form-field>
+            <input matInput placeholder="Usuário" type="text" [(ngModel)]="username"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Senha" type="password" [(ngModel)]="password"/>
+          </mat-form-field>
+          <mat-checkbox [(ngModel)]="confirmation">Confirmar a transação</mat-checkbox>
+          <button style="float: right;" (click)="deleteAccountAndData()">Confirmar</button>
+        </div>
+      </mat-expansion-panel>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

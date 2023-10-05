@@ -1,0 +1,65 @@
+.dark-mode {
+  //todo
+}
+
+.box {
+  width: 99%;
+  height: 87vh;
+  margin: 20px auto;
+  background-color: #333;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow-y: auto;
+  display: flex;
+  align-items: baseline;
+}
+
+button {
+  color: #06152c;
+  background-color: #6db7f8;
+  text-decoration: none;
+  font-size: 1.5em;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 25px;
+  padding: 8px 16px;
+}
+
+button:hover {
+  color: #e0d8ff;
+  background-color: #7476f7;
+}
+
+/* Estilos para o menu de expansão */
+.expansion-menu {
+  width: 97%;
+  background-color: #333;
+  z-index: 1000;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 30px;
+}
+
+.mat-expansion-panel-header {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+
+.mat-expansion-panel-content {
+  background-color: #444;
+}
+
+.submenu-content {
+  padding: 16px;
+}
+
+/* Estilos para os campos de formulário dentro dos submenus */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.mat-checkbox-label {
+  color: #fff !important;
+}
