@@ -47,6 +47,17 @@ export class MyAccountComponent implements OnInit{
       password: this.password,
       confirmation: this.confirmation
     }
-    this.userService.deleteAccountAndData(deleteAccountAndDataRequest);
+
+    this.isLoading();
+    this.userService.deleteAccountAndData(deleteAccountAndDataRequest).then(result => {
+      this.isLoading();
+    })
+    .catch(error => {
+      this.isLoading();
+    });;
+  }
+
+  isLoading() {
+    this.loading = !this.loading;
   }
 }

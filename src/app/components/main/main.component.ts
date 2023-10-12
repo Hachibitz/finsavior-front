@@ -89,6 +89,8 @@ export class MainComponent implements OnInit {
     const anoAtual = _moment().year();
     const mesAtual = _moment().month() + 1; // Os meses em Moment.js são indexados a partir de 0
     this.billDate = _moment(`${anoAtual}-${mesAtual}`, "YYYY-MM");
+
+    this.loadMainTableData();
   }
 
   constructor(private cdRef: ChangeDetectorRef, 
@@ -142,7 +144,7 @@ export class MainComponent implements OnInit {
   }
 
   selectRegisterType() {
-    console.log(this.selectedType);
+    //console.log(this.selectedType);
   }
 
   isLoading() {
@@ -157,6 +159,20 @@ export class MainComponent implements OnInit {
     const year = parts[3];
 
     return month+' '+year;
+  }
+
+  loadMainTableData() {
+    this.isLoading();
+    this.billService.loadMainTableData().then(result => {
+      result.mainTableDataList.forEach((row) => {
+        this.rows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue, Tipo: row.billType, Comentario: row.billDescription, Data: row.billDate });
+      });
+      this.cdRef.detectChanges();
+      this.isLoading();
+    })
+    .catch(error => {
+      this.isLoading();
+    });;
   }
 
 }

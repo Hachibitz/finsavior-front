@@ -59,15 +59,15 @@ export class LoginDropdownComponent implements OnInit{
       password: this.password
     }
 
-    console.log("loginRequest -> ", this.loginRequest);
+    //console.log("loginRequest -> ", this.loginRequest);
     
     this.authService.login(this.loginRequest).then((token) => {
       this.isLoggedIn = true;
       this.setTokenCookie(token);
-      console.log(token);
+      //console.log(token);
     })
     .catch((error) => {
-      console.log("Erro no login");
+      //console.log(error);
       this.isLoggedIn = false;
     })
   }

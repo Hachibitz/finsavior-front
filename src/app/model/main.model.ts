@@ -16,3 +16,7 @@ export interface BillRegisterRequest {
     billDescription: string;
     billTable: string;
 }
+
+export interface MainTableDataResponse {
+    mainTableDataList: BillRegisterRequest[];
+}
