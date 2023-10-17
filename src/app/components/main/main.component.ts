@@ -58,15 +58,15 @@ export class MainComponent implements OnInit {
   darkMode:boolean = false;
 
   rows = [
-    { Nome: 'Conta 1', Valor: 'R$ 20.000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1', Data: '' },
-    { Nome: 'Conta 2', Valor: 'R$ 20.000,00', Tipo: 'Passivo', Comentario: 'DescTeste 2', Data: '' },
-    { Nome: 'Conta 3', Valor: 'R$ 20.000,00', Tipo: 'Caixa', Comentario: 'DescTeste 3', Data: '' }
+    { Nome: 'Conta 1', Valor: 'R$ 20000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1', Data: '' },
+    { Nome: 'Conta 2', Valor: 'R$ 20000,00', Tipo: 'Passivo', Comentario: 'DescTeste 2', Data: '' },
+    { Nome: 'Conta 3', Valor: 'R$ 20000,00', Tipo: 'Caixa', Comentario: 'DescTeste 3', Data: '' }
   ];
 
   cardRows = [
-    { Nome: 'Conta 1', Valor: 'R$ 20.000,00'},
-    { Nome: 'Conta 2', Valor: 'R$ 20.000,00'},
-    { Nome: 'Conta 3', Valor: 'R$ 20.000,00'}
+    { Nome: 'Conta 1', Valor: 'R$ 20000,00'},
+    { Nome: 'Conta 2', Valor: 'R$ 20000,00'},
+    { Nome: 'Conta 3', Valor: 'R$ 20000,00'}
   ];
 
   selectedType: string;
@@ -77,6 +77,8 @@ export class MainComponent implements OnInit {
   billDate: Moment;
   cardBillName: string;
   cardBillValue: number;
+  liquidStatus: number = 0;
+  liquidAndRightsStatus: number = 0;
 
   billTypes: TipoConta[] = [
     { label: 'Ativo', value: 'Ativo' },
@@ -165,14 +167,42 @@ export class MainComponent implements OnInit {
     this.isLoading();
     this.billService.loadMainTableData().then(result => {
       result.mainTableDataList.forEach((row) => {
-        this.rows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue, Tipo: row.billType, Comentario: row.billDescription, Data: row.billDate });
+        this.rows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Tipo: row.billType, Comentario: row.billDescription, Data: row.billDate });
       });
       this.cdRef.detectChanges();
+      this.setStatusData();
       this.isLoading();
     })
     .catch(error => {
       this.isLoading();
     });;
+  }
+
+  setStatusData() {
+    this.rows.forEach((row) => {
+      switch(row.Tipo) {
+        case 'Ativo':
+          this.liquidAndRightsStatus += this.formatNumberToIncrementStatus(row.Valor);
+          break;
+        case 'Passivo':
+          this.liquidStatus -= this.formatNumberToIncrementStatus(row.Valor);
+          this.liquidAndRightsStatus -= this.formatNumberToIncrementStatus(row.Valor);
+          break;
+        case 'Caixa':
+          this.liquidStatus += this.formatNumberToIncrementStatus(row.Valor);
+          this.liquidAndRightsStatus += this.formatNumberToIncrementStatus(row.Valor);
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
+  formatNumberToIncrementStatus(value: string):number {
+    let valueWithoutSimbols: string = value.replace('R$', '');
+    let valuewithoutSpaces: string = valueWithoutSimbols.replace(' ', '');
+    let result: number = parseFloat(valuewithoutSpaces.replace(',', '.'));
+    return result;
   }
 
 }
