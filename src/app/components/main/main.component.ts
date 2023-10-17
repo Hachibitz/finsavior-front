@@ -58,9 +58,9 @@ export class MainComponent implements OnInit {
   darkMode:boolean = false;
 
   rows = [
-    { Nome: 'Conta 1', Valor: 'R$ 20000,00', Tipo: 'Ativo', Comentario: 'DescTeste 1', Data: '' },
-    { Nome: 'Conta 2', Valor: 'R$ 20000,00', Tipo: 'Passivo', Comentario: 'DescTeste 2', Data: '' },
-    { Nome: 'Conta 3', Valor: 'R$ 20000,00', Tipo: 'Caixa', Comentario: 'DescTeste 3', Data: '' }
+    { Nome: 'Conta 1', Valor: 'R$ 2000,25', Tipo: 'Ativo', Comentario: 'DescTeste 1', Data: '' },
+    { Nome: 'Conta 2', Valor: 'R$ 20000,32', Tipo: 'Passivo', Comentario: 'DescTeste 2', Data: '' },
+    { Nome: 'Conta 3', Valor: 'R$ 300000,50', Tipo: 'Caixa', Comentario: 'DescTeste 3', Data: '' }
   ];
 
   cardRows = [
@@ -203,6 +203,14 @@ export class MainComponent implements OnInit {
     let valuewithoutSpaces: string = valueWithoutSimbols.replace(' ', '');
     let result: number = parseFloat(valuewithoutSpaces.replace(',', '.'));
     return result;
+  }
+
+  formatStatusBoxesContent(value: number) {
+    if(value.toString().includes('.')){
+      return value.toString().replace('.', ',');
+    } else {
+      return value;
+    }
   }
 
 }
