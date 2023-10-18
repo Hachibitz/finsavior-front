@@ -34,6 +34,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { TokenInterceptor } from './security/TokenInterceptor'
 import { AuthService } from './services/auth.service';
+import { DialogMessagesComponent } from './components/dialog-messages/dialog-messages.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { AuthService } from './services/auth.service';
     CadastrarComponent,
     LoginDropdownComponent,
     HeaderBarComponent,
-    MyAccountComponent
+    MyAccountComponent,
+    DialogMessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -67,13 +70,15 @@ import { AuthService } from './services/auth.service';
     MatButtonModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatDialogModule
   ],
   providers: [
     UserService, 
     ThemeService, 
     BillService,
     AuthService,
+    MatDialog, 
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

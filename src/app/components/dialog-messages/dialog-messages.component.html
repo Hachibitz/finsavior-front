@@ -1,0 +1,21 @@
+<div class="notificationError" id="error" *ngIf="errorMessage">
+  <h1 mat-dialog-title>{{ data.name }}</h1>
+  <div mat-dialog-content>
+    <p>{{ data.message }}</p>
+  </div>
+</div>
+<div class="notificationWarn" id="warn" *ngIf="warnMessage">
+  <h1 mat-dialog-title>{{ data.name }}</h1>
+  <div mat-dialog-content>
+    <p>{{ data.message }}</p>
+  </div>
+</div>
+<div class="notificationInfo" id="info" *ngIf="infoMessage">
+  <h1 mat-dialog-title>{{ data.name }}</h1>
+  <div mat-dialog-content>
+    <p>{{ data.message }}</p>
+  </div>
+  <!--<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="" cdkFocusInitial>Fechar</button>
+  </div>-->
+</div>

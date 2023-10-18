@@ -13,6 +13,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -98,7 +100,8 @@ export class MainComponent implements OnInit {
   constructor(private cdRef: ChangeDetectorRef, 
               private headerBarComponent: HeaderBarComponent, 
               private themeService: ThemeService,
-              private billService: BillService) {
+              private billService: BillService,
+              private dialog: MatDialog) {
 
   }
 
@@ -175,6 +178,7 @@ export class MainComponent implements OnInit {
     })
     .catch(error => {
       this.isLoading();
+      this.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
     });;
   }
 
@@ -211,6 +215,18 @@ export class MainComponent implements OnInit {
     } else {
       return value;
     }
+  }
+
+  openErrorDialog(errorMessage: string): void {
+    this.dialog.open(DialogMessagesComponent, {
+      data: { message: errorMessage, 
+              name: "Erro",
+              messageType: "error"
+            },
+    });
+    of('Após 10 segundos').pipe(delay(10000)).subscribe(result => {
+      this.dialog.closeAll();
+    });
   }
 
 }
