@@ -39,6 +39,7 @@
           <input class="input-box-card" type="text" placeholder="Conta" [(ngModel)]="cardBillName">
           <input class="input-box-card" type="number" min="1" step="any" placeholder="Valor"
             [(ngModel)]="cardBillValue">
+          <input class="input-box-card" type="text" placeholder="Descrição" [(ngModel)]="cardBillDesc">
           <button class="btn-register small-btn" (click)="addRegisterCard()">Adicionar débito</button>
         </div>
       </div>
@@ -87,7 +88,7 @@
                 <th>Nome</th>
                 <th>Valor</th>
                 <th>Tipo</th>
-                <th>Comentário</th>
+                <th>Descrição</th>
                 <th>Data</th>
               </tr>
             </thead>
@@ -96,7 +97,7 @@
                 <td>{{ item.Nome }}</td>
                 <td>{{ item.Valor }}</td>
                 <td>{{ item.Tipo }}</td>
-                <td>{{ item.Comentario }}</td>
+                <td>{{ item.Descricao }}</td>
                 <td>{{ item.Data }}</td>
               </tr>
             </tbody>
@@ -108,19 +109,23 @@
       <div class="box-middle">
         <div class="main">
           <a>
-            Tabela de cartão de crédito
+            Tabela de detalhamento de cartão de crédito
           </a>
           <table id="cardTable" style="margin-top: 10px;">
             <thead>
               <tr>
                 <th>Nome</th>
                 <th>Valor</th>
+                <th>Descrição</th>
+                <th>Data</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let cartao of cardRows">
                 <td>{{ cartao.Nome }}</td>
                 <td>{{ cartao.Valor }}</td>
+                <td>{{ cartao.Desc }}</td>
+                <td>{{ cartao.Data }}</td>
               </tr>
             </tbody>
           </table>
@@ -133,7 +138,7 @@
       <div class="main">
         <div class="bottom-boxes">
           <div class="status-box">
-            <h3>Status líquido</h3>
+            <h3>Status atual</h3>
             <p>R$ {{formatStatusBoxesContent(liquidStatus)}}</p>
           </div>
           <div class="status-box">
@@ -146,7 +151,7 @@
       <div class="main">
         <div class="bottom-boxes">
           <div class="status-box">
-            <h3>Status + ativos</h3>
+            <h3>Liquidez</h3>
             <p>R$ {{formatStatusBoxesContent(liquidAndRightsStatus)}}</p>
           </div>
           <div class="status-box">

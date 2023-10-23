@@ -59,17 +59,9 @@ export class MainComponent implements OnInit {
   loading: boolean = false;
   darkMode:boolean = false;
 
-  rows = [
-    { Nome: 'Conta 1', Valor: 'R$ 2000,25', Tipo: 'Ativo', Comentario: 'DescTeste 1', Data: '' },
-    { Nome: 'Conta 2', Valor: 'R$ 20000,32', Tipo: 'Passivo', Comentario: 'DescTeste 2', Data: '' },
-    { Nome: 'Conta 3', Valor: 'R$ 300000,50', Tipo: 'Caixa', Comentario: 'DescTeste 3', Data: '' }
-  ];
+  rows = [];
 
-  cardRows = [
-    { Nome: 'Conta 1', Valor: 'R$ 20000,00'},
-    { Nome: 'Conta 2', Valor: 'R$ 20000,00'},
-    { Nome: 'Conta 3', Valor: 'R$ 20000,00'}
-  ];
+  cardRows = [];
 
   selectedType: string;
   
@@ -79,8 +71,14 @@ export class MainComponent implements OnInit {
   billDate: Moment;
   cardBillName: string;
   cardBillValue: number;
+  cardBillDesc: string;
   liquidStatus: number = 0;
   liquidAndRightsStatus: number = 0;
+
+  tableTypes: string[] = [
+    'main',
+    'credit-card'
+  ]
 
   billTypes: TipoConta[] = [
     { label: 'Ativo', value: 'Ativo' },
@@ -95,6 +93,7 @@ export class MainComponent implements OnInit {
     this.billDate = _moment(`${anoAtual}-${mesAtual}`, "YYYY-MM");
 
     this.loadMainTableData();
+    this.loadCardTableData();
   }
 
   constructor(private cdRef: ChangeDetectorRef, 
@@ -116,36 +115,52 @@ export class MainComponent implements OnInit {
     headerBar.classList.toggle('dark-mode', this.darkMode);*/
   }
 
-  addRegisterMain() {  
-    /*this.isLoading();
-    of('Após 2 segundos').pipe(delay(2000)).subscribe(result => {
-      this.isLoading();
-    });*/
-    this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Comentario: this.billDescription, Data: this.formatData(this.billDate) });
-    this.cdRef.detectChanges();
-
+  addRegisterMain() {
     let billRegisterRequest: BillRegisterRequest = {
       billDate: this.formatData(this.billDate),
       billType: this.selectedType,
       billName: this.billName,
       billValue: this.billValue,
       billDescription: this.billDescription,
-      billTable: ''
+      billTable: this.tableTypes[0]
     };
 
     this.isLoading();
     this.billService.billRegister(billRegisterRequest)
       .then(result => {
+        this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Descricao: this.billDescription, Data: this.formatData(this.billDate) });
+        this.setStatusData();
+        this.cdRef.detectChanges();
         this.isLoading();
       })
       .catch(error => {
+        this.openErrorDialog('Falha ao inserir registro, tente novamente mais tarde.');
         this.isLoading();
       });
   }
 
   addRegisterCard() {
-    this.cardRows.push({ Nome: this.cardBillName, Valor: 'R$ '+this.cardBillValue });
-    this.cdRef.detectChanges();
+    let billRegisterRequest: BillRegisterRequest = {
+      billDate: this.formatData(this.billDate),
+      billType: null,
+      billName: this.cardBillName,
+      billValue: this.cardBillValue,
+      billDescription: this.cardBillDesc,
+      billTable: this.tableTypes[1]
+    };
+
+    this.isLoading();
+    this.billService.billRegister(billRegisterRequest)
+      .then(result => {
+        this.cardRows.push({ Nome: this.cardBillName, Valor: 'R$ '+this.cardBillValue, Desc: this.cardBillDesc, Data: this.formatData(this.billDate) });
+        this.setStatusData();
+        this.cdRef.detectChanges();
+        this.isLoading();
+      })
+      .catch(error => {
+        this.openErrorDialog('Falha ao inserir registro, tente novamente mais tarde.');
+        this.isLoading();
+      });
   }
 
   selectRegisterType() {
@@ -170,13 +185,31 @@ export class MainComponent implements OnInit {
     this.isLoading();
     this.billService.loadMainTableData().then(result => {
       result.mainTableDataList.forEach((row) => {
-        this.rows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Tipo: row.billType, Comentario: row.billDescription, Data: row.billDate });
+        this.rows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
       });
       this.cdRef.detectChanges();
       this.setStatusData();
       this.isLoading();
     })
     .catch(error => {
+      this.rows.push({ Nome: 'No data', Valor: 'R$ 0,00', Tipo: 'No data', Descricao: 'No data', Data: '' });
+      this.isLoading();
+      this.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
+    });;
+  }
+
+  loadCardTableData() {
+    this.isLoading();
+    this.billService.loadCardTableData().then(result => {
+      result.cardTableDataList.forEach((row) => {
+        this.cardRows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Desc: row.billDescription, Data: row.billDate });
+      });
+      this.cdRef.detectChanges();
+      this.setStatusData();
+      this.isLoading();
+    })
+    .catch(error => {
+      this.cardRows.push({ Nome: 'No data', Valor: 'R$ 0,00', Desc: 'No data', Data: '' });
       this.isLoading();
       this.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
     });;

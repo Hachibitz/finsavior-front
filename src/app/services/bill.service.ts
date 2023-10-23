@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LOAD_MAIN_TABLE_DATA, MAIN_SERVICE_BILL_REGISTER } from 'src/environments/environment';
+import { LOAD_CARD_TABLE_DATA, LOAD_MAIN_TABLE_DATA, MAIN_SERVICE_BILL_REGISTER } from 'src/environments/environment';
 import {
     HttpClient,
     HttpErrorResponse
 } from '@angular/common/http';
-import { BillRegisterRequest, MainTableDataResponse } from '../model/main.model';
+import { BillRegisterRequest, CardTableDataResponse, MainTableDataResponse } from '../model/main.model';
 
 @Injectable({ providedIn: 'root' })
 export class BillService {
@@ -31,6 +31,22 @@ export class BillService {
         const promessa = new Promise<MainTableDataResponse>((resolve, reject) => {
             this.http.get(LOAD_MAIN_TABLE_DATA, { responseType: 'json' }).subscribe({
                 next: (result: MainTableDataResponse) => {
+                    //console.log(result);
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
+                    //console.log(e);
+                    reject(e);
+                },
+            });
+        });
+        return promessa;
+    };
+
+    loadCardTableData(): Promise<CardTableDataResponse> {
+        const promessa = new Promise<CardTableDataResponse>((resolve, reject) => {
+            this.http.get(LOAD_CARD_TABLE_DATA, { responseType: 'json' }).subscribe({
+                next: (result: CardTableDataResponse) => {
                     //console.log(result);
                     resolve(result);
                 },

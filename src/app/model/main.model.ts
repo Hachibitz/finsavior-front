@@ -20,3 +20,7 @@ export interface BillRegisterRequest {
 export interface MainTableDataResponse {
     mainTableDataList: BillRegisterRequest[];
 }
+
+export interface CardTableDataResponse {
+    cardTableDataList: BillRegisterRequest[];
+}
