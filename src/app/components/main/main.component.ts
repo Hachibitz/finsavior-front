@@ -15,6 +15,7 @@ import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
+import { EditTableDialogComponent } from '../edit-table-dialog/edit-table-dialog.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -259,7 +260,7 @@ export class MainComponent implements OnInit {
               messageType: "error"
             },
     });
-    of('Após 10 segundos').pipe(delay(10000)).subscribe(result => {
+    of('Após 5 segundos').pipe(delay(5000)).subscribe(result => {
       this.dialog.closeAll();
     });
   }
@@ -271,7 +272,7 @@ export class MainComponent implements OnInit {
               messageType: "info"
             },
     });
-    of('Após 3 segundos').pipe(delay(3000)).subscribe(result => {
+    of('Após 2 segundos').pipe(delay(2000)).subscribe(result => {
       this.dialog.closeAll();
     });
   }
@@ -296,6 +297,76 @@ export class MainComponent implements OnInit {
       this.openInfoDialog(result.message);
       let index = this.cardRows.indexOf(item);
       this.cardRows.splice(index, 1);
+      this.cdRef.detectChanges();
+      this.isLoading();
+    }).catch(error => {
+      this.openErrorDialog('Falha: '+error);
+      this.isLoading();
+    });
+  }
+
+  openMainTableEditDialog(item) {
+    const dialogRef = this.dialog.open(EditTableDialogComponent, {
+      data: item,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'salvar') {
+        this.editItemFromMainTable(item);
+      } else {
+
+      }
+    });
+  }
+
+  openCardTableEditDialog(item) {
+    const dialogRef = this.dialog.open(EditTableDialogComponent, {
+      data: item,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'salvar') {
+        this.editItemFromCardTable(item);
+      } else {
+
+      }
+    });
+  }
+
+  editItemFromMainTable(item) {
+    this.isLoading();
+    const billUpdate: BillRegisterRequest = {
+      id: item.id,
+      billName: item.Nome,
+      billValue: this.formatNumberToIncrementStatus(item.Valor),
+      billDescription: item.Descricao,
+      billType: item.Tipo,
+      billTable: 'main',
+      billDate: item.Data
+    }
+    this.billService.editItemFromMainTable(billUpdate).then(result => {
+      this.openInfoDialog(result.message);
+      this.cdRef.detectChanges();
+      this.isLoading();
+    }).catch(error => {
+      this.openErrorDialog('Falha: '+error);
+      this.isLoading();
+    });
+  }
+
+  editItemFromCardTable(item) {
+    this.isLoading();
+    const billUpdate: BillRegisterRequest = {
+      id: item.id,
+      billName: item.Nome,
+      billValue: this.formatNumberToIncrementStatus(item.Valor),
+      billDescription: item.Descricao,
+      billType: null,
+      billTable: 'card',
+      billDate: item.Data
+    }
+    this.billService.editItemFromCardTable(billUpdate).then(result => {
+      this.openInfoDialog(result.message);
       this.cdRef.detectChanges();
       this.isLoading();
     }).catch(error => {

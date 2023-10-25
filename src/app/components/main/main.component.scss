@@ -398,11 +398,16 @@ table th:last-child {
 table td {
     padding: 10px;
     border: 1px solid #e5e5e5;
-    border-radius: 0 0 10px 10px;
+    //border-radius: 0 0 10px 10px;
 }
 
 table td:first-child {
     font-weight: bold;
+}
+
+.action-buttons {
+    display: flex;
+    //gap: 5px;
 }
 
 .bottom-boxes {

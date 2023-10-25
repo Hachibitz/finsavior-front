@@ -100,9 +100,12 @@
                 <td>{{ item.Tipo }}</td>
                 <td>{{ item.Descricao }}</td>
                 <td>{{ item.Data }}</td>
-                <td>
+                <td class="action-buttons">
                   <button mat-icon-button (click)="deleteItemFromMainTable(item)">
                     <mat-icon aria-label="Excluir">delete</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="openMainTableEditDialog(item)">
+                    <mat-icon aria-label="Editar">edit</mat-icon>
                   </button>
                 </td>
               </tr>
@@ -133,9 +136,12 @@
                 <td>{{ item.Valor }}</td>
                 <td>{{ item.Desc }}</td>
                 <td>{{ item.Data }}</td>
-                <td>
+                <td class="action-buttons">
                   <button mat-icon-button (click)="deleteItemFromCardTable(item)">
                     <mat-icon aria-label="Excluir">delete</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="openCardTableEditDialog(item)">
+                    <mat-icon aria-label="Editar">edit</mat-icon>
                   </button>
                 </td>
               </tr>

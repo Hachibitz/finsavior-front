@@ -36,6 +36,7 @@ import { TokenInterceptor } from './security/TokenInterceptor'
 import { AuthService } from './services/auth.service';
 import { DialogMessagesComponent } from './components/dialog-messages/dialog-messages.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { EditTableDialogComponent } from './components/edit-table-dialog/edit-table-dialog.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     LoginDropdownComponent,
     HeaderBarComponent,
     MyAccountComponent,
-    DialogMessagesComponent
+    DialogMessagesComponent,
+    EditTableDialogComponent
   ],
   imports: [
     BrowserModule,

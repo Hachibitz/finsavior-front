@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DELETE_ITEM_CARD_TABLE, 
          DELETE_ITEM_MAIN_TABLE, 
+         EDIT_ITEM_CARD_TABLE, 
+         EDIT_ITEM_MAIN_TABLE, 
          LOAD_CARD_TABLE_DATA, 
          LOAD_MAIN_TABLE_DATA, 
          MAIN_SERVICE_BILL_REGISTER } from 'src/environments/environment';
@@ -20,11 +22,9 @@ export class BillService {
         const promessa = new Promise<string>((resolve, reject) => {
             this.http.post(MAIN_SERVICE_BILL_REGISTER, saveRequest, { responseType: 'json' }).subscribe({
                 next: (result: string) => {
-                    //console.log(result);
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
-                    //console.log(e);
                     reject(e);
                 },
             });
@@ -36,11 +36,9 @@ export class BillService {
         const promessa = new Promise<MainTableDataResponse>((resolve, reject) => {
             this.http.get(LOAD_MAIN_TABLE_DATA, { responseType: 'json' }).subscribe({
                 next: (result: MainTableDataResponse) => {
-                    //console.log(result);
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
-                    //console.log(e);
                     reject(e);
                 },
             });
@@ -52,11 +50,9 @@ export class BillService {
         const promessa = new Promise<CardTableDataResponse>((resolve, reject) => {
             this.http.get(LOAD_CARD_TABLE_DATA, { responseType: 'json' }).subscribe({
                 next: (result: CardTableDataResponse) => {
-                    //console.log(result);
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
-                    //console.log(e);
                     reject(e);
                 },
             });
@@ -70,11 +66,9 @@ export class BillService {
 
             this.http.delete(DELETE_ITEM_MAIN_TABLE, { params: params, responseType: 'json' }).subscribe({
                 next: (result: GenericResponse) => {
-                    //console.log(result);
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
-                    //console.log(e);
                     reject(e);
                 },
             });
@@ -88,11 +82,38 @@ export class BillService {
 
             this.http.delete(DELETE_ITEM_CARD_TABLE, { params: params, responseType: 'json' }).subscribe({
                 next: (result: GenericResponse) => {
-                    //console.log(result);
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
-                    //console.log(e);
+                    reject(e);
+                },
+            });
+        });
+        return promessa;
+    };
+
+    editItemFromMainTable(billUpdate: BillRegisterRequest): Promise<GenericResponse> {
+        const promessa = new Promise<GenericResponse>((resolve, reject) => {
+
+            this.http.put(EDIT_ITEM_MAIN_TABLE, billUpdate, { responseType: 'json' }).subscribe({
+                next: (result: GenericResponse) => {
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
+                    reject(e);
+                },
+            });
+        });
+        return promessa;
+    };
+
+    editItemFromCardTable(billUpdate: BillRegisterRequest): Promise<GenericResponse> {
+        const promessa = new Promise<GenericResponse>((resolve, reject) => {
+            this.http.put(EDIT_ITEM_CARD_TABLE, billUpdate, { responseType: 'json' }).subscribe({
+                next: (result: GenericResponse) => {
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
                     reject(e);
                 },
             });
