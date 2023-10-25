@@ -90,6 +90,7 @@
                 <th>Tipo</th>
                 <th>Descrição</th>
                 <th>Data</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -99,6 +100,11 @@
                 <td>{{ item.Tipo }}</td>
                 <td>{{ item.Descricao }}</td>
                 <td>{{ item.Data }}</td>
+                <td>
+                  <button mat-icon-button (click)="deleteItemFromMainTable(item)">
+                    <mat-icon aria-label="Excluir">delete</mat-icon>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -118,14 +124,20 @@
                 <th>Valor</th>
                 <th>Descrição</th>
                 <th>Data</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let cartao of cardRows">
-                <td>{{ cartao.Nome }}</td>
-                <td>{{ cartao.Valor }}</td>
-                <td>{{ cartao.Desc }}</td>
-                <td>{{ cartao.Data }}</td>
+              <tr *ngFor="let item of cardRows">
+                <td>{{ item.Nome }}</td>
+                <td>{{ item.Valor }}</td>
+                <td>{{ item.Desc }}</td>
+                <td>{{ item.Data }}</td>
+                <td>
+                  <button mat-icon-button (click)="deleteItemFromCardTable(item)">
+                    <mat-icon aria-label="Excluir">delete</mat-icon>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>

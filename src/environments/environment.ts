@@ -6,7 +6,7 @@ export const environment = {
   production: false
 };
 
-export const URL_BASE_DEV = 'http://localhost:8080'
+export const URL_BASE_DEV = 'http://localhost:8085'
 
 /*
  * For easier debugging in development mode, you can import the following file
@@ -28,3 +28,5 @@ export const DELETE_ACCOUNT_AND_DATA = URL_BASE_DEV + USER_SERVICE + '/delete-ac
 export const MAIN_SERVICE_BILL_REGISTER = URL_BASE_DEV + BILL_SERVICE + '/bill-register';
 export const LOAD_MAIN_TABLE_DATA = URL_BASE_DEV + BILL_SERVICE + '/load-main-table-data';
 export const LOAD_CARD_TABLE_DATA = URL_BASE_DEV + BILL_SERVICE + '/load-card-table-data';
+export const DELETE_ITEM_MAIN_TABLE = URL_BASE_DEV + BILL_SERVICE + '/delete-item-table-main';
+export const DELETE_ITEM_CARD_TABLE = URL_BASE_DEV + BILL_SERVICE + '/delete-item-table-card';

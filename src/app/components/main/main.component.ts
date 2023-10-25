@@ -117,6 +117,7 @@ export class MainComponent implements OnInit {
 
   addRegisterMain() {
     let billRegisterRequest: BillRegisterRequest = {
+      id: null,
       billDate: this.formatData(this.billDate),
       billType: this.selectedType,
       billName: this.billName,
@@ -141,6 +142,7 @@ export class MainComponent implements OnInit {
 
   addRegisterCard() {
     let billRegisterRequest: BillRegisterRequest = {
+      id: null,
       billDate: this.formatData(this.billDate),
       billType: null,
       billName: this.cardBillName,
@@ -185,7 +187,7 @@ export class MainComponent implements OnInit {
     this.isLoading();
     this.billService.loadMainTableData().then(result => {
       result.mainTableDataList.forEach((row) => {
-        this.rows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
+        this.rows.push({ id: row.id, Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
       });
       this.cdRef.detectChanges();
       this.setStatusData();
@@ -195,24 +197,24 @@ export class MainComponent implements OnInit {
       this.rows.push({ Nome: 'No data', Valor: 'R$ 0,00', Tipo: 'No data', Descricao: 'No data', Data: '' });
       this.isLoading();
       this.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
-    });;
+    });
   }
 
   loadCardTableData() {
     this.isLoading();
     this.billService.loadCardTableData().then(result => {
       result.cardTableDataList.forEach((row) => {
-        this.cardRows.push({ Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Desc: row.billDescription, Data: row.billDate });
+        this.cardRows.push({ id: row.id, Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Desc: row.billDescription, Data: row.billDate });
       });
       this.cdRef.detectChanges();
       this.setStatusData();
       this.isLoading();
     })
     .catch(error => {
-      this.cardRows.push({ Nome: 'No data', Valor: 'R$ 0,00', Desc: 'No data', Data: '' });
+      this.cardRows.push({ id: null, Nome: 'No data', Valor: 'R$ 0,00', Desc: 'No data', Data: '' });
       this.isLoading();
       this.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
-    });;
+    });
   }
 
   setStatusData() {
@@ -259,6 +261,46 @@ export class MainComponent implements OnInit {
     });
     of('Após 10 segundos').pipe(delay(10000)).subscribe(result => {
       this.dialog.closeAll();
+    });
+  }
+
+  openInfoDialog(infoMessage: string): void {
+    this.dialog.open(DialogMessagesComponent, {
+      data: { message: infoMessage, 
+              name: "Success",
+              messageType: "info"
+            },
+    });
+    of('Após 3 segundos').pipe(delay(3000)).subscribe(result => {
+      this.dialog.closeAll();
+    });
+  }
+
+  deleteItemFromMainTable(item) {
+    this.isLoading();
+    this.billService.deleteItemFromMainTable(item.id).then(result => {
+      this.openInfoDialog(result.message);
+      let index = this.rows.indexOf(item);
+      this.rows.splice(index, 1);
+      this.cdRef.detectChanges();
+      this.isLoading();
+    }).catch(error => {
+      this.openErrorDialog('Falha: '+error);
+      this.isLoading();
+    });
+  }
+
+  deleteItemFromCardTable(item) {
+    this.isLoading();
+    this.billService.deleteItemFromCardTable(item.id).then(result => {
+      this.openInfoDialog(result.message);
+      let index = this.cardRows.indexOf(item);
+      this.cardRows.splice(index, 1);
+      this.cdRef.detectChanges();
+      this.isLoading();
+    }).catch(error => {
+      this.openErrorDialog('Falha: '+error);
+      this.isLoading();
     });
   }
 

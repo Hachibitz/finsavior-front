@@ -9,6 +9,7 @@ export interface SelectedMonth {
 }
 
 export interface BillRegisterRequest {
+    id: number;
     billDate: string;
     billType: string;
     billName: string;
@@ -23,4 +24,9 @@ export interface MainTableDataResponse {
 
 export interface CardTableDataResponse {
     cardTableDataList: BillRegisterRequest[];
+}
+
+export interface GenericResponse {
+    status: string;
+    message: string;
 }
