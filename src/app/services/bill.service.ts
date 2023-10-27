@@ -32,9 +32,11 @@ export class BillService {
         return promessa;
     };
 
-    loadMainTableData(): Promise<MainTableDataResponse> {
+    loadMainTableData(billDate: string): Promise<MainTableDataResponse> {
+        const params = new HttpParams().set('billDate', billDate);
+
         const promessa = new Promise<MainTableDataResponse>((resolve, reject) => {
-            this.http.get(LOAD_MAIN_TABLE_DATA, { responseType: 'json' }).subscribe({
+            this.http.get(LOAD_MAIN_TABLE_DATA, { params: params, responseType: 'json' }).subscribe({
                 next: (result: MainTableDataResponse) => {
                     resolve(result);
                 },
@@ -46,9 +48,11 @@ export class BillService {
         return promessa;
     };
 
-    loadCardTableData(): Promise<CardTableDataResponse> {
+    loadCardTableData(billDate: string): Promise<CardTableDataResponse> {
+        const params = new HttpParams().set('billDate', billDate);
+
         const promessa = new Promise<CardTableDataResponse>((resolve, reject) => {
-            this.http.get(LOAD_CARD_TABLE_DATA, { responseType: 'json' }).subscribe({
+            this.http.get(LOAD_CARD_TABLE_DATA, { params: params, responseType: 'json' }).subscribe({
                 next: (result: CardTableDataResponse) => {
                     resolve(result);
                 },

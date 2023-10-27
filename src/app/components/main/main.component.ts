@@ -107,6 +107,8 @@ export class MainComponent implements OnInit {
 
   onSelectDate(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
     this.billDate = normalizedMonthAndYear.clone();
+    this.loadMainTableData();
+    this.loadCardTableData();
     datepicker.close();
   }
 
@@ -186,7 +188,8 @@ export class MainComponent implements OnInit {
 
   loadMainTableData() {
     this.isLoading();
-    this.billService.loadMainTableData().then(result => {
+    this.rows = [];
+    this.billService.loadMainTableData(this.formatData(this.billDate)).then(result => {
       result.mainTableDataList.forEach((row) => {
         this.rows.push({ id: row.id, Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
       });
@@ -203,7 +206,8 @@ export class MainComponent implements OnInit {
 
   loadCardTableData() {
     this.isLoading();
-    this.billService.loadCardTableData().then(result => {
+    this.cardRows = [];
+    this.billService.loadCardTableData(this.formatData(this.billDate)).then(result => {
       result.cardTableDataList.forEach((row) => {
         this.cardRows.push({ id: row.id, Nome: row.billName, Valor: 'R$ '+row.billValue+',00', Desc: row.billDescription, Data: row.billDate });
       });
@@ -245,6 +249,7 @@ export class MainComponent implements OnInit {
     return result;
   }
 
+  //marked for exclusion
   formatStatusBoxesContent(value: number) {
     if(value.toString().includes('.')){
       return value.toString().replace('.', ',');
