@@ -28,7 +28,8 @@
             <input class="input-box" type="number" min="1" step="any" placeholder="Valor da conta"
               [(ngModel)]="billValue">
             <input class="input-box" type="text" placeholder="Descrição" [(ngModel)]="billDescription">
-            <button class="btn-register" style="margin-left: 10px;" (click)="addRegisterMain()">Cadastrar conta</button>
+            <button id="nonRecurrent" class="btn-register" style="margin-left: 10px;" (click)="addRegisterMain($event)">Cadastrar</button>
+            <button id="recurrent" class="btn-register" style="margin-left: 10px;" (click)="addRecurrentRegister($event)">Cadastrar recorrente</button>
           </div>
         </div>
       </div>

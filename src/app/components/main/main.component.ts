@@ -16,6 +16,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
 import { EditTableDialogComponent } from '../edit-table-dialog/edit-table-dialog.component';
+import { RecurrentBillDialogComponent } from '../recurrent-bill-dialog/recurrent-bill-dialog.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -118,7 +119,22 @@ export class MainComponent implements OnInit {
     headerBar.classList.toggle('dark-mode', this.darkMode);*/
   }
 
-  addRegisterMain() {
+  addRecurrentRegister(event: Event) {
+    const dialogRef = this.dialog.open(RecurrentBillDialogComponent, {
+      data: null,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'salvar') {
+        this.addRegisterMain(event);
+      } else {
+
+      }
+    });
+  }
+
+  addRegisterMain(event: Event) {
+    const id = (event.target as HTMLElement).id;
     let billRegisterRequest: BillRegisterRequest = {
       id: null,
       billDate: this.formatData(this.billDate),
@@ -126,7 +142,8 @@ export class MainComponent implements OnInit {
       billName: this.billName,
       billValue: this.billValue,
       billDescription: this.billDescription,
-      billTable: this.tableTypes[0]
+      billTable: this.tableTypes[0],
+      isRecurrent: id == 'recurrent' ? true : false
     };
 
     this.isLoading();
@@ -135,6 +152,7 @@ export class MainComponent implements OnInit {
         this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Descricao: this.billDescription, Data: this.formatData(this.billDate) });
         this.setStatusData();
         this.cdRef.detectChanges();
+        this.openInfoDialog('Registro salvo com sucesso!');
         this.isLoading();
       })
       .catch(error => {
@@ -151,7 +169,8 @@ export class MainComponent implements OnInit {
       billName: this.cardBillName,
       billValue: this.cardBillValue,
       billDescription: this.cardBillDesc,
-      billTable: this.tableTypes[1]
+      billTable: this.tableTypes[1],
+      isRecurrent: false
     };
 
     this.isLoading();
@@ -160,6 +179,7 @@ export class MainComponent implements OnInit {
         this.cardRows.push({ Nome: this.cardBillName, Valor: 'R$ '+this.cardBillValue, Desc: this.cardBillDesc, Data: this.formatData(this.billDate) });
         this.setStatusData();
         this.cdRef.detectChanges();
+        this.openInfoDialog('Registro salvo com sucesso!');
         this.isLoading();
       })
       .catch(error => {
@@ -347,7 +367,8 @@ export class MainComponent implements OnInit {
       billDescription: item.Descricao,
       billType: item.Tipo,
       billTable: 'main',
-      billDate: item.Data
+      billDate: item.Data,
+      isRecurrent: false
     }
     this.billService.editItemFromMainTable(billUpdate).then(result => {
       this.openInfoDialog(result.message);
@@ -368,7 +389,8 @@ export class MainComponent implements OnInit {
       billDescription: item.Descricao,
       billType: null,
       billTable: 'card',
-      billDate: item.Data
+      billDate: item.Data,
+      isRecurrent: false
     }
     this.billService.editItemFromCardTable(billUpdate).then(result => {
       this.openInfoDialog(result.message);

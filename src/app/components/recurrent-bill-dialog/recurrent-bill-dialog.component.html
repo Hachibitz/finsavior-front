@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Cobrança recorrente</h1>
+<div mat-dialog-content>
+  <mat-label>
+    Ao cadastrar uma cobrança recorrente será cadastrado um registro desta mesma cobrança para cada mês subsequente até o final do ano atual, você tem certeza?
+  </mat-label>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="'cancel'" (click)="onCancel()">Não, acho que preciso pensar melhor.</button>
+  <button mat-button [mat-dialog-close]="" (click)="onSave()">Oxe, claro! Só faça como pedi.</button>
+</div>

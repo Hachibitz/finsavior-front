@@ -5,7 +5,7 @@ import { DELETE_ITEM_CARD_TABLE,
          EDIT_ITEM_MAIN_TABLE, 
          LOAD_CARD_TABLE_DATA, 
          LOAD_MAIN_TABLE_DATA, 
-         MAIN_SERVICE_BILL_REGISTER } from 'src/environments/environment';
+         BILLS_SERVICE_BILL_REGISTER } from 'src/environments/environment';
 import {
     HttpClient,
     HttpErrorResponse,
@@ -19,8 +19,10 @@ export class BillService {
     constructor(private http: HttpClient) { }
 
     billRegister(saveRequest: BillRegisterRequest): Promise<string> {
+        const params = new HttpParams().set('isRecurrent', saveRequest.isRecurrent);
+
         const promessa = new Promise<string>((resolve, reject) => {
-            this.http.post(MAIN_SERVICE_BILL_REGISTER, saveRequest, { responseType: 'json' }).subscribe({
+            this.http.post(BILLS_SERVICE_BILL_REGISTER, saveRequest, { params: params, responseType: 'json' }).subscribe({
                 next: (result: string) => {
                     resolve(result);
                 },

@@ -37,6 +37,7 @@ import { AuthService } from './services/auth.service';
 import { DialogMessagesComponent } from './components/dialog-messages/dialog-messages.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditTableDialogComponent } from './components/edit-table-dialog/edit-table-dialog.component';
+import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog/recurrent-bill-dialog.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { EditTableDialogComponent } from './components/edit-table-dialog/edit-ta
     HeaderBarComponent,
     MyAccountComponent,
     DialogMessagesComponent,
-    EditTableDialogComponent
+    EditTableDialogComponent,
+    RecurrentBillDialogComponent
   ],
   imports: [
     BrowserModule,
