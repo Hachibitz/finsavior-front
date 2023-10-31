@@ -35,7 +35,7 @@ export class MyAccountComponent implements OnInit{
   toggleDarkMode(themeSelected: any) {
     this.darkMode = themeSelected == 'dark-mode' ? true : false;
     let darkModeSessionSet: string = this.darkMode == true ? 'true' : 'false';
-    sessionStorage.setItem('dark-mode', darkModeSessionSet);
+    localStorage.setItem('dark-mode', darkModeSessionSet);
     const body = document.getElementById('myAccount');
     body.classList.toggle('dark-mode', this.darkMode);
     this.headerBarComponent.toggleDarkMode();

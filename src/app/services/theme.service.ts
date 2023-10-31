@@ -13,11 +13,11 @@ export class ThemeService implements OnInit {
 
     public checkDarkMode(): boolean {
         let darkMode = false;
-        if (sessionStorage.getItem('dark-mode')) {
-            darkMode = sessionStorage.getItem('dark-mode') == 'true' ? true : false;
+        if (localStorage.getItem('dark-mode')) {
+            darkMode = localStorage.getItem('dark-mode') == 'true' ? true : false;
             return darkMode;
         } else {
-            sessionStorage.setItem('dark-mode', 'false');
+            localStorage.setItem('dark-mode', 'false');
             return darkMode;
         }
     }
