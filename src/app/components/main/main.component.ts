@@ -232,11 +232,11 @@ export class MainComponent implements OnInit {
     this.isLoading();
     this.billService.billRegister(billRegisterRequest)
       .then(result => {
-        this.rows.push({ Nome: this.billName, Valor: 'R$ '+this.billValue, Tipo: this.selectedType, Descricao: this.billDescription, Data: this.formatData(this.billDate) });
-        this.cdRef.detectChanges();
+        this.setTableData();
         this.openInfoDialog('Registro salvo com sucesso!');
         this.syncCardAndMainTableExpenses();
         this.setStatusData();
+        this.cdRef.detectChanges();
         this.isLoading();
       })
       .catch(error => {
@@ -264,11 +264,11 @@ export class MainComponent implements OnInit {
     this.isLoading();
     this.billService.billRegister(billRegisterRequest)
       .then(result => {
-        this.cardRows.push({ Nome: this.cardBillName, Valor: 'R$ '+this.cardBillValue, Descricao: this.cardBillDescription, Data: this.formatData(this.billDate) });
-        this.cdRef.detectChanges();
+        this.setTableData();
         this.openInfoDialog('Registro salvo com sucesso!');
         this.syncCardAndMainTableExpenses();
         this.setStatusData();
+        this.cdRef.detectChanges();
         this.isLoading();
       })
       .catch(error => {
@@ -356,13 +356,14 @@ export class MainComponent implements OnInit {
 
 
     if(isCardBillPresent >= 1) {
-      let mainTableCreditCardValue = this.formatNumberToIncrement(this.rows[cardBillIndex].Valor);
+      this.rows[cardBillIndex].Valor = 'R$ '+creditCardTableAmount.toFixed(2);
+      /*let mainTableCreditCardValue = this.formatNumberToIncrement(this.rows[cardBillIndex].Valor);
 
       if(creditCardTableAmount >= mainTableCreditCardValue){
-        this.rows[cardBillIndex].Valor = 'R$ '+creditCardTableAmount;
+        this.rows[cardBillIndex].Valor = 'R$ '+creditCardTableAmount.toFixed(2);
       } else {
-        this.cardRows.push({ Nome: 'Outros gastos', Valor: 'R$'+(mainTableCreditCardValue-creditCardTableAmount).toFixed(2), Desc: 'Gastos desconhecidos com cartão de crédito', Data: this.formatData(this.billDate) });
-      }
+        this.cardRows.push({ Nome: 'Outros gastos', Valor: 'R$'+(mainTableCreditCardValue-creditCardTableAmount).toFixed(2), Descricao: 'Gastos desconhecidos com cartão de crédito', Data: this.formatData(this.billDate) });
+      }*/
     } else {
       let creditCardBill = { Nome: 'Cartão de crédito', Valor: 'R$ '+creditCardTableAmount.toFixed(2), Tipo: 'Passivo', Descricao: 'Detalhamento disponível na tabela de cartão', Data: this.formatData(this.billDate) };
       this.rows.push(creditCardBill);
