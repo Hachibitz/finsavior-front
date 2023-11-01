@@ -1,24 +1,49 @@
-<h1 mat-dialog-title>Editar Item</h1>
-<div mat-dialog-content>
-  <form #editForm="ngForm">
-    <mat-form-field>
-      <input matInput placeholder="Nome" [(ngModel)]="data.Nome" name="Nome" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Valor" [(ngModel)]="data.Valor" name="Valor" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Tipo" [(ngModel)]="data.Tipo" name="Tipo" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Descrição" [(ngModel)]="data.Descricao" name="Descricao" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Data" [(ngModel)]="data.Data" name="Data" required>
-    </mat-form-field>
-  </form>
+<div *ngIf="data.Tipo != null">
+  <h1 mat-dialog-title>Editar Item</h1>
+  <div mat-dialog-content>
+    <form #editForm="ngForm">
+      <mat-form-field>
+        <input matInput placeholder="Nome" [(ngModel)]="data.Nome" name="Nome" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Valor" [(ngModel)]="data.Valor" name="Valor" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Tipo" [(ngModel)]="data.Tipo" name="Tipo" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Descrição" [(ngModel)]="data.Descricao" name="Descricao" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Data" [(ngModel)]="data.Data" name="Data" required>
+      </mat-form-field>
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="'cancel'" (click)="onCancel()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="!editForm.valid" (click)="onSave()">Salvar</button>
+  </div>
 </div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="'cancel'" (click)="onCancel()">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data" [disabled]="!editForm.valid" (click)="onSave()">Salvar</button>
+<div *ngIf="data.Tipo == null">
+  <h1 mat-dialog-title>Editar Item</h1>
+  <div mat-dialog-content>
+    <form #editForm="ngForm">
+      <mat-form-field>
+        <input matInput placeholder="Nome" [(ngModel)]="data.Nome" name="Nome" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Valor" [(ngModel)]="data.Valor" name="Valor" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Descrição" [(ngModel)]="data.Descricao" name="Descricao" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Data" [(ngModel)]="data.Data" name="Data" required>
+      </mat-form-field>
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="'cancel'" (click)="onCancel()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="!editForm.valid" (click)="onSave()">Salvar</button>
+  </div>
 </div>
