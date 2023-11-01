@@ -17,6 +17,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
 import { EditTableDialogComponent } from '../edit-table-dialog/edit-table-dialog.component';
 import { RecurrentBillDialogComponent } from '../recurrent-bill-dialog/recurrent-bill-dialog.component';
+import { FormsModule,
+         ReactiveFormsModule, 
+         Validators, 
+         FormGroup, 
+         FormBuilder, 
+         FormControl} from '@angular/forms';
 
 export const MY_FORMATS = {
   parse: {
@@ -57,6 +63,9 @@ const tabAnimation = trigger('tabAnimation', [
 })
 export class MainComponent implements OnInit {
 
+  mainTableForm: FormGroup;
+  cardTableForm: FormGroup;
+
   ColumnMode = ColumnMode;
   loading: boolean = false;
   darkMode:boolean = false;
@@ -73,7 +82,7 @@ export class MainComponent implements OnInit {
   billDate: Moment;
   cardBillName: string;
   cardBillValue: number;
-  cardBillDesc: string;
+  cardBillDescription: string;
   liquidStatus: number = 0;
   liquidAndRightsStatus: number = 0;
 
@@ -97,12 +106,41 @@ export class MainComponent implements OnInit {
     this.setTableData();
   }
 
-  constructor(private cdRef: ChangeDetectorRef, 
-              private headerBarComponent: HeaderBarComponent, 
-              private themeService: ThemeService,
-              private billService: BillService,
-              private dialog: MatDialog) {
+  constructor(private cdRef: ChangeDetectorRef, private headerBarComponent: HeaderBarComponent, private themeService: ThemeService, private billService: BillService, private dialog: MatDialog, private fb: FormBuilder) {
+    const numberAndDecimalValidator = (control: FormControl) => {
+      const valid = /^[0-9.]*$/.test(control.value);
+      return valid ? null : { invalidNumber: true };
+    };
 
+    this.mainTableForm = this.fb.group({
+      billName: ['', [Validators.required]],
+      billValue: ['', [Validators.required, numberAndDecimalValidator, Validators.min(1)]],
+      billDescription: [''],
+      selectedType: ['', [Validators.required]]
+    });
+
+    this.cardTableForm = this.fb.group({
+      cardBillName: ['', [Validators.required]],
+      cardBillValue: ['', [Validators.required, numberAndDecimalValidator, Validators.min(1)]],
+      cardBillDescription: ['']
+    });
+
+    this.syncFormDataAndFields();
+  }
+
+  syncFormDataAndFields(): void {
+    this.mainTableForm.valueChanges.subscribe((formData) => {
+      this.selectedType = formData.selectedType;
+      this.billName = formData.billName;
+      this.billValue = formData.billValue;
+      this.billDescription = formData.billDescription;
+    });
+
+    this.cardTableForm.valueChanges.subscribe((formData) => {
+      this.cardBillName = formData.cardBillName;
+      this.cardBillValue = formData.cardBillValue;
+      this.cardBillDescription = formData.cardBillDescription;
+    });
   }
 
   async setTableData() {
@@ -124,6 +162,41 @@ export class MainComponent implements OnInit {
     headerBar.classList.toggle('dark-mode', this.darkMode);*/
   }
 
+  isMainTableFormValid(): boolean {
+    const billValueControl = this.mainTableForm.get('billValue');
+    const billNameControl = this.mainTableForm.get('billName');
+    const selectedTypeControl = this.mainTableForm.get('selectedType');
+
+    if(selectedTypeControl.invalid){ //(selectedTypeControl.dirty || selectedTypeControl.touched)
+      this.openWarnDialog('Selecione o tipo');
+      return false;
+    }
+    if(billNameControl.invalid){
+      this.openWarnDialog('Campo de nome vazio');
+      return false;
+    }
+    if(billValueControl.invalid){
+      this.openWarnDialog('Campo de valor vazio ou incorreto');
+      return false;
+    }
+    return true;
+  }
+
+  isCardTableFormValid(): boolean {
+    const cardBillValueControl = this.mainTableForm.get('cardBillValue');
+    const cardBillNameControl = this.mainTableForm.get('cardBillName');
+
+    if(cardBillNameControl.invalid){
+      this.openWarnDialog('Campo de nome vazio');
+      return false;
+    }
+    if(cardBillValueControl.invalid){
+      this.openWarnDialog('Campo de valor vazio ou incorreto');
+      return false;
+    }
+    return true;
+  }
+
   addRecurrentRegister(event: Event) {
     const dialogRef = this.dialog.open(RecurrentBillDialogComponent, {
       data: null,
@@ -139,6 +212,10 @@ export class MainComponent implements OnInit {
   }
 
   addRegisterMain(event: Event) {
+    if(!this.isMainTableFormValid()) {
+      return;
+    }
+
     const id = (event.target as HTMLElement).id;
     let billRegisterRequest: BillRegisterRequest = {
       id: null,
@@ -168,13 +245,17 @@ export class MainComponent implements OnInit {
   }
 
   addRegisterCard() {
+    if(!this.isCardTableFormValid()) {
+      return;
+    }
+
     let billRegisterRequest: BillRegisterRequest = {
       id: null,
       billDate: this.formatData(this.billDate),
       billType: null,
       billName: this.cardBillName,
       billValue: this.cardBillValue,
-      billDescription: this.cardBillDesc,
+      billDescription: this.cardBillDescription,
       billTable: this.tableTypes[1],
       isRecurrent: false
     };
@@ -182,7 +263,7 @@ export class MainComponent implements OnInit {
     this.isLoading();
     this.billService.billRegister(billRegisterRequest)
       .then(result => {
-        this.cardRows.push({ Nome: this.cardBillName, Valor: 'R$ '+this.cardBillValue, Desc: this.cardBillDesc, Data: this.formatData(this.billDate) });
+        this.cardRows.push({ Nome: this.cardBillName, Valor: 'R$ '+this.cardBillValue, Desc: this.cardBillDescription, Data: this.formatData(this.billDate) });
         this.setStatusData();
         this.cdRef.detectChanges();
         this.openInfoDialog('Registro salvo com sucesso!');
@@ -267,9 +348,7 @@ export class MainComponent implements OnInit {
 
     this.cardRows.forEach((cardRow) => {
       let index = this.cardRows.indexOf(cardRow);
-      console.log(index);
       creditCardTableAmount += this.formatNumberToIncrement(this.cardRows[index].Valor);
-      console.log(cardRow);
     })
 
 
@@ -337,6 +416,18 @@ export class MainComponent implements OnInit {
             },
     });
     of('Após 5 segundos').pipe(delay(5000)).subscribe(result => {
+      this.dialog.closeAll();
+    });
+  }
+
+  openWarnDialog(warnMessage: string): void {
+    this.dialog.open(DialogMessagesComponent, {
+      data: { message: warnMessage, 
+              name: "Aviso",
+              messageType: "warn"
+            },
+    });
+    of('Após 3 segundos').pipe(delay(3000)).subscribe(result => {
       this.dialog.closeAll();
     });
   }

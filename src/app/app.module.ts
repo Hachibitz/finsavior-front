@@ -13,7 +13,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginDropdownComponent } from './components/login-dropdown/login-dropdown.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from './components/header-bar/header-bar.component';
@@ -62,6 +62,7 @@ import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog
     ButtonModule,
     InputTextModule,
     FormsModule,
+    ReactiveFormsModule,
     NgxDatatableModule,
     PanelModule,
     HttpClientModule,
