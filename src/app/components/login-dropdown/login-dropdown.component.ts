@@ -61,13 +61,11 @@ export class LoginDropdownComponent implements OnInit{
 
     //console.log("loginRequest -> ", this.loginRequest);
     
-    this.authService.login(this.loginRequest).then((token) => {
+    this.authService.login(this.loginRequest).then((response) => {
       this.isLoggedIn = true;
-      this.setTokenCookie(token);
-      //console.log(token);
+      //this.setTokenCookie(token);
     })
     .catch((error) => {
-      //console.log(error);
       this.isLoggedIn = false;
     })
   }

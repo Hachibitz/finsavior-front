@@ -13,8 +13,8 @@ export class AuthService {
     constructor(private http: HttpClient, private cookieService: CookieService) { }
 
     login(loginRequest: LoginRequest): Promise<string> {
-        const promessa = new Promise<string>((resolve, reject) => {
-            this.http.post(SERVICE_LOGIN, loginRequest, { responseType: 'text' }).subscribe({
+        return new Promise<string>((resolve, reject) => {
+            this.http.post(SERVICE_LOGIN, loginRequest, { responseType: 'text', withCredentials: true }).subscribe({
                 next: (result: string) => {
                     resolve(result);
                 },
@@ -23,8 +23,7 @@ export class AuthService {
                 },
             });
         });
-        return promessa;
-    };
+    }
 
     signUp(signUpRequest: SignUpRequest): Promise<SignUpResponse> {
         const promessa = new Promise<SignUpResponse>((resolve, reject) => {
