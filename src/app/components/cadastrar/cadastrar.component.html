@@ -21,9 +21,11 @@
         <div class="checkbox">
           <input type="checkbox" id="terms" [(ngModel)]="termsAcceptance">
           <label for="terms">Aceitar termos e condições</label>
+          <button class="btn-register" (click)="register()">Cadastrar</button>
         </div>
 
-        <button class="btn-register" (click)="register()">Cadastrar</button>
+        <br>
+        <label class="register-link">Já tem uma conta? <a href="javascript:void(0)" (click)="redirectToLogin()">Login</a></label>
       </div>
     </div>
   </div>

@@ -28,6 +28,12 @@
     margin-right: 5px;
 }
 
+.login-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px; /* Ajuste conforme necessário */
+}
+
 .btn-register {
     background-color: #0099ff;
     color: #fff;

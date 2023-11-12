@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoginRequest } from 'src/app/model/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
@@ -15,7 +16,7 @@ export class LoginDropdownComponent implements OnInit{
   password: string;
   isLoggedIn: boolean = false;
 
-  constructor(private userService: UserService, private authService: AuthService){
+  constructor(private userService: UserService, private authService: AuthService, private router: Router){
     
   }
 
@@ -63,11 +64,25 @@ export class LoginDropdownComponent implements OnInit{
     
     this.authService.login(this.loginRequest).then((response) => {
       this.isLoggedIn = true;
+      this.redirectToMain();
       //this.setTokenCookie(token);
     })
     .catch((error) => {
       this.isLoggedIn = false;
     })
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['fs/login']);
+  }
+
+  redirectToRegistration(): void {
+    this.router.navigate(['fs/cadastrar']);
+  }
+
+  redirectToMain(): void {
+    this.router.navigate(['fs/main']);
   }
 
   setTokenCookie(tokenValue: string) {

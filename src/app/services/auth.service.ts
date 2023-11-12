@@ -25,6 +25,10 @@ export class AuthService {
         });
     }
 
+    logout(): void {
+        this.deleteCookie('token');
+    }
+
     signUp(signUpRequest: SignUpRequest): Promise<SignUpResponse> {
         const promessa = new Promise<SignUpResponse>((resolve, reject) => {
             this.http.post(SIGNUP_SERVICE, signUpRequest, { responseType: 'json' }).subscribe({
@@ -43,6 +47,10 @@ export class AuthService {
         return this.cookieService.get('token');
     }
 
+    deleteCookie(cookieName: string): void {
+        this.cookieService.delete(cookieName, '/');
+    }
+
     validateToken(token: string): Promise<boolean> {
         const url = VALIDATE_TOKEN_SERVICE+"?token="+token;
         const promessa = new Promise<boolean>((resolve, reject) => {
@@ -57,4 +65,13 @@ export class AuthService {
         });
         return promessa;
     }
+
+    async isAuthenticated(): Promise<boolean> {
+        try {
+          const result = await this.validateToken(this.getToken());
+          return result;
+        } catch (error) {
+          return false;
+        }
+      }
 }

@@ -3,15 +3,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { CadastrarComponent } from './components/cadastrar/cadastrar.component';
 import { MainComponent } from './components/main/main.component';
 import { MyAccountComponent } from './components/my-account/my-account.component';
+import { AuthGuard } from './security/AuthGuard';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: MainComponent
+    canActivate: [AuthGuard],
+    redirectTo: 'fs/main'
   },
   {
     path: 'fs/main',
+    canActivate: [AuthGuard],
     component: MainComponent
   },
   {
@@ -20,7 +24,12 @@ const routes: Routes = [
   },
   {
     path: 'fs/account',
+    canActivate: [AuthGuard],
     component: MyAccountComponent
+  },
+  {
+    path: 'fs/login',
+    component: LoginPageComponent
   }
 ];
 

@@ -1,0 +1,23 @@
+<app-header-bar></app-header-bar>
+<div class="grid">
+  <div class="col-8" [class]="darkMode ? 'dark-mode' : ''">
+    <div class="box">
+      <div class="new-register">
+        <label>Usuário:</label>
+        <input class="input-box" type="text" placeholder="Usuário" [(ngModel)]="username">
+
+        <label>Senha:</label>
+        <input class="input-box" type="password" placeholder="Senha" [(ngModel)]="password">
+
+        <div class="checkbox">
+          <input type="checkbox" id="terms" [(ngModel)]="keepConnected">
+          <label for="terms">Manter-me logado</label>
+          <button class="btn-register" (click)="login()">Login</button>
+        </div>
+
+        <br>
+        <label class="register-link">Ainda não tem uma conta? <a href="javascript:void(0)" (click)="redirectToRegistration()">Cadastre-se</a></label>
+      </div>
+    </div>
+  </div>
+</div>

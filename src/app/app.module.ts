@@ -34,10 +34,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { TokenInterceptor } from './security/TokenInterceptor'
 import { AuthService } from './services/auth.service';
+import { AuthGuard } from './security/AuthGuard';
 import { DialogMessagesComponent } from './components/dialog-messages/dialog-messages.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditTableDialogComponent } from './components/edit-table-dialog/edit-table-dialog.component';
 import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog/recurrent-bill-dialog.component';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog
     MyAccountComponent,
     DialogMessagesComponent,
     EditTableDialogComponent,
-    RecurrentBillDialogComponent
+    RecurrentBillDialogComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +87,7 @@ import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog
     BillService,
     AuthService,
     MatDialog, 
+    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
