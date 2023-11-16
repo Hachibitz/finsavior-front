@@ -17,6 +17,7 @@ export interface BillRegisterRequest {
     billDescription: string;
     billTable: string;
     isRecurrent: boolean;
+    paid: boolean;
 }
 
 export interface MainTableDataResponse {

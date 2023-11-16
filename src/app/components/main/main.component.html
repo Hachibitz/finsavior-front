@@ -46,8 +46,12 @@
   </div>
   <div class="grid">
     <div class="left-table">
-      <div class="box-middle">
+      <div class="box-side">
         <div class="main">
+          <div>
+            <a>Caixa</a><label style="color: grey;">  (Salário+Ativos)</label><br>
+            <label style="color: grey;">{{income}},00R$</label>
+          </div><br>
           <a>Guia de contas</a>
           <ul>
             <li>
@@ -75,46 +79,106 @@
         </div>
       </div>
     </div>
-    <div class="center-table">
-      <div class="box-middle">
-        <div class="main">
-          <a>
-            Tabela principal
-          </a>
-          <table id="registerTable" style="margin-top: 10px;">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Valor</th>
-                <th>Tipo</th>
-                <th>Descrição</th>
-                <th>Data</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of rows">
-                <td>{{ item.Nome }}</td>
-                <td>{{ item.Valor }}</td>
-                <td>{{ item.Tipo }}</td>
-                <td>{{ item.Descricao }}</td>
-                <td>{{ item.Data }}</td>
-                <td class="action-buttons">
-                  <button mat-icon-button (click)="deleteItemFromMainTable(item)">
-                    <mat-icon aria-label="Excluir">delete</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="openMainTableEditDialog(item)">
-                    <mat-icon aria-label="Editar">edit</mat-icon>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <div class="main-table">
+      <mat-tab-group>
+        <mat-tab label="Tabela Principal">
+          <div class="main-table">
+            <div class="main">
+              <div class="table-title">
+                <div>
+                  <a>Tabela principal</a>
+                </div>
+                <div>
+                  <a>Total de débitos: </a><label style="color: grey;">{{totalDebit}},00R$</label>
+                </div>
+                <div>
+                  <a>Total faltante: </a><label style="color: grey;">{{totalLeft}},00R$</label>
+                </div>
+              </div>
+              <table id="registerTable" style="margin-top: 10px;">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of rows" [ngClass]="{'paid-row': item.Pago}">
+                    <td>{{ item.Nome }}</td>
+                    <td>{{ item.Valor }}</td>
+                    <td>{{ item.Tipo }}</td>
+                    <td>{{ item.Descricao }}</td>
+                    <td>{{ item.Data }}</td>
+                    <td class="action-buttons">
+                      <button mat-icon-button (click)="deleteItemFromMainTable(item)">
+                        <mat-icon aria-label="Excluir">delete</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="openMainTableEditDialog(item)">
+                        <mat-icon aria-label="Editar">edit</mat-icon>
+                      </button>
+                      <mat-checkbox [(ngModel)]="item.Pago" class="paid-checkbox" matTooltip="Marcar como Pago"
+                        (ngModelChange)="markAsPaid(item)"></mat-checkbox>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Tabela de Caixa + Ativos">
+          <div class="income-table">
+            <div class="main">
+              <div class="table-title">
+                <div>
+                  <a>Tabela de caixa/ativos</a>
+                </div>
+                <div>
+                  <a>Total de débitos: </a><label style="color: grey;">{{totalDebit}},00R$</label>
+                </div>
+                <div>
+                  <a>Total faltante: </a><label style="color: grey;">{{totalLeft}},00R$</label>
+                </div>
+              </div>
+              <table id="registerTable" style="margin-top: 10px;">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of incomeRows" [ngClass]="{'paid-row': item.Pago}">
+                    <td>{{ item.Nome }}</td>
+                    <td>{{ item.Valor }}</td>
+                    <td>{{ item.Tipo }}</td>
+                    <td>{{ item.Descricao }}</td>
+                    <td>{{ item.Data }}</td>
+                    <td class="action-buttons">
+                      <button mat-icon-button (click)="deleteItemFromMainTable(item)">
+                        <mat-icon aria-label="Excluir">delete</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="openMainTableEditDialog(item)">
+                        <mat-icon aria-label="Editar">edit</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>  
+    </div>  
     <div class="right-table">
-      <div class="box-middle">
+      <div class="box-side">
         <div class="main">
           <a>
             Tabela de detalhamento de cartão de crédito
@@ -150,7 +214,7 @@
       </div>
     </div>
   </div>
-  <div class="bottom-page">
+  <div class="bottom-page grid">
     <div class="bottom-box-left">
       <div class="main">
         <div class="bottom-boxes">

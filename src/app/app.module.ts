@@ -32,6 +32,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TokenInterceptor } from './security/TokenInterceptor'
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './security/AuthGuard';
@@ -79,7 +80,9 @@ import { LoginPageComponent } from './components/login-page/login-page.component
     MatCheckboxModule,
     MatSelectModule,
     MatOptionModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTooltipModule,
+    MatTabsModule
   ],
   providers: [
     UserService, 
