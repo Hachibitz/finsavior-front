@@ -18,7 +18,7 @@ export class LoginPageComponent implements OnInit{
   password: string;
   isLoggedIn: boolean = false;
   termsAcceptance: boolean;
-  keepConnected: boolean;
+  rememberMe: boolean;
   darkMode: boolean = false;
 
   constructor(private themeService: ThemeService, private authService: AuthService, private router: Router, private dialog: MatDialog) { }
@@ -30,7 +30,8 @@ export class LoginPageComponent implements OnInit{
   login(): void {
     this.loginRequest = {
       username: this.username,
-      password: this.password
+      password: this.password,
+      rememberMe: this.rememberMe
     }
     
     this.authService.login(this.loginRequest).then((response) => {

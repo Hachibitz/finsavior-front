@@ -89,10 +89,10 @@
                   <a>Tabela principal</a>
                 </div>
                 <div>
-                  <a>Total de débitos: </a><label style="color: grey;">{{totalDebit}},00R$</label>
+                  <a>Total de débitos: </a><label style="color: grey;">{{totalDebit}}R$</label>
                 </div>
                 <div>
-                  <a>Total faltante: </a><label style="color: grey;">{{totalLeft}},00R$</label>
+                  <a>Total faltante: </a><label style="color: grey;">{{totalLeft}}R$</label>
                 </div>
               </div>
               <table id="registerTable" style="margin-top: 10px;">
@@ -120,7 +120,7 @@
                       <button mat-icon-button (click)="openMainTableEditDialog(item)">
                         <mat-icon aria-label="Editar">edit</mat-icon>
                       </button>
-                      <mat-checkbox [(ngModel)]="item.Pago" class="paid-checkbox" matTooltip="Marcar como Pago"
+                      <mat-checkbox [(ngModel)]="item.Pago" color="secondary" matTooltip="Marcar como Pago"
                         (ngModelChange)="markAsPaid(item)"></mat-checkbox>
                     </td>
                   </tr>

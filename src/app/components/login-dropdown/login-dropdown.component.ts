@@ -17,6 +17,7 @@ export class LoginDropdownComponent implements OnInit{
   loginRequest: LoginRequest;
   username: string;
   password: string;
+  rememberMe: boolean;
   isLoggedIn: boolean = false;
 
   constructor(private userService: UserService, private authService: AuthService, private router: Router, private dialog: MatDialog){
@@ -60,7 +61,8 @@ export class LoginDropdownComponent implements OnInit{
   login(): void {
     this.loginRequest = {
       username: this.username,
-      password: this.password
+      password: this.password,
+      rememberMe: this.rememberMe
     }
     
     this.authService.login(this.loginRequest).then((response) => {

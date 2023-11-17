@@ -258,16 +258,16 @@ input:checked+.slider:before {
     }
 
     .paid-row {
-        background-color: lightgreen;
-        transition: background-color 0.5s ease;
+        color: blue;
+        transition: color 0.5s ease;
     }
-    
-    .paid-checkbox {
-        color: darkred;
+
+    mat-checkbox {
+        color: #333;
     }
-    
-    .paid-checkbox:checked {
-        color: darkgreen;
+
+    mat-tab {
+        color: #333;
     }
 
     .status-box {
@@ -476,16 +476,8 @@ table td:first-child {
 }
 
 .paid-row {
-    background-color: darkolivegreen;
-    transition: background-color 0.5s ease;
-}
-
-.paid-checkbox {
-    color: darkred;
-}
-
-.paid-checkbox:checked {
-    color: darkgreen;
+    color: cyan;
+    transition: color 0.5s ease;
 }
 
 .bottom-boxes {
