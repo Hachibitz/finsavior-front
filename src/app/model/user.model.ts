@@ -25,3 +25,9 @@ export interface DeleteAccountAndDataRequest {
 export interface DeleteAccountAndDataResponse {
     message: string;
 }
+
+export interface ChangeAccountPasswordRequest {
+    username: string;
+    currentPassword: string;
+    newPassword: string;
+}

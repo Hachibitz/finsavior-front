@@ -36,14 +36,16 @@
         <div class="submenu-content">
           <!-- Conteúdo do submenu "Mudar Senha" aqui -->
           <mat-form-field>
-            <input matInput placeholder="Senha Atual" type="password" />
+            <input matInput placeholder="Senha Atual" type="password" [(ngModel)]="currentPassword"/>
+          </mat-form-field>
+          <label>Pelo menos 8 caracteres - Pelo menos 1 letra maiúscula - Pelo menos 1 letra minúscula - Pelo menos 1 número - Pelo menos 1 símbolo.</label>
+          <mat-form-field>
+            <input matInput placeholder="Nova Senha" type="password" [(ngModel)]="newPassword"/>
           </mat-form-field>
           <mat-form-field>
-            <input matInput placeholder="Nova Senha" type="password" />
+            <input matInput placeholder="Repetir Nova Senha" type="password" [(ngModel)]="newPasswordConfirmation"/>
           </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Repetir Nova Senha" type="password" />
-          </mat-form-field>
+          <button color="primary" (click)="changeAccountPassword()">Confirmar</button>
         </div>
       </mat-expansion-panel>
       <!-- Submenu "Excluir Conta" -->
