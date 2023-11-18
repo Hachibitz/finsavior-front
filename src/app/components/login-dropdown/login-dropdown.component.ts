@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginRequest } from 'src/app/model/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { DialogMessage } from 'src/app/services/dialog-message.service';
 import { UserService } from 'src/app/services/user.service';
-import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
-import { MatDialog } from '@angular/material/dialog';
-import { delay, of } from 'rxjs';
 
 @Component({
   selector: 'app-login-dropdown',
@@ -20,7 +18,7 @@ export class LoginDropdownComponent implements OnInit{
   rememberMe: boolean;
   isLoggedIn: boolean = false;
 
-  constructor(private userService: UserService, private authService: AuthService, private router: Router, private dialog: MatDialog){
+  constructor(private userService: UserService, private authService: AuthService, private router: Router, private dialogMessage: DialogMessage){
     
   }
 
@@ -68,11 +66,11 @@ export class LoginDropdownComponent implements OnInit{
     this.authService.login(this.loginRequest).then((response) => {
       this.isLoggedIn = true;
       this.redirectToMain();
-      this.openInfoDialog('Login realizado com sucesso!');
+      this.dialogMessage.openInfoDialog('Login realizado com sucesso!');
     })
     .catch((error) => {
       this.isLoggedIn = false;
-      this.openErrorDialog('Erro no login: '+error);
+      this.dialogMessage.openErrorDialog('Erro no login: '+error);
     })
   }
 
@@ -87,29 +85,5 @@ export class LoginDropdownComponent implements OnInit{
 
   redirectToMain(): void {
     this.router.navigate(['fs/main']);
-  }
-
-  openInfoDialog(infoMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: infoMessage, 
-              name: "Success",
-              messageType: "info"
-            },
-    });
-    of('Após 2 segundos').pipe(delay(2000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
-  }
-
-  openErrorDialog(errorMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: errorMessage, 
-              name: "Erro",
-              messageType: "error"
-            },
-    });
-    of('Após 5 segundos').pipe(delay(5000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
   }
 }

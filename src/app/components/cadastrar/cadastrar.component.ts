@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SignUpRequest } from 'src/app/model/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
-import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
-import { delay, of } from 'rxjs';
+import { DialogMessage } from 'src/app/services/dialog-message.service';
 
 @Component({
   selector: "app-cadastrar",
@@ -27,7 +25,7 @@ export class CadastrarComponent implements OnInit {
     private themeService: ThemeService,
     private authService: AuthService,
     private router: Router,
-    private dialog: MatDialog
+    private dialogMessage: DialogMessage
   ) {}
 
   ngOnInit() {
@@ -36,7 +34,7 @@ export class CadastrarComponent implements OnInit {
 
   signUp() {
     if (this.signUpValidations() != null) {
-      this.openWarnDialog(this.signUpValidations());
+      this.dialogMessage.openWarnDialog(this.signUpValidations());
       return;
     }
 
@@ -54,10 +52,10 @@ export class CadastrarComponent implements OnInit {
       .signUp(this.signUpRequest)
       .then((result) => {
         this.redirectToLogin();
-        this.openInfoDialog(result.message);
+        this.dialogMessage.openInfoDialog(result.message);
       })
       .catch((error) => {
-        this.openErrorDialog(error.error.message);
+        this.dialogMessage.openErrorDialog(error.error.message);
       });
   }
 
@@ -109,39 +107,6 @@ export class CadastrarComponent implements OnInit {
   containSymbols(username: string) {
     const regex = /^[a-zA-Z0-9_]+$/;
     return regex.test(username);
-  }
-
-  openInfoDialog(infoMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: infoMessage, name: "Success", messageType: "info" },
-    });
-    of("Após 2 segundos")
-      .pipe(delay(2000))
-      .subscribe((result) => {
-        this.dialog.closeAll();
-      });
-  }
-
-  openWarnDialog(warnMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: warnMessage, name: "Aviso", messageType: "warn" },
-    });
-    of("Após 3 segundos")
-      .pipe(delay(3000))
-      .subscribe((result) => {
-        this.dialog.closeAll();
-      });
-  }
-
-  openErrorDialog(errorMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: errorMessage, name: "Erro", messageType: "error" },
-    });
-    of("Após 5 segundos")
-      .pipe(delay(5000))
-      .subscribe((result) => {
-        this.dialog.closeAll();
-      });
   }
 
   redirectToLogin(): void {

@@ -4,9 +4,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MainComponent } from '../main/main.component';
 import { UserService } from 'src/app/services/user.service';
 import { ChangeAccountPasswordRequest, DeleteAccountAndDataRequest } from 'src/app/model/user.model';
-import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
-import { MatDialog } from '@angular/material/dialog';
-import { delay, of } from 'rxjs';
+import { DialogMessage } from 'src/app/services/dialog-message.service';
 
 @Component({
   selector: 'app-my-account',
@@ -36,7 +34,7 @@ export class MyAccountComponent implements OnInit{
 
   }
 
-  constructor(private headerBarComponent: HeaderBarComponent, private userService: UserService, private dialog: MatDialog) {
+  constructor(private headerBarComponent: HeaderBarComponent, private userService: UserService, private dialogMessage: DialogMessage) {
     
   }
 
@@ -58,23 +56,23 @@ export class MyAccountComponent implements OnInit{
 
     this.isLoading();
     this.userService.deleteAccountAndData(deleteAccountAndDataRequest).then(result => {
-      this.openInfoDialog('Sucesso:' + result.message);
+      this.dialogMessage.openInfoDialog('Sucesso:' + result.message);
       this.isLoading();
     })
     .catch(error => {
-      this.openErrorDialog('Error: ' + error.error);
+      this.dialogMessage.openErrorDialog('Error: ' + error.error);
       this.isLoading();
     });;
   }
 
   changeAccountPassword() : void {
     if(this.newPasswordConfirmation != this.newPassword) {
-      this.openWarnDialog('As senhas não coincidem.');
+      this.dialogMessage.openWarnDialog('As senhas não coincidem.');
       return;
     }
 
     if(!this.isPasswordValid(this.newPassword)) {
-      this.openWarnDialog('Critérios da senha não atendidos.');
+      this.dialogMessage.openWarnDialog('Critérios da senha não atendidos.');
       return;
     }
 
@@ -86,11 +84,11 @@ export class MyAccountComponent implements OnInit{
 
     this.isLoading();
     this.userService.changeAccountPassword(this.changeAccountPasswordRequest).then(result => {
-      this.openInfoDialog('Sucesso:' + result.message);
+      this.dialogMessage.openInfoDialog('Sucesso:' + result.message);
       this.isLoading();
     })
     .catch(error => {
-      this.openErrorDialog(error.error);
+      this.dialogMessage.openErrorDialog(error.error);
       this.isLoading();
     })
   }
@@ -98,42 +96,6 @@ export class MyAccountComponent implements OnInit{
   isPasswordValid(newPassword: string): boolean {
     const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
     return regex.test(newPassword);
-  }
-
-  openErrorDialog(errorMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: errorMessage, 
-              name: "Erro",
-              messageType: "error"
-            },
-    });
-    of('Após 5 segundos').pipe(delay(5000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
-  }
-
-  openWarnDialog(warnMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: warnMessage, 
-              name: "Aviso",
-              messageType: "warn"
-            },
-    });
-    of('Após 3 segundos').pipe(delay(3000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
-  }
-
-  openInfoDialog(infoMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: infoMessage, 
-              name: "Success",
-              messageType: "info"
-            },
-    });
-    of('Após 2 segundos').pipe(delay(2000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
   }
 
   isLoading() {

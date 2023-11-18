@@ -3,8 +3,6 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { BillRegisterRequest, TipoConta } from 'src/app/model/main.model';
 import { ColumnMode } from '@swimlane/ngx-datatable';
-import { delay } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { ThemeService } from 'src/app/services/theme.service';
 import { BillService } from 'src/app/services/bill.service';
@@ -14,7 +12,6 @@ import * as _moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogMessagesComponent } from '../dialog-messages/dialog-messages.component';
 import { EditTableDialogComponent } from '../edit-table-dialog/edit-table-dialog.component';
 import { RecurrentBillDialogComponent } from '../recurrent-bill-dialog/recurrent-bill-dialog.component';
 import { FormsModule,
@@ -23,6 +20,7 @@ import { FormsModule,
          FormGroup, 
          FormBuilder, 
          FormControl} from '@angular/forms';
+import { DialogMessage } from 'src/app/services/dialog-message.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -109,7 +107,7 @@ export class MainComponent implements OnInit {
     this.setTableData();
   }
 
-  constructor(private cdRef: ChangeDetectorRef, private headerBarComponent: HeaderBarComponent, private themeService: ThemeService, private billService: BillService, private dialog: MatDialog, private fb: FormBuilder) {
+  constructor(private cdRef: ChangeDetectorRef, private themeService: ThemeService, private billService: BillService, private dialog: MatDialog, private fb: FormBuilder, private dialogMessage: DialogMessage) {
     const numberAndDecimalValidator = (control: FormControl) => {
       const valid = /^[0-9.]*$/.test(control.value);
       return valid ? null : { invalidNumber: true };
@@ -172,15 +170,15 @@ export class MainComponent implements OnInit {
     const selectedTypeControl = this.mainTableForm.get('selectedType');
 
     if(selectedTypeControl.invalid){ //(selectedTypeControl.dirty || selectedTypeControl.touched)
-      this.openWarnDialog('Selecione o tipo');
+      this.dialogMessage.openWarnDialog('Selecione o tipo');
       return false;
     }
     if(billNameControl.invalid){
-      this.openWarnDialog('Campo de nome vazio');
+      this.dialogMessage.openWarnDialog('Campo de nome vazio');
       return false;
     }
     if(billValueControl.invalid){
-      this.openWarnDialog('Campo de valor vazio ou incorreto');
+      this.dialogMessage.openWarnDialog('Campo de valor vazio ou incorreto');
       return false;
     }
     return true;
@@ -191,11 +189,11 @@ export class MainComponent implements OnInit {
     const cardBillNameControl = this.cardTableForm.get('cardBillName');
 
     if(cardBillNameControl.invalid){
-      this.openWarnDialog('Campo de nome vazio');
+      this.dialogMessage.openWarnDialog('Campo de nome vazio');
       return false;
     }
     if(cardBillValueControl.invalid){
-      this.openWarnDialog('Campo de valor vazio ou incorreto');
+      this.dialogMessage.openWarnDialog('Campo de valor vazio ou incorreto');
       return false;
     }
     return true;
@@ -237,12 +235,12 @@ export class MainComponent implements OnInit {
     this.billService.billRegister(billRegisterRequest)
       .then(result => {
         this.setTableData();
-        this.openInfoDialog('Registro salvo com sucesso!');
+        this.dialogMessage.openInfoDialog('Registro salvo com sucesso!');
         this.cdRef.detectChanges();
         this.isLoading();
       })
       .catch(error => {
-        this.openErrorDialog('Falha ao inserir registro, tente novamente mais tarde.');
+        this.dialogMessage.openErrorDialog('Falha ao inserir registro, tente novamente mais tarde.');
         this.isLoading();
       });
   }
@@ -268,12 +266,12 @@ export class MainComponent implements OnInit {
     this.billService.billRegister(billRegisterRequest)
       .then(result => {
         this.setTableData();
-        this.openInfoDialog('Registro salvo com sucesso!');
+        this.dialogMessage.openInfoDialog('Registro salvo com sucesso!');
         this.cdRef.detectChanges();
         this.isLoading();
       })
       .catch(error => {
-        this.openErrorDialog('Falha ao inserir registro, tente novamente mais tarde.');
+        this.dialogMessage.openErrorDialog('Falha ao inserir registro, tente novamente mais tarde.');
         this.isLoading();
       });
   }
@@ -319,7 +317,7 @@ export class MainComponent implements OnInit {
       .catch(error => {
         this.rows.push({ Nome: 'No data', Valor: 'R$ 0,00', Tipo: 'No data', Descricao: 'No data', Data: '' });
         this.isLoading();
-        this.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
+        this.dialogMessage.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
         reject();
       });
     });
@@ -340,7 +338,7 @@ export class MainComponent implements OnInit {
       .catch(error => {
         this.cardRows.push({ id: null, Nome: 'No data', Valor: 'R$ 0,00', Desc: 'No data', Data: '' });
         this.isLoading();
-        this.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
+        this.dialogMessage.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
         reject();
       });
     });
@@ -446,46 +444,10 @@ export class MainComponent implements OnInit {
     }
   }
 
-  openErrorDialog(errorMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: errorMessage, 
-              name: "Erro",
-              messageType: "error"
-            },
-    });
-    of('Após 5 segundos').pipe(delay(5000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
-  }
-
-  openWarnDialog(warnMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: warnMessage, 
-              name: "Aviso",
-              messageType: "warn"
-            },
-    });
-    of('Após 3 segundos').pipe(delay(3000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
-  }
-
-  openInfoDialog(infoMessage: string): void {
-    this.dialog.open(DialogMessagesComponent, {
-      data: { message: infoMessage, 
-              name: "Success",
-              messageType: "info"
-            },
-    });
-    of('Após 2 segundos').pipe(delay(2000)).subscribe(result => {
-      this.dialog.closeAll();
-    });
-  }
-
   deleteItemFromMainTable(item) {
     this.isLoading();
     this.billService.deleteItemFromMainTable(item.id).then(result => {
-      this.openInfoDialog(result.message);
+      this.dialogMessage.openInfoDialog(result.message);
       let index = this.rows.indexOf(item);
       this.rows.splice(index, 1);
       this.syncCardAndMainTableExpenses();
@@ -494,7 +456,7 @@ export class MainComponent implements OnInit {
       this.cdRef.detectChanges();
       this.isLoading();
     }).catch(error => {
-      this.openErrorDialog('Falha: '+error);
+      this.dialogMessage.openErrorDialog('Falha: '+error);
       this.isLoading();
     });
   }
@@ -502,7 +464,7 @@ export class MainComponent implements OnInit {
   deleteItemFromCardTable(item) {
     this.isLoading();
     this.billService.deleteItemFromCardTable(item.id).then(result => {
-      this.openInfoDialog(result.message);
+      this.dialogMessage.openInfoDialog(result.message);
       let index = this.cardRows.indexOf(item);
       this.cardRows.splice(index, 1);
       this.syncCardAndMainTableExpenses();
@@ -511,7 +473,7 @@ export class MainComponent implements OnInit {
       this.cdRef.detectChanges();
       this.isLoading();
     }).catch(error => {
-      this.openErrorDialog('Falha: '+error);
+      this.dialogMessage.openErrorDialog('Falha: '+error);
       this.isLoading();
     });
   }
@@ -565,7 +527,7 @@ export class MainComponent implements OnInit {
       this.cdRef.detectChanges();
       this.isLoading();
     }).catch(error => {
-      this.openErrorDialog('Falha ao sincronizar: '+error);
+      this.dialogMessage.openErrorDialog('Falha ao sincronizar: '+error);
       this.isLoading();
     });
   }
@@ -584,14 +546,14 @@ export class MainComponent implements OnInit {
       paid: null
     }
     this.billService.editItemFromCardTable(billUpdate).then(result => {
-      this.openInfoDialog(result.message);
+      this.dialogMessage.openInfoDialog(result.message);
       this.syncCardAndMainTableExpenses();
       this.setStatusData();
       this.setTotals();
       this.cdRef.detectChanges();
       this.isLoading();
     }).catch(error => {
-      this.openErrorDialog('Falha: '+error);
+      this.dialogMessage.openErrorDialog('Falha: '+error);
       this.isLoading();
     });
   }

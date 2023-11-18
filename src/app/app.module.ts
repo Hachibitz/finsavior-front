@@ -41,6 +41,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditTableDialogComponent } from './components/edit-table-dialog/edit-table-dialog.component';
 import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog/recurrent-bill-dialog.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { DialogMessage } from './services/dialog-message.service';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import { LoginPageComponent } from './components/login-page/login-page.component
     AuthService,
     MatDialog, 
     AuthGuard,
+    DialogMessage,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
