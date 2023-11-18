@@ -7,7 +7,7 @@
         <input class="input-box" type="email" placeholder="Email" [(ngModel)]="email">
 
         <label>Usuário:</label>
-        <input class="input-box" type="text" placeholder="Usuário" [(ngModel)]="userName">
+        <input class="input-box" type="text" placeholder="Usuário" [(ngModel)]="username">
 
         <label>Nome:</label>
         <input class="input-box" type="text" placeholder="Nome" [(ngModel)]="name">
@@ -18,10 +18,13 @@
         <label>Senha:</label>
         <input class="input-box" type="password" placeholder="Senha" [(ngModel)]="password">
 
+        <label>Confirme a senha:</label>
+        <input class="input-box" type="password" placeholder="Repetir senha" [(ngModel)]="passwordConfirmation">
+
         <div class="checkbox">
-          <input type="checkbox" id="terms" [(ngModel)]="termsAcceptance">
+          <input type="checkbox" id="terms" [(ngModel)]="agreement">
           <label for="terms">Aceitar termos e condições</label>
-          <button class="btn-register" (click)="register()">Cadastrar</button>
+          <button class="btn-register" (click)="signUp()">Cadastrar</button>
         </div>
 
         <br>

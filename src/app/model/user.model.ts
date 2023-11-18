@@ -10,6 +10,8 @@ export interface SignUpRequest {
     firstName: string;
     lastName: string;
     password: string;
+    passwordConfirmation: string;
+    agreement: boolean;
 }
 
 export interface SignUpResponse {
