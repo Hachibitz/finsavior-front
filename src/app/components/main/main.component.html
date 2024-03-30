@@ -223,7 +223,8 @@
             <p>R$ {{liquidStatus}}</p>
           </div>
           <div class="status-box">
-            <p>Dicas e insights gerados por IA (Coming soon)</p>
+            <h3>Liquidez</h3>
+            <p>R$ {{liquidAndRightsStatus.toFixed(2)}}</p>
           </div>
         </div>
       </div>
@@ -231,12 +232,30 @@
     <div class="bottom-box-right">
       <div class="main">
         <div class="bottom-boxes">
-          <div class="status-box">
-            <h3>Liquidez</h3>
-            <p>R$ {{liquidAndRightsStatus}}</p>
-          </div>
-          <div class="status-box">
-            <p>Dicas e insights gerados por IA (Coming soon)</p>
+          <!--<div class="ai-status-box">
+            <p>Dicas da IA</p>
+            <h3>{{aiAdviceResult}}</h3>
+            <button mat-icon-button class="obter-button" (click)="generateAiAdvice()">
+              <mat-icon aria-label="Obter">cloud_download</mat-icon>
+            </button>
+          </div>-->
+          <div class="ai-status-box" [class.expanded]="isAiAdviceExpanded">
+            <p>Dicas da IA</p>
+            <h3 *ngIf="!isAiAdviceExpanded">{{ aiAdviceResult | slice:0:100 }}...</h3>
+            <h3 *ngIf="isAiAdviceExpanded">{{ aiAdviceResult }}</h3>
+            <div *ngIf="isAiAdviceGenerated">
+              <button mat-icon-button class="obter-button" *ngIf="!isAiAdviceExpanded" (click)="toggleAiAdviceExpand()">
+                <mat-icon aria-label="Ver mais">expand_more</mat-icon>
+              </button>
+              <button mat-icon-button class="obter-button" *ngIf="isAiAdviceExpanded" (click)="toggleAiAdviceExpand()">
+                <mat-icon aria-label="Ver menos">expand_less</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="!isAiAdviceGenerated">
+              <button mat-icon-button class="obter-button" (click)="generateAiAdvice()">
+                <mat-icon aria-label="Obter">cloud_download</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>

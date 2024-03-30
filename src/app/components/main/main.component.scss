@@ -54,7 +54,7 @@
     .bottom-box-left {
         width: 50%;
         margin-right: 20px;
-        max-height: 55vh;
+        max-height: 16vh;
         background-color: #333;
         border-radius: 10px;
         box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
@@ -64,7 +64,7 @@
     .bottom-box-right {
         width: 50%;
         margin-right: 10px;
-        max-height: 55vh;
+        max-height: 16vh;
         background-color: #333;
         border-radius: 10px;
         box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
@@ -80,6 +80,35 @@
         box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
         border-radius: 10px;
         overflow-y: auto;
+    }
+
+    .ai-status-box {
+        width: 100%;
+        background-color: #3f3f3f;
+        //border: 1px solid #4e4747;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        position: relative;
+    }
+
+    .ai-status-box h3 {
+        color: #cce4e7;
+        margin: 0;
+        margin-bottom: 10px;
+    }
+
+    .ai-status-box p {
+        color: #cce4e7;
+        margin: 0;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .obter-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
     }
 
     .status-box {
@@ -471,7 +500,7 @@ table td:first-child {
 }
 
 .action-buttons {
-    display: flex;
+    display: flex;  
     //gap: 5px;
 }
 

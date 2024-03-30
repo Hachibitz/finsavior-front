@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { BillRegisterRequest, TipoConta } from 'src/app/model/main.model';
+import { AiAdviceRequest, BillRegisterRequest, TipoConta } from 'src/app/model/main.model';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { ThemeService } from 'src/app/services/theme.service';
@@ -21,6 +21,7 @@ import { FormsModule,
          FormBuilder, 
          FormControl} from '@angular/forms';
 import { DialogMessage } from 'src/app/services/dialog-message.service';
+import { AI_PROMPT } from 'src/environments/environment';
 
 export const MY_FORMATS = {
   parse: {
@@ -86,6 +87,9 @@ export class MainComponent implements OnInit {
   income: number;
   totalDebit: number;
   totalLeft: number;
+  aiAdviceResult: string = "Obtenha dicas e insights gerados por IA do mês anterior";
+  isAiAdviceGenerated: boolean = false;
+  isAiAdviceExpanded: boolean = false;
 
   tableTypes: string[] = [
     'main',
@@ -150,6 +154,11 @@ export class MainComponent implements OnInit {
     this.syncCardAndMainTableExpenses();
     this.setStatusData();
     this.setTotals();
+    this.getAiAdvice();
+  }
+
+  toggleAiAdviceExpand() {
+    this.isAiAdviceExpanded = !this.isAiAdviceExpanded;
   }
 
   onSelectDate(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
@@ -561,6 +570,66 @@ export class MainComponent implements OnInit {
   markAsPaid(item) {
     item.Nome != 'Cartão de crédito' ? this.editItemFromMainTable(item) : localStorage.setItem("isCreditCardPaid", item.Pago);
     this.setTotals();
+  }
+
+  async generateAiAdvice(): Promise<void> {
+    this.billDate = this.billDate.subtract(1, 'months');
+    await this.setTableData();
+
+    const rowsTableString = this.generateTableString(this.rows);
+    const cardRowsTableString = this.generateTableString(this.cardRows);
+    const incomeRowsTableString = this.generateTableString(this.incomeRows);
+
+    const mountedPrompt: string = AI_PROMPT[0] + rowsTableString+"\n\n"+incomeRowsTableString+"\n\n" + AI_PROMPT[1] + cardRowsTableString+"\n\n" + AI_PROMPT[2] + AI_PROMPT[3];
+
+    const aiAdviceRequest: AiAdviceRequest = {
+      prompt: mountedPrompt,
+      date: this.formatData(this.billDate)
+    }
+
+    console.log(aiAdviceRequest);
+
+    this.billDate = this.billDate.add(1, 'months');
+    this.setTableData();
+
+    this.isLoading();
+    this.billService.generateAiAdvice(aiAdviceRequest).then(result => {
+      this.aiAdviceResult = result.message;
+      this.isAiAdviceGenerated = true;
+      this.isLoading();
+    }).catch(error => {
+      this.dialogMessage.openErrorDialog(error.error.message);
+      this.isLoading();
+    })
+  }
+
+  getAiAdvice() {
+    this.isLoading();
+    this.billService.getAiAdvice().then(result => {
+      this.aiAdviceResult = result.message;
+      this.isAiAdviceGenerated = true;
+      if(result.message.length == 0 || result.message == null) {
+        this.aiAdviceResult = "Obtenha dicas e insights gerados por IA do mês anterior";
+        this.isAiAdviceGenerated = false;
+      }
+      this.isLoading();
+    }).catch(error => {
+      this.dialogMessage.openErrorDialog(error.error.message);
+      this.isLoading();
+    })
+  }
+
+  generateTableString(data: any[]): string {
+    if (!data || data.length === 0) {
+      return '';
+    }
+  
+    const headers = Object.keys(data[0]);
+  
+    // Gera a string com os valores da tabela, sem as tags HTML
+    const valuesString = data.map(item => headers.map(header => item[header]).join('\t')).join('\n');
+  
+    return valuesString;
   }
 
 }
