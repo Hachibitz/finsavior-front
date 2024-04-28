@@ -25,6 +25,7 @@ export interface DeleteAccountAndDataRequest {
 }
 
 export interface DeleteAccountAndDataResponse {
+    status: string;
     message: string;
 }
 

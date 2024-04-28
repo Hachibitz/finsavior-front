@@ -20,7 +20,7 @@ export class UserService {
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
-                    reject(e);
+                    reject(e.error);
                 },
             });
         });
@@ -34,7 +34,7 @@ export class UserService {
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
-                    reject(e);
+                    reject(e.error);
                 },
             });
         });
