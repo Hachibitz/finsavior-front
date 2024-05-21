@@ -1,0 +1,42 @@
+#suggestionsPage {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.suggestion-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.suggestion-form h2 {
+  margin-bottom: 20px;
+}
+
+.btn-register,
+.small-btn {
+  background-color: #0099ff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-register:hover,
+.small-btn:hover {
+  background-color: #0077cc;
+}
+
+mat-form-field {
+  margin: 1vh;
+  width: 50vh;
+}
+
+p {
+  color: #d3d3d3;
+  margin-bottom: 1vh;
+  font-weight: bold;
+  font-size: 24px;
+}

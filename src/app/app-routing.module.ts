@@ -5,6 +5,7 @@ import { MainComponent } from './components/main/main.component';
 import { MyAccountComponent } from './components/my-account/my-account.component';
 import { AuthGuard } from './security/AuthGuard';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { SuggestionPageComponent } from './components/suggestion-page/suggestion-page.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,10 @@ const routes: Routes = [
   {
     path: 'fs/login',
     component: LoginPageComponent
+  },
+  {
+    path: 'fs/suggestion',
+    component: SuggestionPageComponent
   }
 ];
 

@@ -1,0 +1,35 @@
+<div id="suggestionsPage" class="fadeInUp">
+    <app-header-bar></app-header-bar>
+  
+    <div id="mainBody" class="fadeInUp" [class]="darkMode ? 'dark-mode' : 'light-mode'">
+      <div class="grid">
+        <div class="col-12">
+          <div class="box-input">
+            <div class="new-register">
+              <form [formGroup]="suggestionForm" class="suggestion-form">
+                <p>Envie suas sugestões</p>
+                <mat-form-field>
+                  <mat-label>Nome</mat-label>
+                  <input matInput formControlName="name">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>E-mail</mat-label>
+                  <input matInput formControlName="email">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Sugestão</mat-label>
+                  <textarea matInput formControlName="suggestion" rows="5"></textarea>
+                </mat-form-field>
+                <button class="btn-register" (click)="submitSuggestion()">Enviar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="dark-mode-toggle">
+      <div class="slider round" [class.checked]="darkMode"></div>
+    </div>
+  </div>
+  

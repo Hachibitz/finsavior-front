@@ -42,6 +42,7 @@ import { EditTableDialogComponent } from './components/edit-table-dialog/edit-ta
 import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog/recurrent-bill-dialog.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { DialogMessage } from './services/dialog-message.service';
+import { SuggestionPageComponent } from './components/suggestion-page/suggestion-page.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { DialogMessage } from './services/dialog-message.service';
     DialogMessagesComponent,
     EditTableDialogComponent,
     RecurrentBillDialogComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    SuggestionPageComponent
   ],
   imports: [
     BrowserModule,
