@@ -28,12 +28,9 @@ export class SuggestionPageComponent implements OnInit {
 
   submitSuggestion(): void {
     if (this.suggestionForm.valid) {
-      // You can implement the logic to send the suggestion via email here
       console.log('Suggestion submitted:', this.suggestionForm.value);
-      // Optionally, you can reset the form after submission
       this.suggestionForm.reset();
     } else {
-      // Handle invalid form
       console.log('Invalid form. Please check your inputs.');
     }
   }
