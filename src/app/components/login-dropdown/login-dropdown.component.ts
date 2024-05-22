@@ -18,6 +18,10 @@ export class LoginDropdownComponent implements OnInit{
   rememberMe: boolean;
   isLoggedIn: boolean = false;
 
+  userName: string;
+  userProfilePicture;
+  dropdownOpen: boolean = false;
+
   constructor(private userService: UserService, private authService: AuthService, private router: Router, private dialogMessage: DialogMessage){
     
   }
@@ -28,6 +32,10 @@ export class LoginDropdownComponent implements OnInit{
     this.authService.validateToken(token).then(
       (isValid) => {
         this.isLoggedIn = isValid;
+
+        if (isValid) {
+          this.loadUserProfile();
+        }
       })
       .catch((error) => {
         this.isLoggedIn = false;
@@ -35,9 +43,15 @@ export class LoginDropdownComponent implements OnInit{
     );
   }
 
-  userName: string = 'John Doe';
-  userProfilePicture: string = 'https://tds-images.thedailystar.net/sites/default/files/styles/amp_metadata_content_image_min_696px_wide/public/images/2022/10/14/ai_art_generator.png';
-  dropdownOpen: boolean = false;
+  loadUserProfile() {
+    this.userService.getProfileData().then(result => {
+        this.userProfilePicture = 'data:image/png;base64,' + result.profilePicture;
+        this.userName = result.username;
+    })
+    .catch(error => {
+        this.dialogMessage.openErrorDialog('Erro ao carregar perfil do usuário: ' + error.error);
+    });
+  }
 
   toggleDropdown(event: MouseEvent) {
     this.dropdownOpen = !this.dropdownOpen;

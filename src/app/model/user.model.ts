@@ -34,3 +34,13 @@ export interface ChangeAccountPasswordRequest {
     currentPassword: string;
     newPassword: string;
 }
+
+export interface UserData {
+    username: string;
+    profilePicture: ArrayBuffer;
+}
+
+export interface UploadProfilePictureRequest {
+    name: string;
+    profilePicture: File;
+}

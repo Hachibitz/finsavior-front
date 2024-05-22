@@ -90,3 +90,18 @@
     background-color: #f0f0f0;
     color: #0056b3;
   }
+
+  a {
+    color: #4285f4;
+    text-decoration: none;
+    font-size: 1.5em;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 25px;
+    padding: 8px 16px;
+  }
+  
+  a:hover {
+    color: #f0f0f0;
+    background-color: #6db7f8;
+  }

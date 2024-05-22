@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CHANGE_ACCOUNT_PASSWORD, DELETE_ACCOUNT_AND_DATA, SERVICE_LOGIN, SIGNUP_SERVICE } from 'src/environments/environment';
+import { CHANGE_ACCOUNT_PASSWORD, DELETE_ACCOUNT_AND_DATA, GET_PROFILE_DATA, USER_PROFILE } from 'src/environments/environment';
 import {
     HttpClient,
     HttpErrorResponse
 } from '@angular/common/http';
-import { ChangeAccountPasswordRequest, DeleteAccountAndDataRequest, DeleteAccountAndDataResponse, LoginRequest, SignUpRequest, SignUpResponse } from '../model/user.model';
+import { ChangeAccountPasswordRequest, DeleteAccountAndDataRequest, DeleteAccountAndDataResponse, LoginRequest, SignUpRequest, SignUpResponse, UploadProfilePictureRequest, UserData } from '../model/user.model';
 import { CookieService } from 'ngx-cookie-service';
 import { GenericResponse } from '../model/main.model';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -31,6 +32,35 @@ export class UserService {
         const promessa = new Promise<GenericResponse>((resolve, reject) => {
             this.http.post(CHANGE_ACCOUNT_PASSWORD, changeAccountPasswordRequest, { responseType: 'json' }).subscribe({
                 next: (result: GenericResponse) => {
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
+                    reject(e.error);
+                },
+            });
+        });
+        return promessa;
+    }
+
+    uploadProfilePicture(request: FormData): Promise<GenericResponse> {
+        const promessa = new Promise<GenericResponse>((resolve, reject) => {
+            this.http.post(`${USER_PROFILE}/upload-picture`, request).subscribe({
+                next: (result: GenericResponse) => {
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
+                    reject(e.error);
+                },
+            });
+        });
+        
+        return promessa;
+    }
+
+    getProfileData(): Promise<UserData> {
+        const promessa = new Promise<UserData>((resolve, reject) => {
+                this.http.get(GET_PROFILE_DATA, { responseType: 'json' }).subscribe({
+                next: (result: UserData) => {
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
