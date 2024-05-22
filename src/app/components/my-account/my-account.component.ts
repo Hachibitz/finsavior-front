@@ -3,7 +3,7 @@ import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { MatAccordion } from '@angular/material/expansion';
 import { MainComponent } from '../main/main.component';
 import { UserService } from 'src/app/services/user.service';
-import { ChangeAccountPasswordRequest, DeleteAccountAndDataRequest } from 'src/app/model/user.model';
+import { ChangeAccountPasswordRequest, DeleteAccountAndDataRequest, UploadProfilePictureRequest } from 'src/app/model/user.model';
 import { DialogMessage } from 'src/app/services/dialog-message.service';
 
 @Component({
@@ -18,6 +18,9 @@ import { DialogMessage } from 'src/app/services/dialog-message.service';
 export class MyAccountComponent implements OnInit{
 
   @ViewChild(MatAccordion) accordion: MatAccordion; 
+  @ViewChild('fileInput') fileInput;
+
+  userProfilePicture: string = 'https://tds-images.thedailystar.net/sites/default/files/styles/amp_metadata_content_image_min_696px_wide/public/images/2022/10/14/ai_art_generator.png';
   
   darkMode: boolean;
   loading: boolean = false;
@@ -31,11 +34,46 @@ export class MyAccountComponent implements OnInit{
   changeAccountPasswordRequest: ChangeAccountPasswordRequest;
   
   ngOnInit(): void {
-
+    this.isLoading();
+    this.loadUserProfile();
   }
 
   constructor(private headerBarComponent: HeaderBarComponent, private userService: UserService, private dialogMessage: DialogMessage) {
     
+  }
+
+  loadUserProfile() {
+    this.userService.getProfileData().then(result => {
+        this.userProfilePicture = 'data:image/png;base64,' + result.profilePicture;
+        this.isLoading();
+    })
+    .catch(error => {
+        this.dialogMessage.openErrorDialog('Erro ao carregar perfil do usuário: ' + error.error);
+        this.isLoading();
+    });
+  }
+
+  uploadProfilePicture() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: Event) {
+    const file: File = (event.target as HTMLInputElement).files[0];
+    if (file) {
+      this.isLoading();
+
+      const formData = new FormData();
+      formData.append('profilePicture', file);
+
+      this.userService.uploadProfilePicture(formData).then(result => {
+        this.dialogMessage.openInfoDialog(result.message);
+        this.loadUserProfile();
+      })
+      .catch(error => {
+        this.dialogMessage.openErrorDialog('Error: ' + error.error);
+        this.isLoading();
+      });
+    }
   }
 
   toggleDarkMode(themeSelected: any) {
