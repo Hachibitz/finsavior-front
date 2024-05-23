@@ -45,8 +45,8 @@
       <div class="box-side">
         <div class="main">
           <div>
-            <a>Caixa</a><label style="color: grey;">  (Salário+Ativos)</label><br>
-            <label style="color: grey;">{{income}},00R$</label>
+            <a>Saldo</a><label style="color: grey;">  (Quantia disponível)</label><br>
+            <label style="color: grey;">{{currentlyAvailableIncome}},00R$</label>
           </div><br>
           <a>Guia de contas</a>
           <ul>
@@ -85,6 +85,12 @@
                 <div>
                   <a>Total faltante: </a><label style="color: grey;">{{totalLeft}}R$</label>
                 </div>
+              </div>
+              <div>
+                <a>Filtros: </a>
+                <button mat-button (click)="applyFilter('todos')">Todos</button>
+                <button mat-button (click)="applyFilter('pagos')">Pagos</button>
+                <button mat-button (click)="applyFilter('nao-pagos')">Não Pagos</button>
               </div>
               <mat-table [dataSource]="rows" matSort>
                 <ng-container matColumnDef="Nome">

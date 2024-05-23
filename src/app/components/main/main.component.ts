@@ -91,12 +91,14 @@ export class MainComponent implements OnInit, AfterViewInit {
   cardBillDescription: string;
   liquidStatus: number = 0;
   liquidAndRightsStatus: number = 0;
-  income: number;
   totalDebit;
   totalLeft;
+  totalPaid;
+  currentlyAvailableIncome;
   aiAdviceResult: string = "Obtenha dicas e insights gerados por IA do mês anterior";
   isAiAdviceGenerated: boolean = false;
   isAiAdviceExpanded: boolean = false;
+  filterStatus: string = 'todos';
 
   tableTypes: string[] = [
     'main',
@@ -122,6 +124,9 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.rows.sort = this.sort;
     this.cardRows.sort = this.sort;
     this.incomeRows.sort = this.sort;
+
+    this.configureSorting();
+    this.configureFiltering();
   }
 
   constructor(private cdRef: ChangeDetectorRef, private themeService: ThemeService, private billService: BillService, private dialog: MatDialog, private fb: FormBuilder, private dialogMessage: DialogMessage) {
@@ -144,6 +149,35 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
 
     this.syncFormDataAndFields();
+  }
+
+  configureSorting() {
+    const sortAccessor = (data, sortHeaderId) => {
+      switch (sortHeaderId) {
+        case 'Valor':
+          return this.formatNumberToIncrement(data.Valor);
+        default:
+          return data[sortHeaderId];
+      }
+    };
+
+    this.rows.sortingDataAccessor = sortAccessor;
+    this.incomeRows.sortingDataAccessor = sortAccessor;
+    this.cardRows.sortingDataAccessor = sortAccessor;
+  }
+
+  configureFiltering() {
+    this.rows.filterPredicate = (data, filter: string) => {
+      if (filter === 'todos') {
+        return true;
+      }
+      return filter === 'pagos' ? data.Pago : !data.Pago;
+    };
+  }
+
+  applyFilter(filterValue: string) {
+    this.filterStatus = filterValue;
+    this.rows.filter = filterValue;
   }
 
   syncFormDataAndFields(): void {
@@ -320,13 +354,11 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.isLoading();
     this.rows = new MatTableDataSource<any>([]);
     this.incomeRows = new MatTableDataSource<any>([]);
-    this.income = 0;
 
     try {
       const result = await this.billService.loadMainTableData(this.formatData(this.billDate));
       result.mainTableDataList.forEach((row) => {
         if (row.billType === 'Caixa' || row.billType === 'Ativo') {
-          this.income += row.billValue;
           this.incomeRows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
         } else {
           this.rows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate, Pago: row.paid });
@@ -392,16 +424,17 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   setStatusData(): void {
-    const totalPaid: number = this.rows.data.filter(row => row.Pago).reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0);
-    const totalUnpaid: number = this.rows.data.filter(row => !row.Pago).reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0);
+    this.totalPaid = this.rows.data.filter(row => row.Pago).reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0);
+    this.currentlyAvailableIncome = this.incomeRows.data.filter(incomeRow => incomeRow.Tipo === 'Caixa').reduce((acc, incomeRow) => acc + parseFloat(incomeRow.Valor.replace('R$ ', '')), 0);
+    this.setTotals();
 
-    this.liquidStatus = this.income - totalPaid;
-    this.liquidAndRightsStatus = this.income - totalUnpaid;
+    this.liquidStatus = this.currentlyAvailableIncome - this.totalPaid;
+    this.liquidAndRightsStatus = this.getIncomeTotal() - this.totalDebit;
   }
 
   setTotals(): void {
     this.totalDebit = (this.rows.data.filter(row => row.Tipo === 'Passivo').reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0)).toFixed(2);
-    this.totalLeft = (this.income - this.totalDebit).toFixed(2);
+    this.totalLeft = (this.totalDebit - this.totalPaid).toFixed(2);
   }
 
   formatNumberToIncrement(value: string):number {
@@ -558,8 +591,6 @@ export class MainComponent implements OnInit, AfterViewInit {
       date: this.formatData(this.billDate)
     }
 
-    console.log(aiAdviceRequest);
-
     this.billDate = this.billDate.add(1, 'months');
     this.setTableData();
 
@@ -601,6 +632,11 @@ export class MainComponent implements OnInit, AfterViewInit {
     const valuesString = data.map(item => headers.map(header => item[header]).join('\t')).join('\n');
   
     return valuesString;
+  }
+
+  getIncomeTotal(): number {
+    let result: number = this.incomeRows.data.reduce((acc, incomeRow) => acc + parseFloat(incomeRow.Valor.replace('R$ ', '')), 0);
+    return result;
   }
 
 }
