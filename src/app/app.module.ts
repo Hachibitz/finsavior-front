@@ -43,6 +43,9 @@ import { RecurrentBillDialogComponent } from './components/recurrent-bill-dialog
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { DialogMessage } from './services/dialog-message.service';
 import { SuggestionPageComponent } from './components/suggestion-page/suggestion-page.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
   declarations: [
@@ -85,7 +88,10 @@ import { SuggestionPageComponent } from './components/suggestion-page/suggestion
     MatOptionModule,
     MatDialogModule,
     MatTooltipModule,
-    MatTabsModule
+    MatTabsModule,
+    MatTableModule,
+    MatSortModule,
+    CdkTableModule
   ],
   providers: [
     UserService, 

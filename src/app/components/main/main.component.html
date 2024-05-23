@@ -12,11 +12,7 @@
               <mat-label>Mês e ano</mat-label>
               <input matInput [matDatepicker]="dp" [(ngModel)]="billDate">
               <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-              <mat-datepicker #dp
-                              startView="multi-year"
-                              (monthSelected)="onSelectDate($event, dp)"
-                              panelClass="example-month-picker">
-              </mat-datepicker>
+              <mat-datepicker #dp startView="multi-year" (monthSelected)="onSelectDate($event, dp)" panelClass="example-month-picker"></mat-datepicker>
             </mat-form-field>
           </div>
           <form [formGroup]="mainTableForm" class="right-column">
@@ -56,24 +52,19 @@
           <ul>
             <li>
               <span class="title">Ativo</span><br><br>
-              <span class="description">Direito ou valor que ficará disponível para ser encorporado à liquidez no
-                futuro,
-                exemplo: vale-alimentação, pagamento de empréstimo a receber, restituição de imposto, etc...</span>
+              <span class="description">Direito ou valor que ficará disponível para ser encorporado à liquidez no futuro, exemplo: vale-alimentação, pagamento de empréstimo a receber, restituição de imposto, etc...</span>
             </li>
             <li>
               <span class="title">Passivo</span><br><br>
-              <span class="description">Obrigação ou valor a diminuir da liquidez, exemplo: aluguel, parcela de carro,
-                iptu, etc...</span>
+              <span class="description">Obrigação ou valor a diminuir da liquidez, exemplo: aluguel, parcela de carro, iptu, etc...</span>
             </li>
             <li>
               <span class="title">Caixa</span><br><br>
-              <span class="description">Representa a injeção de valor valor imediato e disponível na liquidez, por
-                exemplo: saldo de conta em banco.</span>
+              <span class="description">Representa a injeção de valor valor imediato e disponível na liquidez, por exemplo: saldo de conta em banco.</span>
             </li>
             <li>
               <span class="title">Liquidez</span><br><br>
-              <span class="description">Representa o seu estado financeiro atual: Liquidez=(Ativo+Caixa)-Passivo.
-              </span>
+              <span class="description">Representa o seu estado financeiro atual: Liquidez=(Ativo+Caixa)-Passivo.</span>
             </li>
           </ul>
         </div>
@@ -95,37 +86,42 @@
                   <a>Total faltante: </a><label style="color: grey;">{{totalLeft}}R$</label>
                 </div>
               </div>
-              <table id="registerTable" style="margin-top: 10px;">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Valor</th>
-                    <th>Tipo</th>
-                    <th>Descrição</th>
-                    <th>Data</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of rows" [ngClass]="{'paid-row': item.Pago}">
-                    <td>{{ item.Nome }}</td>
-                    <td>{{ item.Valor }}</td>
-                    <td>{{ item.Tipo }}</td>
-                    <td>{{ item.Descricao }}</td>
-                    <td>{{ item.Data }}</td>
-                    <td class="action-buttons">
-                      <button mat-icon-button (click)="deleteItemFromMainTable(item)">
-                        <mat-icon aria-label="Excluir">delete</mat-icon>
-                      </button>
-                      <button mat-icon-button (click)="openMainTableEditDialog(item)">
-                        <mat-icon aria-label="Editar">edit</mat-icon>
-                      </button>
-                      <mat-checkbox [(ngModel)]="item.Pago" color="secondary" matTooltip="Marcar como Pago"
-                        (ngModelChange)="markAsPaid(item)"></mat-checkbox>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <mat-table [dataSource]="rows" matSort>
+                <ng-container matColumnDef="Nome">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nome </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Nome }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Valor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Valor </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Valor }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Tipo }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Descricao">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header class="main-description-column"> Descrição </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Descricao }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Data">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Data </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Data }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Acoes">
+                  <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+                  <mat-cell *matCellDef="let item" class="action-buttons">
+                    <button mat-icon-button (click)="deleteItemFromMainTable(item)">
+                      <mat-icon aria-label="Excluir">delete</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="openMainTableEditDialog(item)">
+                      <mat-icon aria-label="Editar">edit</mat-icon>
+                    </button>
+                    <mat-checkbox [(ngModel)]="item.Pago" color="secondary" matTooltip="Marcar como Pago" (ngModelChange)="markAsPaid(item)"></mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
             </div>
           </div>
         </mat-tab>
@@ -143,73 +139,81 @@
                   <a>Total faltante: </a><label style="color: grey;">{{totalLeft}},00R$</label>
                 </div>
               </div>
-              <table id="registerTable" style="margin-top: 10px;">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Valor</th>
-                    <th>Tipo</th>
-                    <th>Descrição</th>
-                    <th>Data</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of incomeRows" [ngClass]="{'paid-row': item.Pago}">
-                    <td>{{ item.Nome }}</td>
-                    <td>{{ item.Valor }}</td>
-                    <td>{{ item.Tipo }}</td>
-                    <td>{{ item.Descricao }}</td>
-                    <td>{{ item.Data }}</td>
-                    <td class="action-buttons">
-                      <button mat-icon-button (click)="deleteItemFromMainTable(item)">
-                        <mat-icon aria-label="Excluir">delete</mat-icon>
-                      </button>
-                      <button mat-icon-button (click)="openMainTableEditDialog(item)">
-                        <mat-icon aria-label="Editar">edit</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <mat-table [dataSource]="incomeRows" matSort>
+                <ng-container matColumnDef="Nome">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nome </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Nome }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Valor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Valor </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Valor }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Tipo }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Descricao">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header  class="income-description-column"> Descrição </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Descricao }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Data">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Data </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{ item.Data }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Acoes">
+                  <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+                  <mat-cell *matCellDef="let item" class="action-buttons">
+                    <button mat-icon-button (click)="deleteItemFromMainTable(item)">
+                      <mat-icon aria-label="Excluir">delete</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="openMainTableEditDialog(item)">
+                      <mat-icon aria-label="Editar">edit</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
             </div>
           </div>
         </mat-tab>
-      </mat-tab-group>  
-    </div>  
+      </mat-tab-group>
+    </div>
     <div class="right-table">
       <div class="box-side">
         <div class="main">
-          <a>
-            Tabela de detalhamento de cartão de crédito
-          </a>
-          <table id="cardTable" style="margin-top: 10px;">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Valor</th>
-                <th>Descrição</th>
-                <th>Data</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of cardRows">
-                <td>{{ item.Nome }}</td>
-                <td>{{ item.Valor }}</td>
-                <td>{{ item.Descricao }}</td>
-                <td>{{ item.Data }}</td>
-                <td class="action-buttons">
-                  <button mat-icon-button (click)="deleteItemFromCardTable(item)">
-                    <mat-icon aria-label="Excluir">delete</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="openCardTableEditDialog(item)">
-                    <mat-icon aria-label="Editar">edit</mat-icon>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <a style="margin-bottom: 20px;">Tabela de detalhamento de cartão de crédito</a>
+          <mat-table [dataSource]="cardRows" matSort>
+            <ng-container matColumnDef="Nome">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Nome </mat-header-cell>
+              <mat-cell *matCellDef="let item"> {{ item.Nome }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Valor">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Valor </mat-header-cell>
+              <mat-cell *matCellDef="let item"> {{ item.Valor }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Descricao">
+              <mat-header-cell *matHeaderCellDef mat-sort-header class="card-description-column"> Descrição </mat-header-cell>
+              <mat-cell *matCellDef="let item"> {{ item.Descricao }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Data">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Data </mat-header-cell>
+              <mat-cell *matCellDef="let item"> {{ item.Data }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Acoes">
+              <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+              <mat-cell *matCellDef="let item" class="action-buttons">
+                <button mat-icon-button (click)="deleteItemFromCardTable(item)">
+                  <mat-icon aria-label="Excluir">delete</mat-icon>
+                </button>
+                <button mat-icon-button (click)="openCardTableEditDialog(item)">
+                  <mat-icon aria-label="Editar">edit</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="cardDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: cardDisplayedColumns;"></mat-row>
+          </mat-table>
         </div>
       </div>
     </div>
@@ -220,7 +224,7 @@
         <div class="bottom-boxes">
           <div class="status-box">
             <h3>Status atual</h3>
-            <p>R$ {{liquidStatus}}</p>
+            <p>R$ {{liquidStatus.toFixed(2)}}</p>
           </div>
           <div class="status-box">
             <h3>Liquidez</h3>
@@ -232,13 +236,6 @@
     <div class="bottom-box-right">
       <div class="main">
         <div class="bottom-boxes">
-          <!--<div class="ai-status-box">
-            <p>Dicas da IA</p>
-            <h3>{{aiAdviceResult}}</h3>
-            <button mat-icon-button class="obter-button" (click)="generateAiAdvice()">
-              <mat-icon aria-label="Obter">cloud_download</mat-icon>
-            </button>
-          </div>-->
           <div class="ai-status-box" [class.expanded]="isAiAdviceExpanded">
             <p>Dicas da IA</p>
             <h3 *ngIf="!isAiAdviceExpanded">{{ aiAdviceResult | slice:0:100 }}...</h3>
@@ -262,12 +259,3 @@
     </div>
   </div>
 </div>
-<!--<div class="dark-mode-toggle">
-  <label class="switch">
-    <input type="checkbox" [(ngModel)]="darkMode" (ngModelChange)="toggleDarkMode()">
-    <span class="slider round"></span>
-  </label>
-</div>-->
-<!--<div class="dark-mode-toggle" (click)="toggleDarkMode()">
-  <div class="slider round" [class.checked]="darkMode"></div>
-</div>-->

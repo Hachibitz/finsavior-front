@@ -32,6 +32,8 @@ export class MyAccountComponent implements OnInit{
   newPassword: string;
   newPasswordConfirmation: string;
   changeAccountPasswordRequest: ChangeAccountPasswordRequest;
+
+  private static MAX_PROFILE_IMAGE_SIZE_KB: number = 5120;
   
   ngOnInit(): void {
     this.isLoading();
@@ -61,6 +63,13 @@ export class MyAccountComponent implements OnInit{
     const file: File = (event.target as HTMLInputElement).files[0];
     if (file) {
       this.isLoading();
+
+      const fileSizeInKb: number = (file.size / 1024); 
+      if(fileSizeInKb > MyAccountComponent.MAX_PROFILE_IMAGE_SIZE_KB) {
+        this.dialogMessage.openWarnDialog("Tamanho máximo da imagem precisa ser de 5mb e formato deve ser PNG ou JPG");
+        this.isLoading();
+        return;
+      }
 
       const formData = new FormData();
       formData.append('profilePicture', file);

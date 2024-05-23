@@ -464,40 +464,13 @@ mat-tab-group {
 .table-title {
     display: flex;
     justify-content: space-between;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
     margin-bottom: 20px;
-    border-radius: 10px;
 }
 
-table th {
-    text-align: left;
-    padding: 10px;
-    background-color: #0099ff;
-    color: #fff;
-    border: none;
-}
-
-table th:first-child {
-    border-radius: 10px 0 0 0;
-}
-
-table th:last-child {
-    border-radius: 0 10px 0 0;
-}
-
-table td {
-    padding-left: 5px;
-    border: 1px solid #e5e5e5;
-    //border-radius: 0 0 10px 10px;
-}
-
-table td:first-child {
-    font-weight: bold;
-}
+/*.card-description-column {
+    //flex: 1 0 auto;
+    width: 50vh;
+}*/
 
 .action-buttons {
     display: flex;  

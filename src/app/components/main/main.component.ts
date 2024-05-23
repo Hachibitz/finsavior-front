@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { AiAdviceRequest, BillRegisterRequest, TipoConta } from 'src/app/model/main.model';
@@ -7,6 +7,8 @@ import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { ThemeService } from 'src/app/services/theme.service';
 import { BillService } from 'src/app/services/bill.service';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
@@ -60,18 +62,23 @@ const tabAnimation = trigger('tabAnimation', [
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},],
   animations: [tabAnimation]
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
+  
+  @ViewChild(MatSort) sort: MatSort;
 
   mainTableForm: FormGroup;
   cardTableForm: FormGroup;
+
+  rows = new MatTableDataSource<any>([]);
+  incomeRows = new MatTableDataSource<any>([]);
+  cardRows = new MatTableDataSource<any>([]);
 
   ColumnMode = ColumnMode;
   loading: boolean = false;
   darkMode:boolean = false;
 
-  rows = [];
-  cardRows = [];
-  incomeRows = [];
+  displayedColumns: string[] = ['Nome', 'Valor', 'Tipo', 'Descricao', 'Data', 'Acoes'];
+  cardDisplayedColumns: string[] = ['Nome', 'Valor', 'Descricao', 'Data', 'Acoes'];
 
   selectedType: string;
   
@@ -85,8 +92,8 @@ export class MainComponent implements OnInit {
   liquidStatus: number = 0;
   liquidAndRightsStatus: number = 0;
   income: number;
-  totalDebit: number;
-  totalLeft: number;
+  totalDebit;
+  totalLeft;
   aiAdviceResult: string = "Obtenha dicas e insights gerados por IA do mês anterior";
   isAiAdviceGenerated: boolean = false;
   isAiAdviceExpanded: boolean = false;
@@ -109,6 +116,12 @@ export class MainComponent implements OnInit {
     this.billDate = _moment(`${anoAtual}-${mesAtual}`, "YYYY-MM");
 
     this.setTableData();
+  }
+
+  ngAfterViewInit() {
+    this.rows.sort = this.sort;
+    this.cardRows.sort = this.sort;
+    this.incomeRows.sort = this.sort;
   }
 
   constructor(private cdRef: ChangeDetectorRef, private themeService: ThemeService, private billService: BillService, private dialog: MatDialog, private fb: FormBuilder, private dialogMessage: DialogMessage) {
@@ -303,54 +316,52 @@ export class MainComponent implements OnInit {
     return month+' '+year;
   }
 
-  loadMainTableData(): Promise<void> {
+  async loadMainTableData(): Promise<void> {
     this.isLoading();
-    this.rows = [];
-    this.incomeRows = [];
+    this.rows = new MatTableDataSource<any>([]);
+    this.incomeRows = new MatTableDataSource<any>([]);
     this.income = 0;
 
-    return new Promise((resolve, reject) => {
-      this.billService.loadMainTableData(this.formatData(this.billDate)).then(result => {
-        result.mainTableDataList.forEach((row) => {
-          if(row.billType == 'Caixa' || row.billType == 'Ativo'){
-            this.income += row.billValue;
-            this.incomeRows.push({ id: row.id, Nome: row.billName, Valor: 'R$ '+row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
-          } else {
-            this.rows.push({ id: row.id, Nome: row.billName, Valor: 'R$ '+row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate, Pago: row.paid });
-          }
-        });
-        this.cdRef.detectChanges();
-        this.isLoading();
-        resolve();
-      })
-      .catch(error => {
-        this.rows.push({ Nome: 'No data', Valor: 'R$ 0,00', Tipo: 'No data', Descricao: 'No data', Data: '' });
-        this.isLoading();
-        this.dialogMessage.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
-        reject();
+    try {
+      const result = await this.billService.loadMainTableData(this.formatData(this.billDate));
+      result.mainTableDataList.forEach((row) => {
+        if (row.billType === 'Caixa' || row.billType === 'Ativo') {
+          this.income += row.billValue;
+          this.incomeRows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
+        } else {
+          this.rows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate, Pago: row.paid });
+        }
       });
-    });
+      this.cdRef.detectChanges();
+    } catch (error) {
+      this.rows.data.push({ Nome: 'No data', Valor: 'R$ 0,00', Tipo: 'No data', Descricao: 'No data', Data: '' });
+      this.dialogMessage.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
+    } finally {
+      this.isLoading();
+    }
+
+    this.rows.data = [...this.rows.data];
+    this.incomeRows.data = [...this.incomeRows.data];
   }
 
   async loadCardTableData(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.isLoading();
-      this.cardRows = [];
-      this.billService.loadCardTableData(this.formatData(this.billDate)).then(result => {
-        result.cardTableDataList.forEach((row) => {
-          this.cardRows.push({ id: row.id, Nome: row.billName, Valor: 'R$ '+row.billValue, Descricao: row.billDescription, Data: row.billDate });
-        });
-        this.cdRef.detectChanges();
-        this.isLoading();
-        resolve();
-      })
-      .catch(error => {
-        this.cardRows.push({ id: null, Nome: 'No data', Valor: 'R$ 0,00', Desc: 'No data', Data: '' });
-        this.isLoading();
-        this.dialogMessage.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
-        reject();
+    this.isLoading();
+    this.cardRows = new MatTableDataSource<any>([]);
+
+    try {
+      const result = await this.billService.loadCardTableData(this.formatData(this.billDate));
+      result.cardTableDataList.forEach((row) => {
+        this.cardRows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Descricao: row.billDescription, Data: row.billDate });
       });
-    });
+      this.cdRef.detectChanges();
+    } catch (error) {
+      this.cardRows.data.push({ id: null, Nome: 'No data', Valor: 'R$ 0,00', Descricao: 'No data', Data: '' });
+      this.dialogMessage.openErrorDialog('Ocorreu um erro na comunicação com o servidor.');
+    } finally {
+      this.isLoading();
+    }
+
+    this.cardRows.data = [...this.cardRows.data];
   }
 
   syncCardAndMainTableExpenses(): void {
@@ -358,83 +369,39 @@ export class MainComponent implements OnInit {
     let isCardBillPresent: number = 0;
     let cardBillIndex: number = null;
 
-    this.rows.forEach((row) => {
+    this.rows.data.forEach((row) => {
       if(row.Nome == 'Cartão de crédito') {
         isCardBillPresent += 1;
-        cardBillIndex = this.rows.indexOf(row);
-        row.Pago = localStorage.getItem("isCreditCardPaid") == 'true' ? true : false;
+        cardBillIndex = this.rows.data.indexOf(row);
+        row.Pago = localStorage.getItem("isCreditCardPaid") == "true";
       }
-    })
+    });
 
-    this.cardRows.forEach((cardRow) => {
-      let index = this.cardRows.indexOf(cardRow);
-      creditCardTableAmount += this.formatNumberToIncrement(this.cardRows[index].Valor);
-    })
+    this.cardRows.data.forEach((row) => {
+      creditCardTableAmount += parseFloat(row.Valor.replace('R$ ', ''));
+    });
 
-
-    if(isCardBillPresent >= 1) {
-      this.rows[cardBillIndex].Valor = 'R$ '+creditCardTableAmount.toFixed(2);
-      const indexOfCreditCardBill = this.rows.indexOf(this.rows[cardBillIndex]);
-      const creditBillInArray = this.rows.splice(indexOfCreditCardBill, 1);
-      this.rows.unshift(creditBillInArray[0]);
-      this.cdRef.detectChanges();
-      /*let mainTableCreditCardValue = this.formatNumberToIncrement(this.rows[cardBillIndex].Valor);
-
-      if(creditCardTableAmount >= mainTableCreditCardValue){
-        this.rows[cardBillIndex].Valor = 'R$ '+creditCardTableAmount.toFixed(2);
-      } else {
-        this.cardRows.push({ Nome: 'Outros gastos', Valor: 'R$'+(mainTableCreditCardValue-creditCardTableAmount).toFixed(2), Descricao: 'Gastos desconhecidos com cartão de crédito', Data: this.formatData(this.billDate) });
-      }*/
+    if(isCardBillPresent == 0) {
+      this.rows.data.push({ Nome: '*Cartão de crédito', Valor: 'R$ ' + creditCardTableAmount, Tipo: 'Passivo', Descricao: 'Soma da tabela de cartão de crédito', Data: this.billDate.format('MM/YYYY'), Pago: localStorage.getItem("isCreditCardPaid") == "true" });
     } else {
-      let creditCardBill = { Nome: 'Cartão de crédito', Valor: 'R$ '+creditCardTableAmount.toFixed(2), Tipo: 'Passivo', Descricao: 'Detalhamento disponível na tabela de cartão', Data: this.formatData(this.billDate), Pago: localStorage.getItem("isCreditCardPaid") == 'true' ? true : false };
-      this.rows.push(creditCardBill);
-      const indexOfCreditCardBill = this.rows.indexOf(creditCardBill);
-      const creditBillInArray = this.rows.splice(indexOfCreditCardBill, 1);
-      this.rows.unshift(creditBillInArray[0]);
-      this.cdRef.detectChanges();
+      let updatedRow = this.rows.data[cardBillIndex];
+      updatedRow.Valor = 'R$ ' + creditCardTableAmount;
     }
+
+    this.rows.data = [...this.rows.data];
   }
 
-  setStatusData() {
-    this.liquidStatus = 0;
-    this.liquidAndRightsStatus = 0;
-    this.rows.forEach((row) => {
-      switch(row.Tipo) {
-        /*case 'Ativo':
-          this.liquidAndRightsStatus += this.formatNumberToIncrement(row.Valor);
-          break;*/
-        case 'Passivo':
-          this.liquidStatus -= this.formatNumberToIncrement(row.Valor);
-          this.liquidAndRightsStatus -= this.formatNumberToIncrement(row.Valor);
-          break;
-        /*case 'Caixa':
-          this.liquidStatus += this.formatNumberToIncrement(row.Valor);
-          this.liquidAndRightsStatus += this.formatNumberToIncrement(row.Valor);
-          break;*/
-        default:
-          break;
-      }
-    })
+  setStatusData(): void {
+    const totalPaid: number = this.rows.data.filter(row => row.Pago).reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0);
+    const totalUnpaid: number = this.rows.data.filter(row => !row.Pago).reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0);
 
-    this.incomeRows.forEach((incomeRow)=>{
-      incomeRow.Tipo == 'Caixa' ? this.liquidStatus += this.formatNumberToIncrement(incomeRow.Valor) : false;
-    })
-    this.liquidStatus = parseFloat(this.liquidStatus.toFixed(2))
-    this.liquidAndRightsStatus = parseFloat(this.liquidAndRightsStatus.toFixed(2))+this.income;
+    this.liquidStatus = this.income - totalPaid;
+    this.liquidAndRightsStatus = this.income - totalUnpaid;
   }
 
   setTotals(): void {
-    let totalToDeduct: number = 0;
-    this.totalDebit = 0;
-    this.totalLeft = 0;
-    
-    this.rows.forEach((row => {
-      row.Tipo == 'Passivo' ? this.totalDebit += this.formatNumberToIncrement(row.Valor) : false;
-      row.Pago ? totalToDeduct += this.formatNumberToIncrement(row.Valor) : false;
-    }))
-    this.totalLeft = this.totalDebit - totalToDeduct;
-    this.totalDebit = parseFloat(this.totalDebit.toFixed(2));
-    this.totalLeft = parseFloat(this.totalLeft.toFixed(2));
+    this.totalDebit = (this.rows.data.filter(row => row.Tipo === 'Passivo').reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0)).toFixed(2);
+    this.totalLeft = (this.income - this.totalDebit).toFixed(2);
   }
 
   formatNumberToIncrement(value: string):number {
@@ -453,36 +420,38 @@ export class MainComponent implements OnInit {
     }
   }
 
-  deleteItemFromMainTable(item) {
+  deleteItemFromMainTable(item): void {
     this.isLoading();
     this.billService.deleteItemFromMainTable(item.id).then(result => {
       this.dialogMessage.openInfoDialog(result.message);
-      let index = this.rows.indexOf(item);
-      this.rows.splice(index, 1);
+  
+      this.rows.data = this.rows.data.filter(row => row.id !== item.id);
+  
       this.syncCardAndMainTableExpenses();
       this.setStatusData();
       this.setTotals();
       this.cdRef.detectChanges();
       this.isLoading();
     }).catch(error => {
-      this.dialogMessage.openErrorDialog('Falha: '+error);
+      this.dialogMessage.openErrorDialog('Falha: ' + error);
       this.isLoading();
     });
   }
-
-  deleteItemFromCardTable(item) {
+  
+  deleteItemFromCardTable(item): void {
     this.isLoading();
     this.billService.deleteItemFromCardTable(item.id).then(result => {
       this.dialogMessage.openInfoDialog(result.message);
-      let index = this.cardRows.indexOf(item);
-      this.cardRows.splice(index, 1);
+  
+      this.cardRows.data = this.cardRows.data.filter(row => row.id !== item.id);
+  
       this.syncCardAndMainTableExpenses();
       this.setStatusData();
       this.setTotals();
       this.cdRef.detectChanges();
       this.isLoading();
     }).catch(error => {
-      this.dialogMessage.openErrorDialog('Falha: '+error);
+      this.dialogMessage.openErrorDialog('Falha: ' + error);
       this.isLoading();
     });
   }
@@ -534,6 +503,7 @@ export class MainComponent implements OnInit {
       this.setStatusData();
       this.setTotals();
       this.cdRef.detectChanges();
+      this.dialogMessage.openInfoDialog('Item salvo');
       this.isLoading();
     }).catch(error => {
       this.dialogMessage.openErrorDialog('Falha ao sincronizar: '+error);
@@ -560,6 +530,7 @@ export class MainComponent implements OnInit {
       this.setStatusData();
       this.setTotals();
       this.cdRef.detectChanges();
+      this.dialogMessage.openInfoDialog('Item salvo');
       this.isLoading();
     }).catch(error => {
       this.dialogMessage.openErrorDialog('Falha: '+error);
@@ -576,9 +547,9 @@ export class MainComponent implements OnInit {
     this.billDate = this.billDate.subtract(1, 'months');
     await this.setTableData();
 
-    const rowsTableString = this.generateTableString(this.rows);
-    const cardRowsTableString = this.generateTableString(this.cardRows);
-    const incomeRowsTableString = this.generateTableString(this.incomeRows);
+    const rowsTableString = this.generateTableString(this.rows.data);
+    const cardRowsTableString = this.generateTableString(this.cardRows.data);
+    const incomeRowsTableString = this.generateTableString(this.incomeRows.data);
 
     const mountedPrompt: string = AI_PROMPT[0] + rowsTableString+"\n\n"+incomeRowsTableString+"\n\n" + AI_PROMPT[1] + cardRowsTableString+"\n\n" + AI_PROMPT[2] + AI_PROMPT[3];
 
