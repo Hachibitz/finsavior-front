@@ -1,0 +1,42 @@
+<div class="overlay" *ngIf="loading">
+    <div class="custom-loader"></div>
+</div>
+
+<app-header-bar></app-header-bar>
+
+<div class="fadeInUp parent" [class]="darkMode ? 'dark-mode' : 'light-mode'">
+    <div class="box">
+        <div class="plan-container">
+            <div class="plan-box">
+                <h2>Plano Gratuito</h2>
+                <p>Benefícios</p>
+                <ul>
+                    <li>Avaliação financeira por IA (powered by OpenAI) limitada a 1 avaliação de 1 único mês à escolha do usuário.</li>
+                </ul>
+                <button class="btn-buy">Gratuito</button>
+            </div>
+            <div class="arrow">➔</div>
+            <div class="plan-box">
+                <h2>Plano Plus</h2>
+                <p>Benefícios</p>
+                <ul>
+                    <li>Conteúdo do plano gratuito</li>
+                    <li>Termômetro de criatividade personalizado da IA</li>
+                    <li>3 avaliações financeiras pela IA de um conjunto de 3 meses ou 1 avaliação financeira da IA de 1 período de 1 ano.</li>
+                </ul>
+                <button class="btn-buy">R$ 5,99/mês</button>
+            </div>
+            <div class="arrow">➔</div>
+            <div class="plan-box">
+                <h2>Plano Prime</h2>
+                <p>Benefícios</p>
+                <ul>
+                    <li>Conteúdo do plano plus</li>
+                    <li>Notificações em tempo real pela IA quando suas contas tiverem desvios inesperados (transações suspeitas, valor acima da sua curva de gastos, previsão de insuficiência financeira, etc)</li>
+                    <li>Integração com a Open Finance para registros automáticos de lançamentos de conta e cartão.</li>
+                </ul>
+                <button class="btn-buy">Em breve</button>
+            </div>
+        </div>
+    </div>
+</div>

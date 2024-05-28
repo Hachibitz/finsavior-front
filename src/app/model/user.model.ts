@@ -1,3 +1,5 @@
+import { AnalysisTypeEnum } from "./ai-advice.model";
+
 export interface LoginRequest {
     username: string;
     password: string;
@@ -37,10 +39,29 @@ export interface ChangeAccountPasswordRequest {
 
 export interface UserData {
     username: string;
+    email: string;
+    plan: Plan;
     profilePicture: ArrayBuffer;
 }
 
 export interface UploadProfilePictureRequest {
     name: string;
     profilePicture: File;
+}
+
+export interface Plan {
+    planId: number;
+    planDs: string;
+}
+
+export const PlanEnum: Plan[] = [
+    { planId: 1, planDs: 'FREE' },
+    { planId: 2, planDs: 'PLUS' },
+    { planId: 3, planDs: 'PREMIUM' }
+]
+
+export const PlanCoverageEnum = {
+    FREE: { planId: 1, coverages: [AnalysisTypeEnum.FREE]},
+    PLUS: { planId: 2, coverages: [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL]},
+    PREMIUM: { planId: 3, coverages: [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL] }
 }

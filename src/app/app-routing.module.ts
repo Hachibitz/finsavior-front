@@ -6,6 +6,8 @@ import { MyAccountComponent } from './components/my-account/my-account.component
 import { AuthGuard } from './security/AuthGuard';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { SuggestionPageComponent } from './components/suggestion-page/suggestion-page.component';
+import { PlansPageComponent } from './components/plans-page/plans-page.component';
+import { AiAdvicesComponent } from './components/ai-advices/ai-advices.component';
 
 
 const routes: Routes = [
@@ -35,6 +37,14 @@ const routes: Routes = [
   {
     path: 'fs/suggestion',
     component: SuggestionPageComponent
+  },
+  {
+    path: 'fs/plans',
+    component: PlansPageComponent
+  },
+  {
+    path: 'fs/ai-advices',
+    component: AiAdvicesComponent
   }
 ];
 

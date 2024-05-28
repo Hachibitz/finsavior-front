@@ -20,6 +20,7 @@ export class CadastrarComponent implements OnInit {
   passwordConfirmation: string;
   agreement: boolean;
   signUpRequest: SignUpRequest;
+  loading: boolean = false;
 
   constructor(
     private themeService: ThemeService,
@@ -48,6 +49,7 @@ export class CadastrarComponent implements OnInit {
       agreement: this.agreement,
     };
 
+    this.isLoading();
     this.authService
       .signUp(this.signUpRequest)
       .then((result) => {
@@ -56,6 +58,9 @@ export class CadastrarComponent implements OnInit {
       })
       .catch((error) => {
         this.dialogMessage.openErrorDialog(error.error.message);
+      })
+      .finally(() => {
+        this.isLoading();
       });
   }
 
@@ -111,5 +116,9 @@ export class CadastrarComponent implements OnInit {
 
   redirectToLogin(): void {
     this.router.navigate(["fs/login"]);
+  }
+
+  isLoading() {
+    this.loading = !this.loading;
   }
 }

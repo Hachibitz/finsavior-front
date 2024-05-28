@@ -55,8 +55,8 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.2); /* 20% de opacidade */
-    z-index: 9999; /* Certifique-se de que o overlay fique acima de todos os outros elementos */
+    background-color: rgba(0, 0, 0, 0.2); // opacidade 20%
+    z-index: 9999; // Garante que fica acima dos outros componentes
     display: flex;
     justify-content: center;
     align-items: center;
