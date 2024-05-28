@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Conselhos da IA</h1>
+<form [formGroup]="form" (ngSubmit)="onSave()">
+    <div mat-dialog-content>
+        <div class="form-field">
+            <label class="form-label">Tipo de Análise</label>
+            <div class="radio-group">
+                <div class="radio-option" *ngFor="let type of analysisTypes">
+                    <input type="radio" [id]="type.label" [value]="type.analysisTypeId" formControlName="analysisType">
+                    <label [for]="type.label">{{ type.label }}</label>
+                </div>
+            </div>
+            <mat-error *ngIf="form.get('analysisType').invalid && form.get('analysisType').touched">
+                Tipo de análise é obrigatório.
+            </mat-error>
+        </div>
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Mês e Ano Inicial</mat-label>
+                <input matInput [matDatepicker]="dp" id="mat-input-date-ia" formControlName="date">
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp startView="multi-year" (monthSelected)="onDateChange($event)"></mat-datepicker>
+                <mat-error *ngIf="form.get('date').invalid && form.get('date').touched">
+                    Mês e ano são obrigatórios.
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button [mat-dialog-close]="'cancel'" type="button" (click)="onCancel()">Cancelar</button>
+        <button mat-button type="submit">Gerar</button>
+    </div>
+</form>

@@ -13,7 +13,8 @@ import {
     HttpErrorResponse,
     HttpParams
 } from '@angular/common/http';
-import { AiAdviceRequest, BillRegisterRequest, CardTableDataResponse, GenericResponse, MainTableDataResponse } from '../model/main.model';
+import { BillRegisterRequest, CardTableDataResponse, GenericResponse, MainTableDataResponse } from '../model/main.model';
+import { AiAdviceRequest } from '../model/ai-advice.model';
 
 @Injectable({ providedIn: 'root' })
 export class BillService {

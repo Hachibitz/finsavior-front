@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { AiAdviceRequest, BillRegisterRequest, TipoConta } from 'src/app/model/main.model';
+import { BillRegisterRequest, TipoConta } from 'src/app/model/main.model';
+import { AiAdviceRequest, AnalysisType, AnalysisTypeEnum } from 'src/app/model/ai-advice.model';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { ThemeService } from 'src/app/services/theme.service';
@@ -23,7 +24,11 @@ import { FormsModule,
          FormBuilder, 
          FormControl} from '@angular/forms';
 import { DialogMessage } from 'src/app/services/dialog-message.service';
-import { AI_PROMPT } from 'src/environments/environment';
+import { AiAdviceDialogComponent } from '../ai-advice-dialog/ai-advice-dialog.component';
+import { UserService } from 'src/app/services/user.service';
+import { Plan, UserData, PlanCoverageEnum, PlanEnum } from 'src/app/model/user.model';
+import { StringBuilder } from 'src/app/utils/StringBuilder';
+import moment from 'moment';
 
 export const MY_FORMATS = {
   parse: {
@@ -85,7 +90,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   billName: string = '';
   billValue: number;
   billDescription: string;
-  billDate: Moment;
+  billDate: Date;
   cardBillName: string;
   cardBillValue: number;
   cardBillDescription: string;
@@ -99,6 +104,9 @@ export class MainComponent implements OnInit, AfterViewInit {
   isAiAdviceGenerated: boolean = false;
   isAiAdviceExpanded: boolean = false;
   filterStatus: string = 'todos';
+  analysisTypes: AnalysisType[] = [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL];
+
+  userData: UserData;
 
   tableTypes: string[] = [
     'main',
@@ -115,9 +123,10 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.darkMode = this.themeService.checkDarkMode();
     const anoAtual = _moment().year();
     const mesAtual = _moment().month() + 1; // Os meses em Moment.js são indexados a partir de 0
-    this.billDate = _moment(`${anoAtual}-${mesAtual}`, "YYYY-MM");
+    this.billDate = _moment(`${anoAtual}-${mesAtual}`, "YYYY-MM").toDate();
 
     this.setTableData();
+    this.setUserData();
   }
 
   ngAfterViewInit() {
@@ -129,7 +138,14 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.configureFiltering();
   }
 
-  constructor(private cdRef: ChangeDetectorRef, private themeService: ThemeService, private billService: BillService, private dialog: MatDialog, private fb: FormBuilder, private dialogMessage: DialogMessage) {
+  constructor(private cdRef: ChangeDetectorRef, 
+    private themeService: ThemeService, 
+    private billService: BillService, 
+    private dialog: MatDialog, 
+    private fb: FormBuilder, 
+    private dialogMessage: DialogMessage,
+    private userService: UserService
+  ) {
     const numberAndDecimalValidator = (control: FormControl) => {
       const valid = /^[0-9.]*$/.test(control.value);
       return valid ? null : { invalidNumber: true };
@@ -195,6 +211,19 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
   }
 
+  setUserData(): void {
+    this.isLoading();
+    this.userService.getProfileData().then((result) => {
+      this.userData = result;
+    })
+    .catch((error) => {
+      this.dialogMessage.openErrorDialog(error.message);
+    })
+    .finally(() => {
+      this.isLoading();
+    });
+  }
+
   async setTableData() {
     await this.loadMainTableData();
     await this.loadCardTableData();
@@ -209,7 +238,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   onSelectDate(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
-    this.billDate = normalizedMonthAndYear.clone();
+    this.billDate = normalizedMonthAndYear.clone().toDate();
     this.setTableData();
     datepicker.close();
   }
@@ -253,6 +282,45 @@ export class MainComponent implements OnInit, AfterViewInit {
       return false;
     }
     return true;
+  }
+
+  openAiAdviceDialog(event: Event): void {
+    const dialogRef = this.dialog.open(AiAdviceDialogComponent, {
+      data: null,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'cancel') {
+        
+      } else {
+        let haveCoverage: boolean = false;
+
+        haveCoverage = this.validateSelectedAnalisysAndPlan(this.userData, result.analysisTypeId);
+        if(!haveCoverage) {
+          this.dialogMessage.openWarnDialog('Seu plano não possui a análise selecionada. Faça o upgrade agora mesmo com condições especiais!');
+        }
+
+        if(haveCoverage) {
+          this.generateAiAdvice(result.analysisTypeId, result.selectedDate).then((result) => {
+            this.billDate = new Date();
+            this.setTableData();
+          });
+        }
+      }
+    });
+  }
+
+  validateSelectedAnalisysAndPlan(userData: UserData, selectedAnalisys: number): boolean {
+    const plan: Plan = PlanEnum.find(profilePlan => profilePlan.planId == userData.plan.planId);
+    const coverageList: AnalysisType[] = Object.values(PlanCoverageEnum).find(planCoverage => planCoverage.planId === plan.planId).coverages;
+
+    const chosenAnalysis: AnalysisType = coverageList.find(coverage => coverage.analysisTypeId == selectedAnalisys);
+
+    if(chosenAnalysis) {
+      return true;
+    }
+
+    return false;
   }
 
   addRecurrentRegister(event: Event) {
@@ -340,7 +408,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.loading = !this.loading;
   }
 
-  formatData(date: Moment): string {
+  formatData(date: Date): string {
     const dateString = date.toString();
     const parts = dateString.split(' ');
 
@@ -414,7 +482,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
 
     if(isCardBillPresent == 0) {
-      this.rows.data.push({ Nome: '*Cartão de crédito', Valor: 'R$ ' + creditCardTableAmount, Tipo: 'Passivo', Descricao: 'Soma da tabela de cartão de crédito', Data: this.billDate.format('MM/YYYY'), Pago: localStorage.getItem("isCreditCardPaid") == "true" });
+      this.rows.data.push({ Nome: 'Cartão de crédito', Valor: 'R$ ' + creditCardTableAmount, Tipo: 'Passivo', Descricao: 'Soma da tabela de cartão de crédito', Data: moment(this.billDate).format('MM/YYYY'), Pago: localStorage.getItem("isCreditCardPaid") == "true" });
     } else {
       let updatedRow = this.rows.data[cardBillIndex];
       updatedRow.Valor = 'R$ ' + creditCardTableAmount;
@@ -576,33 +644,85 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.setTotals();
   }
 
-  async generateAiAdvice(): Promise<void> {
-    this.billDate = this.billDate.subtract(1, 'months');
-    await this.setTableData();
-
-    const rowsTableString = this.generateTableString(this.rows.data);
-    const cardRowsTableString = this.generateTableString(this.cardRows.data);
-    const incomeRowsTableString = this.generateTableString(this.incomeRows.data);
-
-    const mountedPrompt: string = AI_PROMPT[0] + rowsTableString+"\n\n"+incomeRowsTableString+"\n\n" + AI_PROMPT[1] + cardRowsTableString+"\n\n" + AI_PROMPT[2] + AI_PROMPT[3];
+  async generateAiAdvice(analysisTypeId: number, startingDate: Date): Promise<void> {
+    const [rowsTableString, cardRowsTableString, incomeRowsTableString] = await Promise.all([
+      this.getMainTableFromAnalysisTypeAndStartingDate(analysisTypeId, startingDate),
+      this.getCardTableFromAnalysisTypeAndStartingDate(analysisTypeId, startingDate),
+      this.getIncomeTableFromAnalysisTypeAndStartingDate(analysisTypeId, startingDate)
+    ]);
 
     const aiAdviceRequest: AiAdviceRequest = {
-      prompt: mountedPrompt,
-      date: this.formatData(this.billDate)
-    }
+      mainAndIncomeTable: `${rowsTableString}\n\n${incomeRowsTableString}\n\n`,
+      cardTable: `${cardRowsTableString}\n\n`,
+      date: this.formatData(startingDate),
+      analysisTypeId: analysisTypeId
+    };
 
-    this.billDate = this.billDate.add(1, 'months');
-    this.setTableData();
+    await this.generateAiAdviceCall(aiAdviceRequest);
+  }
 
+  generateAiAdviceCall(aiAdviceRequest: AiAdviceRequest): void {
     this.isLoading();
     this.billService.generateAiAdvice(aiAdviceRequest).then(result => {
       this.aiAdviceResult = result.message;
       this.isAiAdviceGenerated = true;
-      this.isLoading();
     }).catch(error => {
       this.dialogMessage.openErrorDialog(error.error.message);
+    })
+    .finally(() => {
       this.isLoading();
     })
+  }
+
+  async getMainTableFromAnalysisTypeAndStartingDate(analysisTypeId: number, startingDate: Date): Promise<string> {
+    const analysisTypeChosen = this.analysisTypes.find(type => type.analysisTypeId === analysisTypeId);
+    let stringBuilder = new StringBuilder();
+
+    for(let i=0; i<analysisTypeChosen.period; i++) {
+      this.billDate = this.addMonths(startingDate, i);
+      await this.setTableData();
+      stringBuilder.append("\n\n\n\nDados dessa tabela são referentes ao mês e ano: ")
+      .append(`${this.formatData(this.billDate)} \n\n`)
+      .append(this.generateTableString(this.rows.data));
+    }
+
+    return stringBuilder.toString();
+  }
+
+  async getIncomeTableFromAnalysisTypeAndStartingDate(analysisTypeId: number, startingDate: Date): Promise<string> {
+    const analysisTypeChosen = this.analysisTypes.find(type => type.analysisTypeId === analysisTypeId);
+    let stringBuilder = new StringBuilder();
+
+    for(let i=0; i<analysisTypeChosen.period; i++) {
+      this.billDate = this.addMonths(startingDate, i);
+      await this.setTableData();
+      stringBuilder.append("\n\n\n\nDados dessa tabela são referentes ao mês e ano: ")
+      .append(`${this.billDate.getMonth()}/${this.billDate.getFullYear()} \n\n`)
+      .append(this.generateTableString(this.incomeRows.data));
+    }
+
+    return stringBuilder.toString();
+  }
+
+  async getCardTableFromAnalysisTypeAndStartingDate(analysisTypeId: number, startingDate: Date): Promise<string> {
+    const analysisTypeChosen = this.analysisTypes.find(type => type.analysisTypeId === analysisTypeId);
+    let stringBuilder = new StringBuilder();
+
+    for(let i=0; i<analysisTypeChosen.period; i++) {
+      this.billDate = this.addMonths(startingDate, i);
+      await this.setTableData();
+      stringBuilder.append("\n\n\n\nDados dessa tabela são referentes ao mês e ano: ")
+      .append(`${this.billDate.getMonth()}/${this.billDate.getFullYear()} \n\n`)
+      .append(this.generateTableString(this.cardRows.data));
+    }
+
+    return stringBuilder.toString();
+  }
+
+  addMonths(date: Date, months: number): Date {
+    const result = new Date(date);
+    result.setMonth(result.getMonth() + months);
+    return result;
   }
 
   getAiAdvice() {

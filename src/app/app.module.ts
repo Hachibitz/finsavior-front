@@ -46,6 +46,10 @@ import { SuggestionPageComponent } from './components/suggestion-page/suggestion
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { CdkTableModule } from '@angular/cdk/table';
+import { PlansPageComponent } from './components/plans-page/plans-page.component';
+import { AiAdviceDialogComponent } from './components/ai-advice-dialog/ai-advice-dialog.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { AiAdvicesComponent } from './components/ai-advices/ai-advices.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +63,10 @@ import { CdkTableModule } from '@angular/cdk/table';
     EditTableDialogComponent,
     RecurrentBillDialogComponent,
     LoginPageComponent,
-    SuggestionPageComponent
+    SuggestionPageComponent,
+    PlansPageComponent,
+    AiAdviceDialogComponent,
+    AiAdvicesComponent
   ],
   imports: [
     BrowserModule,
@@ -91,7 +98,8 @@ import { CdkTableModule } from '@angular/cdk/table';
     MatTabsModule,
     MatTableModule,
     MatSortModule,
-    CdkTableModule
+    CdkTableModule,
+    MatRadioModule
   ],
   providers: [
     UserService, 
