@@ -50,18 +50,18 @@ export interface UploadProfilePictureRequest {
 }
 
 export interface Plan {
-    planId: number;
+    planId: string;
     planDs: string;
 }
 
 export const PlanEnum: Plan[] = [
-    { planId: 1, planDs: 'FREE' },
-    { planId: 2, planDs: 'PLUS' },
-    { planId: 3, planDs: 'PREMIUM' }
+    { planId: '1L', planDs: 'FREE' },
+    { planId: '2L', planDs: 'PLUS' },
+    { planId: '3L', planDs: 'PREMIUM' }
 ]
 
 export const PlanCoverageEnum = {
-    FREE: { planId: 1, coverages: [AnalysisTypeEnum.FREE]},
-    PLUS: { planId: 2, coverages: [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL]},
-    PREMIUM: { planId: 3, coverages: [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL] }
+    FREE: { planId: '1L', coverages: [AnalysisTypeEnum.FREE]},
+    PLUS: { planId: '2L', coverages: [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL]},
+    PREMIUM: { planId: '3L', coverages: [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL] }
 }
