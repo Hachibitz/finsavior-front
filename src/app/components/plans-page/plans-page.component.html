@@ -24,7 +24,9 @@
                     <li>Termômetro de criatividade personalizado da IA</li>
                     <li>3 avaliações financeiras pela IA de um conjunto de 3 meses ou 1 avaliação financeira da IA de 1 período de 1 ano.</li>
                 </ul>
-                <button class="btn-buy">R$ 5,99/mês</button>
+                <div class="paypal-div">
+                    <app-paypal [planId]="plusPlanId"></app-paypal>
+                </div>
             </div>
             <div class="arrow">➔</div>
             <div class="plan-box">

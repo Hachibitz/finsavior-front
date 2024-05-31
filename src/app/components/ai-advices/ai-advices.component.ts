@@ -6,6 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./ai-advices.component.scss']
 })
 export class AiAdvicesComponent {
-
   loading: boolean = false;
 }
