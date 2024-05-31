@@ -26,7 +26,8 @@ import { FormsModule,
 import { DialogMessage } from 'src/app/services/dialog-message.service';
 import { AiAdviceDialogComponent } from '../ai-advice-dialog/ai-advice-dialog.component';
 import { UserService } from 'src/app/services/user.service';
-import { Plan, UserData, PlanCoverageEnum, PlanEnum } from 'src/app/model/user.model';
+import { UserData } from 'src/app/model/user.model';
+import { Plan, PlanCoverageEnum, PlanEnum } from 'src/app/model/payment.model';
 import { StringBuilder } from 'src/app/utils/StringBuilder';
 import moment from 'moment';
 

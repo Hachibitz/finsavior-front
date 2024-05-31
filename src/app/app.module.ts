@@ -50,6 +50,10 @@ import { PlansPageComponent } from './components/plans-page/plans-page.component
 import { AiAdviceDialogComponent } from './components/ai-advice-dialog/ai-advice-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { AiAdvicesComponent } from './components/ai-advices/ai-advices.component';
+import { PaypalComponent } from './components/paypal/paypal.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { PaymentService } from './services/payment.service';
+import { LoadingService } from './services/loading-service';
 
 @NgModule({
   declarations: [
@@ -66,7 +70,8 @@ import { AiAdvicesComponent } from './components/ai-advices/ai-advices.component
     SuggestionPageComponent,
     PlansPageComponent,
     AiAdviceDialogComponent,
-    AiAdvicesComponent
+    AiAdvicesComponent,
+    PaypalComponent
   ],
   imports: [
     BrowserModule,
@@ -99,13 +104,16 @@ import { AiAdvicesComponent } from './components/ai-advices/ai-advices.component
     MatTableModule,
     MatSortModule,
     CdkTableModule,
-    MatRadioModule
+    MatRadioModule,
+    NgxPayPalModule
   ],
   providers: [
     UserService, 
     ThemeService, 
     BillService,
     AuthService,
+    PaymentService, 
+    LoadingService, 
     MatDialog, 
     AuthGuard,
     DialogMessage,
