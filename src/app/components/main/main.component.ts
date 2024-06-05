@@ -117,7 +117,8 @@ export class MainComponent implements OnInit, AfterViewInit {
   billTypes: TipoConta[] = [
     { label: 'Ativo', value: 'Ativo' },
     { label: 'Passivo', value: 'Passivo' },
-    { label: 'Caixa', value: 'Caixa' }
+    { label: 'Caixa', value: 'Caixa' },
+    { label: 'Poupança', value: 'Poupança' }
   ];
 
   ngOnInit(): void {
@@ -419,6 +420,31 @@ export class MainComponent implements OnInit, AfterViewInit {
     return month+' '+year;
   }
 
+  refreshTablesAndStatus(tableData: any): void {
+    if(tableData.mainTableDataList) {
+      tableData.mainTableDataList.forEach((row) => {
+        if (row.billType === 'Caixa' || row.billType === 'Ativo' || row.billType === 'Poupança') {
+          this.incomeRows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
+        } else {
+          this.rows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate, Pago: row.paid });
+        }
+      });
+    }
+
+    if(tableData.cardTableDataList) {
+      tableData.cardTableDataList.forEach((row) => {
+        this.cardRows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Descricao: row.billDescription, Data: row.billDate });
+      });
+    }
+
+    this.syncCardAndMainTableExpenses();
+    this.setStatusData();
+    this.setTotals();
+    this.getAiAdvice();
+
+    this.cdRef.detectChanges();
+  }
+
   async loadMainTableData(): Promise<void> {
     this.isLoading();
     this.rows = new MatTableDataSource<any>([]);
@@ -427,7 +453,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     try {
       const result = await this.billService.loadMainTableData(this.formatData(this.billDate));
       result.mainTableDataList.forEach((row) => {
-        if (row.billType === 'Caixa' || row.billType === 'Ativo') {
+        if (row.billType === 'Caixa' || row.billType === 'Ativo' || row.billType === 'Poupança') {
           this.incomeRows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate });
         } else {
           this.rows.data.push({ id: row.id, Nome: row.billName, Valor: 'R$ ' + row.billValue, Tipo: row.billType, Descricao: row.billDescription, Data: row.billDate, Pago: row.paid });
@@ -494,7 +520,7 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   setStatusData(): void {
     this.totalPaid = this.rows.data.filter(row => row.Pago).reduce((acc, row) => acc + parseFloat(row.Valor.replace('R$ ', '')), 0);
-    this.currentlyAvailableIncome = this.incomeRows.data.filter(incomeRow => incomeRow.Tipo === 'Caixa').reduce((acc, incomeRow) => acc + parseFloat(incomeRow.Valor.replace('R$ ', '')), 0);
+    this.currentlyAvailableIncome = this.incomeRows.data.filter(incomeRow => (incomeRow.Tipo === 'Caixa' || incomeRow.Tipo === 'Ativo')).reduce((acc, incomeRow) => acc + parseFloat(incomeRow.Valor.replace('R$ ', '')), 0);
     this.setTotals();
 
     this.liquidStatus = this.currentlyAvailableIncome - this.totalPaid;
@@ -527,12 +553,13 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.billService.deleteItemFromMainTable(item.id).then(result => {
       this.dialogMessage.openInfoDialog(result.message);
   
-      this.rows.data = this.rows.data.filter(row => row.id !== item.id);
+      if(item.Tipo == 'Passivo') {
+        this.rows.data = this.rows.data.filter(row => row.id !== item.id);
+      } else {
+        this.incomeRows.data = this.incomeRows.data.filter(incomeRow => incomeRow.id !== item.id);
+      }
   
-      this.syncCardAndMainTableExpenses();
-      this.setStatusData();
-      this.setTotals();
-      this.cdRef.detectChanges();
+      this.refreshTablesAndStatus(this.rows);
       this.isLoading();
     }).catch(error => {
       this.dialogMessage.openErrorDialog('Falha: ' + error);
@@ -547,10 +574,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   
       this.cardRows.data = this.cardRows.data.filter(row => row.id !== item.id);
   
-      this.syncCardAndMainTableExpenses();
-      this.setStatusData();
-      this.setTotals();
-      this.cdRef.detectChanges();
+      this.refreshTablesAndStatus(this.cardRows);
       this.isLoading();
     }).catch(error => {
       this.dialogMessage.openErrorDialog('Falha: ' + error);
@@ -601,10 +625,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     }
     this.billService.editItemFromMainTable(billUpdate).then(result => {
       //this.openInfoDialog(result.message);
-      this.syncCardAndMainTableExpenses();
-      this.setStatusData();
-      this.setTotals();
-      this.cdRef.detectChanges();
+      this.refreshTablesAndStatus(this.rows);
       this.dialogMessage.openInfoDialog('Item salvo');
       this.isLoading();
     }).catch(error => {
@@ -628,10 +649,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     }
     this.billService.editItemFromCardTable(billUpdate).then(result => {
       this.dialogMessage.openInfoDialog(result.message);
-      this.syncCardAndMainTableExpenses();
-      this.setStatusData();
-      this.setTotals();
-      this.cdRef.detectChanges();
+      this.refreshTablesAndStatus(this.cardRows);
       this.dialogMessage.openInfoDialog('Item salvo');
       this.isLoading();
     }).catch(error => {
