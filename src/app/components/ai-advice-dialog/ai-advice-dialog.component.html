@@ -24,6 +24,17 @@
                 </mat-error>
             </mat-form-field>
         </div>
+        <div class="form-field">
+            <!--<mat-slider min="0" max="2" step="1" thumbLabel tickInterval="1" showTickMarks [disabled]="!userHasNeededPlan"
+                formControlName="temperature">
+            </mat-slider>-->
+            <label class="form-label">Termômetro de criatividade (exclusivo para assinantes)</label>
+            <ngx-slider [(value)]="temperatureSliderValue" [options]="sliderOptions"></ngx-slider>
+            <mat-error *ngIf="!userHasNeededPlan" style="margin-top: 30px;">
+                Você precisa ser assinante para ajustar a criatividade. <button mat-button
+                    (click)="upgradePlan()">Upgrade</button>
+            </mat-error>
+        </div>
     </div>
     <div mat-dialog-actions>
         <button mat-button [mat-dialog-close]="'cancel'" type="button" (click)="onCancel()">Cancelar</button>
