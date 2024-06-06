@@ -7,14 +7,14 @@ export interface Plan {
 
 export const PlanEnum: Plan[] = [
   { planId: "1L", planDs: "FREE" },
-  { planId: "2L", planDs: "PLUS" },
+  { planId: "P-2BA47576SC596340BMZMJJRQ", planDs: "PLUS" },
   { planId: "3L", planDs: "PREMIUM" },
 ];
 
 export const PlanCoverageEnum = {
   FREE: { planId: "1L", coverages: [AnalysisTypeEnum.FREE] },
   PLUS: {
-    planId: "2L",
+    planId: "P-2BA47576SC596340BMZMJJRQ",
     coverages: [
       AnalysisTypeEnum.FREE,
       AnalysisTypeEnum.TRIMESTER,

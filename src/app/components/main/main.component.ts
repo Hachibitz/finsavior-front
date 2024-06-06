@@ -7,12 +7,9 @@ import { ColumnMode } from '@swimlane/ngx-datatable';
 import { HeaderBarComponent } from '../header-bar/header-bar.component';
 import { ThemeService } from 'src/app/services/theme.service';
 import { BillService } from 'src/app/services/bill.service';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import * as _moment from 'moment';
-import {default as _rollupMoment, Moment} from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTableDialogComponent } from '../edit-table-dialog/edit-table-dialog.component';
@@ -29,7 +26,7 @@ import { UserService } from 'src/app/services/user.service';
 import { UserData } from 'src/app/model/user.model';
 import { Plan, PlanCoverageEnum, PlanEnum } from 'src/app/model/payment.model';
 import { StringBuilder } from 'src/app/utils/StringBuilder';
-import moment from 'moment';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 export const MY_FORMATS = {
   parse: {
@@ -123,9 +120,7 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.darkMode = this.themeService.checkDarkMode();
-    const anoAtual = _moment().year();
-    const mesAtual = _moment().month() + 1; // Os meses em Moment.js são indexados a partir de 0
-    this.billDate = _moment(`${anoAtual}-${mesAtual}`, "YYYY-MM").toDate();
+    this.billDate = new Date();
 
     this.setTableData();
     this.setUserData();
@@ -239,8 +234,8 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.isAiAdviceExpanded = !this.isAiAdviceExpanded;
   }
 
-  onSelectDate(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
-    this.billDate = normalizedMonthAndYear.clone().toDate();
+  onSelectDate(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>) {
+    this.billDate = new Date(normalizedMonthAndYear);
     this.setTableData();
     datepicker.close();
   }
@@ -303,7 +298,7 @@ export class MainComponent implements OnInit, AfterViewInit {
         }
 
         if(haveCoverage) {
-          this.generateAiAdvice(result.analysisTypeId, result.selectedDate).then((result) => {
+          this.generateAiAdvice(result.analysisTypeId, result.selectedDate, result.temperature).then((result) => {
             this.billDate = new Date();
             this.setTableData();
           });
@@ -509,7 +504,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
 
     if(isCardBillPresent == 0) {
-      this.rows.data.push({ Nome: 'Cartão de crédito', Valor: 'R$ ' + creditCardTableAmount, Tipo: 'Passivo', Descricao: 'Soma da tabela de cartão de crédito', Data: moment(this.billDate).format('MM/YYYY'), Pago: localStorage.getItem("isCreditCardPaid") == "true" });
+      this.rows.data.push({ Nome: 'Cartão de crédito', Valor: 'R$ ' + creditCardTableAmount, Tipo: 'Passivo', Descricao: 'Soma da tabela de cartão de crédito', Data: this.formatData(this.billDate), Pago: localStorage.getItem("isCreditCardPaid") == "true" });
     } else {
       let updatedRow = this.rows.data[cardBillIndex];
       updatedRow.Valor = 'R$ ' + creditCardTableAmount;
@@ -663,7 +658,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.setTotals();
   }
 
-  async generateAiAdvice(analysisTypeId: number, startingDate: Date): Promise<void> {
+  async generateAiAdvice(analysisTypeId: number, startingDate: Date, temperature: number): Promise<void> {
     const [rowsTableString, cardRowsTableString, incomeRowsTableString] = await Promise.all([
       this.getMainTableFromAnalysisTypeAndStartingDate(analysisTypeId, startingDate),
       this.getCardTableFromAnalysisTypeAndStartingDate(analysisTypeId, startingDate),
@@ -674,7 +669,8 @@ export class MainComponent implements OnInit, AfterViewInit {
       mainAndIncomeTable: `${rowsTableString}\n\n${incomeRowsTableString}\n\n`,
       cardTable: `${cardRowsTableString}\n\n`,
       date: this.formatData(startingDate),
-      analysisTypeId: analysisTypeId
+      analysisTypeId: analysisTypeId,
+      temperature: temperature
     };
 
     await this.generateAiAdviceCall(aiAdviceRequest);

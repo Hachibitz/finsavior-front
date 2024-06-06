@@ -15,4 +15,5 @@ export interface AiAdviceRequest {
     cardTable: String;
     date: string;
     analysisTypeId: number;
+    temperature: number;
 }

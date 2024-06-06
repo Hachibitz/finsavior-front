@@ -54,6 +54,8 @@ import { PaypalComponent } from './components/paypal/paypal.component';
 import { NgxPayPalModule } from 'ngx-paypal';
 import { PaymentService } from './services/payment.service';
 import { LoadingService } from './services/loading-service';
+import { MatSliderModule } from '@angular/material/slider';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 @NgModule({
   declarations: [
@@ -105,7 +107,9 @@ import { LoadingService } from './services/loading-service';
     MatSortModule,
     CdkTableModule,
     MatRadioModule,
-    NgxPayPalModule
+    NgxPayPalModule,
+    MatSliderModule,
+    NgxSliderModule
   ],
   providers: [
     UserService, 
