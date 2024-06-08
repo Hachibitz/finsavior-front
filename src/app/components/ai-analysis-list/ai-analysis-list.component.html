@@ -1,0 +1,50 @@
+<div class="overlay" *ngIf="loading">
+    <div class="custom-loader"></div>
+</div>
+
+<app-header-bar></app-header-bar>
+
+<div class="box">
+    <mat-card *ngIf="loading" class="loading-card">
+        <mat-spinner></mat-spinner>
+    </mat-card>
+
+    <div class="filter-section" [formGroup]="filterForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Filtrar por mês inicial</mat-label>
+            <input matInput [matDatepicker]="startDp" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDp"></mat-datepicker-toggle>
+            <mat-datepicker #startDp startView="multi-year" (monthSelected)="onStartDateChange($event)"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Filtrar por tipo</mat-label>
+            <mat-select formControlName="type">
+                <mat-option value="">Todos</mat-option>
+                <mat-option value="Mensal">Mensal</mat-option>
+                <mat-option value="Trimestral">Trimestral</mat-option>
+                <mat-option value="Anual">Anual</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Filtrar por mês da consulta</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (monthSelected)="onDateChange($event)"></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-button (click)="openAiAnalysisDialog()">Gerar nova análise</button>
+    </div>
+
+    <label style="margin-left: 10px; margin-bottom: 10px;">Lista de análises</label>
+
+    <div class="analysis-list">
+        <mat-card *ngFor="let analysis of filteredAnalyses" (click)="viewAnalysis(analysis.id)" class="analysis-item">
+            <mat-card-title>Tipo da análise: {{ analysis.analysisType }}</mat-card-title>
+            <mat-card-subtitle>Período da análise: {{ analysis.startDate }} - {{ analysis.finishDate }}</mat-card-subtitle>
+            <mat-card-subtitle>Data de solicitação: {{ analysis.date }}</mat-card-subtitle>
+            <mat-card-subtitle>Nível de criatividade utilizado: {{ analysis.temperature*100 }}%</mat-card-subtitle>
+        </mat-card>
+    </div>
+</div>

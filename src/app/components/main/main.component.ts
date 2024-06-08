@@ -27,6 +27,7 @@ import { UserData } from 'src/app/model/user.model';
 import { Plan, PlanCoverageEnum, PlanEnum } from 'src/app/model/payment.model';
 import { StringBuilder } from 'src/app/utils/StringBuilder';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export const MY_FORMATS = {
   parse: {
@@ -124,6 +125,15 @@ export class MainComponent implements OnInit, AfterViewInit {
 
     this.setTableData();
     this.setUserData();
+
+    this.route.paramMap.subscribe(params => {
+      const isRedirectToAiAnalysis = String(params.get('isRedirectToAiAnalysis'));
+      if (isRedirectToAiAnalysis == 'ai-analysis-dialog') {
+        this.openAiAdviceDialog();
+      } else {
+        this.router.navigate(['fs/main']);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -141,7 +151,9 @@ export class MainComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog, 
     private fb: FormBuilder, 
     private dialogMessage: DialogMessage,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     const numberAndDecimalValidator = (control: FormControl) => {
       const valid = /^[0-9.]*$/.test(control.value);
@@ -227,7 +239,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.syncCardAndMainTableExpenses();
     this.setStatusData();
     this.setTotals();
-    this.getAiAdvice();
+    //this.getAiAdvice();
   }
 
   toggleAiAdviceExpand() {
@@ -281,7 +293,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     return true;
   }
 
-  openAiAdviceDialog(event: Event): void {
+  openAiAdviceDialog(): void {
     const dialogRef = this.dialog.open(AiAdviceDialogComponent, {
       data: null,
     });
@@ -298,7 +310,7 @@ export class MainComponent implements OnInit, AfterViewInit {
         }
 
         if(haveCoverage) {
-          this.generateAiAdvice(result.analysisTypeId, result.selectedDate, result.temperature).then((result) => {
+          this.generateAiAdvice(result.analysisTypeId, result.selectedDate, result.temperature, result.finishDate).then((result) => {
             this.billDate = new Date();
             this.setTableData();
           });
@@ -435,7 +447,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.syncCardAndMainTableExpenses();
     this.setStatusData();
     this.setTotals();
-    this.getAiAdvice();
+    //this.getAiAdvice();
 
     this.cdRef.detectChanges();
   }
@@ -658,7 +670,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.setTotals();
   }
 
-  async generateAiAdvice(analysisTypeId: number, startingDate: Date, temperature: number): Promise<void> {
+  async generateAiAdvice(analysisTypeId: number, startingDate: Date, temperature: number, finishDate: Date): Promise<void> {
     const [rowsTableString, cardRowsTableString, incomeRowsTableString] = await Promise.all([
       this.getMainTableFromAnalysisTypeAndStartingDate(analysisTypeId, startingDate),
       this.getCardTableFromAnalysisTypeAndStartingDate(analysisTypeId, startingDate),
@@ -668,12 +680,20 @@ export class MainComponent implements OnInit, AfterViewInit {
     const aiAdviceRequest: AiAdviceRequest = {
       mainAndIncomeTable: `${rowsTableString}\n\n${incomeRowsTableString}\n\n`,
       cardTable: `${cardRowsTableString}\n\n`,
-      date: this.formatData(startingDate),
+      date: this.formatData(new Date()),
       analysisTypeId: analysisTypeId,
-      temperature: temperature
+      temperature: temperature,
+      startDate: this.toLocalISOString(startingDate),
+      finishDate: this.toLocalISOString(finishDate)
     };
 
     await this.generateAiAdviceCall(aiAdviceRequest);
+  }
+
+  toLocalISOString(date: Date): string {
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - offset * 60000);
+    return adjustedDate.toISOString().slice(0, -1);
   }
 
   generateAiAdviceCall(aiAdviceRequest: AiAdviceRequest): void {
@@ -740,7 +760,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  getAiAdvice() {
+  /*getAiAdvice() {
     this.isLoading();
     this.billService.getAiAdvice().then(result => {
       this.aiAdviceResult = result.message;
@@ -754,7 +774,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       this.dialogMessage.openErrorDialog(error.error.message);
       this.isLoading();
     })
-  }
+  }*/
 
   generateTableString(data: any[]): string {
     if (!data || data.length === 0) {

@@ -16,4 +16,16 @@ export interface AiAdviceRequest {
     date: string;
     analysisTypeId: number;
     temperature: number;
+    startDate: string;
+    finishDate: string;
+}
+
+export interface Analysis {
+    id: number;
+    analysisType: string;
+    date: string;
+    resultAnalysis: string;
+    startDate: string;
+    finishDate: string;
+    temperature: number;
 }

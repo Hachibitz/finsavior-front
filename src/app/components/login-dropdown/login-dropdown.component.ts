@@ -100,4 +100,8 @@ export class LoginDropdownComponent implements OnInit{
   redirectToMain(): void {
     this.router.navigate(['fs/main']);
   }
+
+  redirectToMyAccount(): void {
+    this.router.navigate(['fs/account']);
+  }
 }

@@ -14,7 +14,7 @@ import {
     HttpParams
 } from '@angular/common/http';
 import { BillRegisterRequest, CardTableDataResponse, GenericResponse, MainTableDataResponse } from '../model/main.model';
-import { AiAdviceRequest } from '../model/ai-advice.model';
+import { AiAdviceRequest, Analysis } from '../model/ai-advice.model';
 
 @Injectable({ providedIn: 'root' })
 export class BillService {
@@ -131,6 +131,7 @@ export class BillService {
     };
 
     generateAiAdvice(aiAdviceRequest: AiAdviceRequest): Promise<GenericResponse> {
+        console.log(aiAdviceRequest);
         const promessa = new Promise<GenericResponse>((resolve, reject) => {
             this.http.post(GENERATE_AI_ADVICE, aiAdviceRequest, { responseType: 'json' }).subscribe({
                 next: (result: GenericResponse) => {
@@ -144,10 +145,10 @@ export class BillService {
         return promessa;
     };
 
-    getAiAdvice(): Promise<GenericResponse> {
-        const promessa = new Promise<GenericResponse>((resolve, reject) => {
+    getAiAdvices(): Promise<Analysis[]> {
+        const promessa = new Promise<Analysis[]>((resolve, reject) => {
             this.http.get(GET_AI_ADVICE, { responseType: 'json' }).subscribe({
-                next: (result: GenericResponse) => {
+                next: (result: Analysis[]) => {
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {

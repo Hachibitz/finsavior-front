@@ -2,12 +2,12 @@
     <div class="col-10">
         <div class="box-header-nav">
             <div class="nav-header">
-                <a href="http://localhost:4200/fs/main">HOME</a>
-                <a href="http://localhost:4200/fs/account">MINHA CONTA</a>
-                <a href="http://localhost:4200/fs/ai-advices">IA</a>
-                <a href="http://localhost:4200/fs/plans">PLANOS</a>
-                <a href="http://localhost:4200/fs/cadastrar">CADASTRO</a>
-                <a href="http://localhost:4200/fs/suggestion">SUGESTÕES</a>
+                <a (click)="navigateByUri('/fs/main')">HOME</a>
+                <a (click)="navigateByUri('/fs/account')">MINHA CONTA</a>
+                <a (click)="navigateByUri('/fs/ai-analysis-list')">IA</a>
+                <a (click)="navigateByUri('/fs/plans')">PLANOS</a>
+                <a (click)="navigateByUri('/fs/cadastrar')">CADASTRO</a>
+                <a (click)="navigateByUri('/fs/suggestion')">SUGESTÕES</a>
             </div>
         </div>
     </div>
