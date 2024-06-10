@@ -27,7 +27,7 @@ export class AiAdviceDialogComponent {
 
   temperatureSliderValue: number = 0;
   sliderOptions: Options = {
-    showTicksValues: false,
+    showTicksValues: true,
     stepsArray: [
       { value: 0, legend: "Mais precisão" },
       { value: 0.1 },

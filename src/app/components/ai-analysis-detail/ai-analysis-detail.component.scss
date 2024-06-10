@@ -1,17 +1,140 @@
-.container {
-    padding: 16px;
+:host {
+  padding-left: 0 !important;
+}
+
+.box-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.box {
+  width: 99.5%;
+  height: 85vh;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  //background-color: #333;
+  background: linear-gradient(145deg, #333, #444);
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.loading-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.analysis-details {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+mat-card {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+mat-card-title {
+  color: #4285f4;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+mat-card-subtitle {
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+a {
+  color: #4285f4;
+}
+
+mat-card-content {
+  size: 2rem;
+}
+
+label {
+  color: #4285f4;
+  text-decoration: none;
+  font-size: 2.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.divider {
+  width: 100%;
+  border-top: 1px solid #fff;
+  margin: 20px 0;
+}
+
+.coming-soon {
+  text-align: center;
+  color: #fff;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.coming-soon .title {
+  font-size: 1.5rem;
+  color: #4285f4;
+  margin: 10px 0;
+}
+
+.coming-soon .pulsate {
+  font-size: 3rem;
+  color: #4285f4;
+  background-color: #a8b2c2;
+  padding: 20px;
+  border-radius: 10px;
+  animation: pulsate 1.5s infinite;
+  margin-top: 5vh;
+}
+
+@keyframes pulsate {
+  0% {
+    opacity: 1;
   }
-  
-  .loading-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
+  50% {
+    opacity: 0.5;
   }
-  
-  .analysis-details {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #f9f9f9;
+  100% {
+    opacity: 1;
   }
-  
+}
+
+button {
+  margin-top: 10px; 
+  border-style: solid;
+}
+
+.delete-container {
+  align-self: flex-start;
+  margin-top: 20px;
+  margin-right: 10px;
+}
+
+.delete-icon {
+  color: #f44336;
+  cursor: pointer;
+  margin-left: auto;
+  transition: color 0.3s;
+}
+
+.delete-icon:hover {
+  color: #d32f2f;
+  background-color: #a8b2c2;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+}

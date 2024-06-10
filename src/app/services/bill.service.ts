@@ -7,14 +7,15 @@ import { DELETE_ITEM_CARD_TABLE,
          LOAD_MAIN_TABLE_DATA, 
          BILLS_SERVICE_BILL_REGISTER, 
          GENERATE_AI_ADVICE,
-         GET_AI_ADVICE} from 'src/environments/environment';
+         GET_AI_ADVICE,
+         DELETE_AI_ANALYSIS} from 'src/environments/environment';
 import {
     HttpClient,
     HttpErrorResponse,
     HttpParams
 } from '@angular/common/http';
 import { BillRegisterRequest, CardTableDataResponse, GenericResponse, MainTableDataResponse } from '../model/main.model';
-import { AiAdviceRequest, Analysis } from '../model/ai-advice.model';
+import { AiAdviceRequest, AiAdviceResponse, Analysis } from '../model/ai-advice.model';
 
 @Injectable({ providedIn: 'root' })
 export class BillService {
@@ -130,11 +131,10 @@ export class BillService {
         return promessa;
     };
 
-    generateAiAdvice(aiAdviceRequest: AiAdviceRequest): Promise<GenericResponse> {
-        console.log(aiAdviceRequest);
-        const promessa = new Promise<GenericResponse>((resolve, reject) => {
+    generateAiAdvice(aiAdviceRequest: AiAdviceRequest): Promise<AiAdviceResponse> {
+        const promessa = new Promise<AiAdviceResponse>((resolve, reject) => {
             this.http.post(GENERATE_AI_ADVICE, aiAdviceRequest, { responseType: 'json' }).subscribe({
-                next: (result: GenericResponse) => {
+                next: (result: AiAdviceResponse) => {
                     resolve(result);
                 },
                 error: (e: HttpErrorResponse) => {
@@ -158,4 +158,19 @@ export class BillService {
         });
         return promessa;
     };
+
+    deleteAiAnalysis(analysisId: number): Promise<GenericResponse> {
+        const promessa = new Promise<GenericResponse>((resolve, reject) => {
+            const requestUrl = DELETE_AI_ANALYSIS+"/"+analysisId;
+            this.http.delete(requestUrl, { responseType: 'json' }).subscribe({
+                next: (result: GenericResponse) => {
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
+                    reject(e);
+                },
+            });
+        });
+        return promessa;
+    }
 }

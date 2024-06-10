@@ -40,11 +40,16 @@
     <label style="margin-left: 10px; margin-bottom: 10px;">Lista de análises</label>
 
     <div class="analysis-list">
-        <mat-card *ngFor="let analysis of filteredAnalyses" (click)="viewAnalysis(analysis.id)" class="analysis-item">
-            <mat-card-title>Tipo da análise: {{ analysis.analysisType }}</mat-card-title>
-            <mat-card-subtitle>Período da análise: {{ analysis.startDate }} - {{ analysis.finishDate }}</mat-card-subtitle>
-            <mat-card-subtitle>Data de solicitação: {{ analysis.date }}</mat-card-subtitle>
-            <mat-card-subtitle>Nível de criatividade utilizado: {{ analysis.temperature*100 }}%</mat-card-subtitle>
+        <mat-card *ngFor="let analysis of filteredAnalyses" class="analysis-item">
+          <div class="analysis-content" (click)="viewAnalysis(analysis.id)">
+            <mat-card-subtitle><a>Tipo da análise: </a>{{ analysis.analysisType }}</mat-card-subtitle>
+            <mat-card-subtitle><a>Período da análise: </a>{{ analysis.startDate }} - {{ analysis.finishDate }}</mat-card-subtitle>
+            <mat-card-subtitle><a>Data de solicitação: </a>{{ analysis.date }}</mat-card-subtitle>
+            <mat-card-subtitle><a>Nível de criatividade utilizado: </a>{{ analysis.temperature*100 }}%</mat-card-subtitle>
+          </div>
+          <div>
+            <mat-icon class="delete-icon" (click)="deleteAnalysis(analysis.id)">delete</mat-icon>
+          </div>
         </mat-card>
     </div>
 </div>

@@ -20,6 +20,10 @@ export interface AiAdviceRequest {
     finishDate: string;
 }
 
+export interface AiAdviceResponse {
+    id: number;
+}
+
 export interface Analysis {
     id: number;
     analysisType: string;

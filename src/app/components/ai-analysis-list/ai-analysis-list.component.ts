@@ -6,6 +6,7 @@ import { BillService } from 'src/app/services/bill.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { DateAdapter } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { DialogMessage } from 'src/app/services/dialog-message.service';
 
 @Component({
   selector: 'app-ai-analysis-list',
@@ -36,7 +37,8 @@ export class AiAnalysisListComponent implements OnInit {
     private billService: BillService, 
     private themeService: ThemeService, 
     private dateAdapter: DateAdapter<any>, 
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private dialogMessage: DialogMessage) {
     this.filterForm = this.formBuilder.group({
       date: new FormControl(null),
       type: new FormControl(''),
@@ -89,7 +91,7 @@ export class AiAnalysisListComponent implements OnInit {
       this.filteredAnalyses = data;
     })
     .catch((error) => {
-      
+      this.dialogMessage.openErrorDialog(error.message);
     })
     .finally(() => {
       this.isLoading();
@@ -122,5 +124,20 @@ export class AiAnalysisListComponent implements OnInit {
 
   openAiAnalysisDialog(): void {
     this.router.navigate(['fs/main', 'ai-analysis-dialog']);
+  }
+
+  deleteAnalysis(analysisId: number): void {
+    this.isLoading();
+    this.billService.deleteAiAnalysis(analysisId).then((result) => {
+      this.dialogMessage.openInfoDialog("Análise "+analysisId+" excluída com sucesso");
+    })
+    .catch((error) => {
+      this.dialogMessage.openErrorDialog(error.message);
+    })
+    .finally(() => {
+      this.isLoading();
+    });
+
+    this.loadAnalysis();
   }
 }

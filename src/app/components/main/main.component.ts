@@ -99,9 +99,6 @@ export class MainComponent implements OnInit, AfterViewInit {
   totalLeft;
   totalPaid;
   currentlyAvailableIncome;
-  aiAdviceResult: string = "Obtenha dicas e insights gerados por IA do mês anterior";
-  isAiAdviceGenerated: boolean = false;
-  isAiAdviceExpanded: boolean = false;
   filterStatus: string = 'todos';
   analysisTypes: AnalysisType[] = [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL];
 
@@ -239,11 +236,6 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.syncCardAndMainTableExpenses();
     this.setStatusData();
     this.setTotals();
-    //this.getAiAdvice();
-  }
-
-  toggleAiAdviceExpand() {
-    this.isAiAdviceExpanded = !this.isAiAdviceExpanded;
   }
 
   onSelectDate(normalizedMonthAndYear: Date, datepicker: MatDatepicker<Date>) {
@@ -447,7 +439,6 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.syncCardAndMainTableExpenses();
     this.setStatusData();
     this.setTotals();
-    //this.getAiAdvice();
 
     this.cdRef.detectChanges();
   }
@@ -699,8 +690,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   generateAiAdviceCall(aiAdviceRequest: AiAdviceRequest): void {
     this.isLoading();
     this.billService.generateAiAdvice(aiAdviceRequest).then(result => {
-      this.aiAdviceResult = result.message;
-      this.isAiAdviceGenerated = true;
+      this.router.navigate(['fs/ai-analysis-detail', result.id]);
     }).catch(error => {
       this.dialogMessage.openErrorDialog(error.error.message);
     })
@@ -759,22 +749,6 @@ export class MainComponent implements OnInit, AfterViewInit {
     result.setMonth(result.getMonth() + months);
     return result;
   }
-
-  /*getAiAdvice() {
-    this.isLoading();
-    this.billService.getAiAdvice().then(result => {
-      this.aiAdviceResult = result.message;
-      this.isAiAdviceGenerated = true;
-      if(result.message.length == 0 || result.message == null) {
-        this.aiAdviceResult = "Obtenha dicas e insights gerados por IA do mês anterior";
-        this.isAiAdviceGenerated = false;
-      }
-      this.isLoading();
-    }).catch(error => {
-      this.dialogMessage.openErrorDialog(error.error.message);
-      this.isLoading();
-    })
-  }*/
 
   generateTableString(data: any[]): string {
     if (!data || data.length === 0) {

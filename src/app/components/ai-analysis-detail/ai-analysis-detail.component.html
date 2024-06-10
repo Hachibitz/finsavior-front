@@ -4,16 +4,28 @@
 
 <app-header-bar></app-header-bar>
 
-<div class="container">
+<div class="box">
   <mat-card *ngIf="loading" class="loading-card">
     <mat-spinner></mat-spinner>
   </mat-card>
 
-  <mat-card *ngIf="analysis">
-    <mat-card-title>Análise {{ analysis.analysisType }}</mat-card-title>
-    <mat-card-subtitle>{{ analysis.startDate }} - {{ analysis.finishDate }}</mat-card-subtitle>
-    <mat-card-content class="analysis-details">
+  <mat-card class="matcard" *ngIf="analysis">
+    <div>
+      <mat-card-title>Análise {{ analysis.analysisType }}</mat-card-title>
+        <mat-card-subtitle><a>Período da análise: </a>{{ analysis.startDate }} - {{ analysis.finishDate }}</mat-card-subtitle>
+        <mat-card-content class="analysis-details">
       <p>{{ analysis.resultAnalysis }}</p>
     </mat-card-content>
+    <button mat-button (click)="returnToListPage()">Voltar</button>
+    </div>
+    <div class="delete-container">
+      <mat-icon class="delete-icon" (click)="deleteAnalysis(analysis.id)">delete</mat-icon>
+    </div>
   </mat-card>
+
+  <div class="divider"></div>
+  <div class="coming-soon">
+    <p class="title">Gráficos analíticos gerados pela IA</p>
+    <p class="pulsate">Em breve!!</p>
+  </div>
 </div>

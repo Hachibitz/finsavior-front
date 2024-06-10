@@ -37,21 +37,63 @@
 }
 
 .analysis-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
   cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s;
-
-  &:hover {
-    background-color: #f0f0f0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-
   margin-left: 10px;
   margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.analysis-item:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  mat-card-subtitle {
+    color: #333;
+  }
+}
+
+.analysis-content {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 40px);
+}
+
+.mat-card-subtitle {
+  flex-grow: 1;
+}
+
+.delete-icon {
+  color: #f44336;
+  cursor: pointer;
+  margin-left: auto;
+  transition: color 0.3s;
+  align-self: center;
+}
+
+.delete-icon:hover {
+  color: #d32f2f;
+  background-color: #333;
+  border-radius: 10px;
+  transition: background-color 0.3s;
 }
 
 label {
   color: #4285f4;
   text-decoration: none;
-  font-size: 1.5em;
+  font-size: 2.5em;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+a {
+  color: #4285f4;
+}
+
+button {
+  border-style: solid;
 }
