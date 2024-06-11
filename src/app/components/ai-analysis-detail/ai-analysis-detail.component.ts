@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Analysis } from 'src/app/model/ai-advice.model';
 import { BillService } from 'src/app/services/bill.service';
 import { DialogMessage } from 'src/app/services/dialog-message.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: "app-ai-analysis-detail",
@@ -26,7 +28,8 @@ export class AiAnalysisDetailComponent implements OnInit {
     private billService: BillService,
     private themeService: ThemeService,
     private router: Router,
-    private dialogMessage: DialogMessage
+    private dialogMessage: DialogMessage,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -60,15 +63,25 @@ export class AiAnalysisDetailComponent implements OnInit {
   }
 
   deleteAnalysis(analysisId: number): void {
-    this.isLoading();
-    this.billService.deleteAiAnalysis(analysisId).then((result) => {
-      this.returnToListPage();
-      this.isLoading();
-    })
-    .catch((error) => {
-      this.dialogMessage.openErrorDialog(error.message);
-      this.isLoading();
-    })
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: null,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'Sim') {
+        this.isLoading();
+        this.billService.deleteAiAnalysis(analysisId).then((result) => {
+          this.returnToListPage();
+          this.isLoading();
+        })
+        .catch((error) => {
+          this.dialogMessage.openErrorDialog(error.message);
+          this.isLoading();
+        })
+      } else {
+
+      }
+    });
   }
   
   returnToListPage(): void {

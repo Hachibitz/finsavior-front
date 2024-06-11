@@ -7,6 +7,8 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { DateAdapter } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { DialogMessage } from 'src/app/services/dialog-message.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-ai-analysis-list',
@@ -38,7 +40,8 @@ export class AiAnalysisListComponent implements OnInit {
     private themeService: ThemeService, 
     private dateAdapter: DateAdapter<any>, 
     private formBuilder: FormBuilder,
-    private dialogMessage: DialogMessage) {
+    private dialogMessage: DialogMessage,
+    private dialog: MatDialog,) {
     this.filterForm = this.formBuilder.group({
       date: new FormControl(null),
       type: new FormControl(''),
@@ -127,17 +130,27 @@ export class AiAnalysisListComponent implements OnInit {
   }
 
   deleteAnalysis(analysisId: number): void {
-    this.isLoading();
-    this.billService.deleteAiAnalysis(analysisId).then((result) => {
-      this.dialogMessage.openInfoDialog("Análise "+analysisId+" excluída com sucesso");
-    })
-    .catch((error) => {
-      this.dialogMessage.openErrorDialog(error.message);
-    })
-    .finally(() => {
-      this.isLoading();
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: null,
     });
 
-    this.loadAnalysis();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'Sim') {
+        this.isLoading();
+        this.billService.deleteAiAnalysis(analysisId).then((result) => {
+          this.dialogMessage.openInfoDialog("Análise "+analysisId+" excluída com sucesso");
+        })
+        .catch((error) => {
+          this.dialogMessage.openErrorDialog(error.message);
+        })
+        .finally(() => {
+          this.isLoading();
+        });
+
+        this.loadAnalysis();
+      } else {
+
+      }
+    });
   }
 }
