@@ -61,6 +61,7 @@ import { AiAnalysisDetailComponent } from './components/ai-analysis-detail/ai-an
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { TermsAndPrivacyDialogComponent } from './components/terms-and-privacy-dialog/terms-and-privacy-dialog.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     PaypalComponent,
     AiAnalysisListComponent,
     AiAnalysisDetailComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    TermsAndPrivacyDialogComponent
   ],
   imports: [
     BrowserModule,
