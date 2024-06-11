@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Confirmação</h1>
+<div mat-dialog-content>
+  <mat-label>
+    Tem certeza?
+  </mat-label>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="'cancel'" (click)="onCancel()">Cancelar</button>
+  <button mat-button [mat-dialog-close]="" (click)="onSave()">Sim</button>
+</div>

@@ -60,6 +60,7 @@ import { AiAnalysisListComponent } from './components/ai-analysis-list/ai-analys
 import { AiAnalysisDetailComponent } from './components/ai-analysis-detail/ai-analysis-detail.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AiAdvicesComponent,
     PaypalComponent,
     AiAnalysisListComponent,
-    AiAnalysisDetailComponent
+    AiAnalysisDetailComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,

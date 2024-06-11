@@ -28,6 +28,7 @@ import { Plan, PlanCoverageEnum, PlanEnum } from 'src/app/model/payment.model';
 import { StringBuilder } from 'src/app/utils/StringBuilder';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -547,36 +548,66 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   deleteItemFromMainTable(item): void {
-    this.isLoading();
-    this.billService.deleteItemFromMainTable(item.id).then(result => {
-      this.dialogMessage.openInfoDialog(result.message);
-  
-      if(item.Tipo == 'Passivo') {
-        this.rows.data = this.rows.data.filter(row => row.id !== item.id);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: null,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === "Sim") {
+        this.isLoading();
+        this.billService.deleteItemFromMainTable(item.id).then((result) => {
+            this.dialogMessage.openInfoDialog(result.message);
+
+            if (item.Tipo == "Passivo") {
+              this.rows.data = this.rows.data.filter(
+                (row) => row.id !== item.id
+              );
+            } else {
+              this.incomeRows.data = this.incomeRows.data.filter(
+                (incomeRow) => incomeRow.id !== item.id
+              );
+            }
+
+            this.refreshTablesAndStatus(this.rows);
+            this.isLoading();
+          })
+          .catch((error) => {
+            this.dialogMessage.openErrorDialog("Falha: " + error);
+            this.isLoading();
+          });
       } else {
-        this.incomeRows.data = this.incomeRows.data.filter(incomeRow => incomeRow.id !== item.id);
+
       }
-  
-      this.refreshTablesAndStatus(this.rows);
-      this.isLoading();
-    }).catch(error => {
-      this.dialogMessage.openErrorDialog('Falha: ' + error);
-      this.isLoading();
     });
   }
   
   deleteItemFromCardTable(item): void {
-    this.isLoading();
-    this.billService.deleteItemFromCardTable(item.id).then(result => {
-      this.dialogMessage.openInfoDialog(result.message);
-  
-      this.cardRows.data = this.cardRows.data.filter(row => row.id !== item.id);
-  
-      this.refreshTablesAndStatus(this.cardRows);
-      this.isLoading();
-    }).catch(error => {
-      this.dialogMessage.openErrorDialog('Falha: ' + error);
-      this.isLoading();
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: null,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'Sim') {
+        this.isLoading();
+        this.billService
+          .deleteItemFromCardTable(item.id)
+          .then((result) => {
+            this.dialogMessage.openInfoDialog(result.message);
+
+            this.cardRows.data = this.cardRows.data.filter(
+              (row) => row.id !== item.id
+            );
+
+            this.refreshTablesAndStatus(this.cardRows);
+            this.isLoading();
+          })
+          .catch((error) => {
+            this.dialogMessage.openErrorDialog("Falha: " + error);
+            this.isLoading();
+          });
+      } else {
+
+      }
     });
   }
 
