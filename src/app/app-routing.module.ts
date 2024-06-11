@@ -8,6 +8,8 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { SuggestionPageComponent } from './components/suggestion-page/suggestion-page.component';
 import { PlansPageComponent } from './components/plans-page/plans-page.component';
 import { AiAdvicesComponent } from './components/ai-advices/ai-advices.component';
+import { AiAnalysisListComponent } from './components/ai-analysis-list/ai-analysis-list.component';
+import { AiAnalysisDetailComponent } from './components/ai-analysis-detail/ai-analysis-detail.component';
 
 
 const routes: Routes = [
@@ -18,6 +20,11 @@ const routes: Routes = [
   },
   {
     path: 'fs/main',
+    canActivate: [AuthGuard],
+    component: MainComponent
+  },
+  {
+    path: 'fs/main/:isRedirectToAiAnalysis',
     canActivate: [AuthGuard],
     component: MainComponent
   },
@@ -45,6 +52,14 @@ const routes: Routes = [
   {
     path: 'fs/ai-advices',
     component: AiAdvicesComponent
+  },
+  {
+    path: 'fs/ai-analysis-list',
+    component: AiAnalysisListComponent
+  },
+  {
+    path: 'fs/ai-analysis-detail/:id',
+    component: AiAnalysisDetailComponent
   }
 ];
 

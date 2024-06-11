@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class HeaderBarComponent implements OnInit {
     this.darkMode = this.themeService.checkDarkMode();
   }
 
-  constructor(private themeService: ThemeService) {
+  constructor(private themeService: ThemeService, private router: Router) {
 
   }
 
@@ -22,5 +23,9 @@ export class HeaderBarComponent implements OnInit {
     this.darkMode = sessionStorage.getItem('dark-mode') == 'true' ? true : false;
     const headerBar = document.getElementById('headerBar');
     headerBar.classList.toggle('dark-mode', this.darkMode);
+  }
+
+  navigateByUri(uri: string) {
+    this.router.navigate([uri]);
   }
 }

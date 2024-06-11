@@ -30,14 +30,16 @@ export class AiAdviceDialogComponent {
     showTicksValues: true,
     stepsArray: [
       { value: 0, legend: "Mais precisão" },
-      { value: 0.25},
-      { value: 0.5},
-      { value: 0.75},
-      { value: 1, legend: "Equilibrado" },
-      { value: 1.25 },
-      { value: 1.5 },
-      { value: 1.75 },
-      { value: 2, legend: "Mais criativo" }
+      { value: 0.1 },
+      { value: 0.2 },
+      { value: 0.3 },
+      { value: 0.4 },
+      { value: 0.5, legend: "Equilibrado" },
+      { value: 0.6 },
+      { value: 0.7 },
+      { value: 0.8 },
+      { value: 0.9 },
+      { value: 1, legend: "Mais criativo" }
     ],
     disabled: false
   };
@@ -64,10 +66,20 @@ export class AiAdviceDialogComponent {
 
   onSave() {
     if (this.form.valid) {
+      const analysisType = this.analysisTypes.filter(analysisType => analysisType.analysisTypeId == this.form.value.analysisType)[0];
+
+      const selectedDate = new Date(this.form.value.date);
+      const finishDate = new Date(selectedDate);
+      finishDate.setMonth(selectedDate.getMonth() + analysisType.period);
+      finishDate.setDate(finishDate.getDate() - 1);
+      finishDate.setHours(23,59,59);
+      selectedDate.setHours(0,0,0);
+
       const dialogData = {
         analysisTypeId: this.form.value.analysisType,
-        selectedDate: this.form.value.date,
-        temperature: this.temperatureSliderValue
+        selectedDate: selectedDate,
+        temperature: this.temperatureSliderValue,
+        finishDate: finishDate
       };
 
       this.dialogRef.close(dialogData);

@@ -25,7 +25,7 @@
     </div>
     <div class="dropdown-menu" *ngIf="dropdownOpen && isLoggedIn" (click)="stopPropagation($event)" (mouseleave)="toggleDropdown($event)">
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="http://localhost:4200/fs/account">Minha conta</a>
+        <a class="dropdown-item" href="javascript:void(0)" (click)="redirectToMyAccount()">Minha conta</a>
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Sair</a>
         <div class="dropdown-divider"></div>
     </div>

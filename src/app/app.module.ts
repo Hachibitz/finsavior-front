@@ -56,6 +56,10 @@ import { PaymentService } from './services/payment.service';
 import { LoadingService } from './services/loading-service';
 import { MatSliderModule } from '@angular/material/slider';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { AiAnalysisListComponent } from './components/ai-analysis-list/ai-analysis-list.component';
+import { AiAnalysisDetailComponent } from './components/ai-analysis-detail/ai-analysis-detail.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -73,7 +77,9 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     PlansPageComponent,
     AiAdviceDialogComponent,
     AiAdvicesComponent,
-    PaypalComponent
+    PaypalComponent,
+    AiAnalysisListComponent,
+    AiAnalysisDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -109,7 +115,9 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     MatRadioModule,
     NgxPayPalModule,
     MatSliderModule,
-    NgxSliderModule
+    NgxSliderModule,
+    MatCardModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     UserService, 

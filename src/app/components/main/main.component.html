@@ -242,26 +242,14 @@
     <div class="bottom-box-right">
       <div class="main">
         <div class="bottom-boxes">
-          <div class="ai-status-box" [class.expanded]="isAiAdviceExpanded">
-            <p>Dicas da IA</p>
-            <!--<h3 *ngIf="!isAiAdviceExpanded">{{ aiAdviceResult | slice:0:100 }}...</h3>
-            <h3 *ngIf="isAiAdviceExpanded">{{ aiAdviceResult }}</h3>-->
-            <h3>Ver conselhos e insights da IA</h3>
-            <!--<div *ngIf="isAiAdviceGenerated">
-              <button mat-icon-button class="obter-button" *ngIf="!isAiAdviceExpanded" (click)="toggleAiAdviceExpand()">
-                <mat-icon aria-label="Ver mais">expand_more</mat-icon>
-              </button>
-              <button mat-icon-button class="obter-button" *ngIf="isAiAdviceExpanded" (click)="toggleAiAdviceExpand()">
-                <mat-icon aria-label="Ver menos">expand_less</mat-icon>
-              </button>
-            </div>
-            <div *ngIf="!isAiAdviceGenerated">
-              <button mat-icon-button class="obter-button" (click)="generateAiAdvice()">
-                <mat-icon aria-label="Obter">cloud_download</mat-icon>
-              </button>
-            </div>-->
+          <div class="ai-status-box" [class.expanded]="false"> <!-- isAiAdviceExpanded? -->
             <div>
-              <button mat-icon-button class="obter-button" (click)="openAiAdviceDialog($event)">
+              <p>Dicas da IA</p>
+              <h3>Gerar conselhos e insights da IA</h3>
+            </div>
+            <div class="generate-analysis">
+              <a style="align-self: center;">Gerar</a>
+              <button mat-icon-button class="obter-button" (click)="openAiAdviceDialog()">
                 <mat-icon aria-label="Obter">cloud_download</mat-icon>
               </button>
             </div>
