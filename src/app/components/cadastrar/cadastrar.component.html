@@ -27,7 +27,10 @@
 
         <div class="checkbox">
           <input type="checkbox" id="terms" [(ngModel)]="agreement">
-          <label for="terms">Aceitar termos e condições</label>
+          <label for="terms">Declaro que li e aceito os 
+            <a href="javascript:void(0)" (click)="openTermsDialog()">Termos e Condições</a> e <br> a 
+            <a href="javascript:void(0)" (click)="openPrivacyDialog()">Política de Privacidade</a>
+          </label>
           <button class="btn-register" (click)="signUp()">Cadastrar</button>
         </div>
 
