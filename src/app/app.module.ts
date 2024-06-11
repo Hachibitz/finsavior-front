@@ -62,6 +62,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { TermsAndPrivacyDialogComponent } from './components/terms-and-privacy-dialog/terms-and-privacy-dialog.component';
+import { TermsAndPrivacyService } from './services/terms-and-privacy-service';
 
 @NgModule({
   declarations: [
@@ -133,6 +134,7 @@ import { TermsAndPrivacyDialogComponent } from './components/terms-and-privacy-d
     MatDialog, 
     AuthGuard,
     DialogMessage,
+    TermsAndPrivacyService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

@@ -22,6 +22,7 @@ export const BILL_SERVICE = "/bills";
 export const AUTH_SERVICE = "/auth";
 export const AI_ADVICE_SERVICE = "/ai-advice";
 export const PAYMENT_SERVICE = '/payment';
+export const TERMS_AND_PRIVACY_SERVICE = '/terms-and-privacy';
 
 export const SERVICE_LOGIN = URL_BASE_DEV + AUTH_SERVICE + '/login-auth';
 export const SIGNUP_SERVICE = URL_BASE_DEV + AUTH_SERVICE + '/signup';
@@ -44,3 +45,6 @@ export const CREATE_SUBSCRIPTION = URL_BASE_DEV + PAYMENT_SERVICE + '/create-sub
 
 export const CLIENT_ID = 'ARBQ9WR2ziMtCYL7jaVFixfJqueUZFrFx1W_tlWdqTCjJf8wSoST6DZrRq9JQb3tqvOVDHmJ9drge69f';
 export const CLIENT_SECRET = 'EL4A37GecMI5wji0sOuJ1MT8lQGR9PJzjZozSCxkBup3p1bih2A5irWjZWNSkFYaQURk5ZHbejWxdQPr';
+
+export const GET_TERMS = URL_BASE_DEV + TERMS_AND_PRIVACY_SERVICE + '/get-terms';
+export const GET_PRIVACY_POLICY = URL_BASE_DEV + TERMS_AND_PRIVACY_SERVICE + '/get-privacy-policy';
