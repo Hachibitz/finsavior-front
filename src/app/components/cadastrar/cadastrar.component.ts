@@ -4,6 +4,8 @@ import { SignUpRequest } from 'src/app/model/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { DialogMessage } from 'src/app/services/dialog-message.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TermsAndPrivacyDialogComponent } from '../terms-and-privacy-dialog/terms-and-privacy-dialog.component';
 
 @Component({
   selector: "app-cadastrar",
@@ -26,11 +28,24 @@ export class CadastrarComponent implements OnInit {
     private themeService: ThemeService,
     private authService: AuthService,
     private router: Router,
-    private dialogMessage: DialogMessage
+    private dialogMessage: DialogMessage,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.darkMode = this.themeService.checkDarkMode();
+  }
+
+  openTermsDialog() {
+    this.dialog.open(TermsAndPrivacyDialogComponent, {
+      data: { type: 'terms' }
+    });
+  }
+  
+  openPrivacyDialog() {
+    this.dialog.open(TermsAndPrivacyDialogComponent, {
+      data: { type: 'privacy' }
+    });
   }
 
   signUp() {

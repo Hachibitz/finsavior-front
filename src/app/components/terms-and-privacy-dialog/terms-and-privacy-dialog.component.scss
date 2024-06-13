@@ -1,0 +1,23 @@
+mat-dialog-content {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 20px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    /* Mantém as quebras de linha */
+}
+
+mat-dialog-title {
+    margin-bottom: 15px;
+}
+
+mat-label {
+    display: block;
+    margin-bottom: 20px;
+}
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}

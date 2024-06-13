@@ -61,6 +61,8 @@ import { AiAnalysisDetailComponent } from './components/ai-analysis-detail/ai-an
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { TermsAndPrivacyDialogComponent } from './components/terms-and-privacy-dialog/terms-and-privacy-dialog.component';
+import { TermsAndPrivacyService } from './services/terms-and-privacy-service';
 
 @NgModule({
   declarations: [
@@ -81,7 +83,8 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     PaypalComponent,
     AiAnalysisListComponent,
     AiAnalysisDetailComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    TermsAndPrivacyDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -131,6 +134,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     MatDialog, 
     AuthGuard,
     DialogMessage,
+    TermsAndPrivacyService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
