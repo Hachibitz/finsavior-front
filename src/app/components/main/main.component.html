@@ -86,11 +86,17 @@
                   <a>Total faltante: </a><label style="color: grey;">{{totalLeft}}R$</label>
                 </div>
               </div>
-              <div>
-                <a>Filtros: </a>
-                <button mat-button (click)="applyFilter('todos')">Todos</button>
-                <button mat-button (click)="applyFilter('pagos')">Pagos</button>
-                <button mat-button (click)="applyFilter('nao-pagos')">Não Pagos</button>
+              <div class="filter-and-situation-container">
+                <div>
+                  <a>Filtros: </a>
+                  <button mat-button (click)="applyFilter('todos')">Todos</button>
+                  <button mat-button (click)="applyFilter('pagos')">Pagos</button>
+                  <button mat-button (click)="applyFilter('nao-pagos')">Não Pagos</button>
+                </div>
+
+                <div class="current-situation" [ngStyle]="{'color': situationColor}" (mouseover)="showTooltip($event)">
+                  <span class="title" style="font-size: 1.1em;">Situação atual: </span>{{situation}}
+                </div>
               </div>
               <mat-table [dataSource]="rows" matSort>
                 <ng-container matColumnDef="Nome">
@@ -231,6 +237,10 @@
           <div class="status-box">
             <h3>Status atual</h3>
             <p>R$ {{liquidStatus.toFixed(2)}}</p>
+          </div>
+          <div class="status-box">
+            <h3>Saldo previsto</h3>
+            <p>R$ {{foreseenBalance.toFixed(2)}}</p>
           </div>
           <div class="status-box">
             <h3>Liquidez</h3>
