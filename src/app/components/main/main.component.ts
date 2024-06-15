@@ -96,10 +96,13 @@ export class MainComponent implements OnInit, AfterViewInit {
   cardBillDescription: string;
   liquidStatus: number = 0;
   liquidAndRightsStatus: number = 0;
+  foreseenBalance: number = 0;
   totalDebit;
   totalLeft;
   totalPaid;
   currentlyAvailableIncome;
+  situation: string;
+  situationColor: string;
   filterStatus: string = 'todos';
   analysisTypes: AnalysisType[] = [AnalysisTypeEnum.FREE, AnalysisTypeEnum.TRIMESTER, AnalysisTypeEnum.ANNUAL];
 
@@ -172,6 +175,62 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
 
     this.syncFormDataAndFields();
+  }
+
+  updateSituation() {
+    const percentage = (this.foreseenBalance / this.currentlyAvailableIncome) * 100;
+
+    if (this.foreseenBalance < 0) {
+      this.situation = 'Vermelho';
+      this.situationColor = 'red';
+    } else if (percentage >= 10) {
+      this.situation = 'Azul';
+      this.situationColor = 'blue';
+    } else {
+      this.situation = 'Amarelo';
+      this.situationColor = 'yellow';
+    }
+  }
+
+  showTooltip(event: MouseEvent) {
+    const tooltipText = {
+      'Azul': 'Saldo previsto maior que 10% do saldo disponível. Parabéns! Você está bem organizado com suas finanças. Faça uma análise de IA para te ajudar a se manter no Azul.',
+      'Amarelo': 'Ponto de atenção: saldo previsto positivo mas próximo de 0. Uma análise com a IA pode te ajudar a evitar desvios futuros.',
+      'Vermelho': 'Saldo previsto menor que 0. Faça uma análise com a IA, pode te ajudar!'
+    };
+  
+    const tooltip = document.createElement('div');
+    tooltip.style.position = 'absolute';
+    tooltip.style.backgroundColor = '#f9f9f9';
+    tooltip.style.border = '1px solid #ccc';
+    tooltip.style.padding = '5px';
+    tooltip.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    tooltip.style.zIndex = '1000'; 
+    tooltip.textContent = tooltipText[this.situation];
+    document.body.appendChild(tooltip);
+  
+    const tooltipWidth = tooltip.offsetWidth;
+    const tooltipHeight = tooltip.offsetHeight;
+    const pageWidth = window.innerWidth;
+    const pageHeight = window.innerHeight;
+  
+    let top = event.clientY + 10;
+    let left = event.clientX + 10;
+  
+    if (top + tooltipHeight > pageHeight) {
+      top = event.clientY - tooltipHeight - 10;
+    }
+  
+    if (left + tooltipWidth > pageWidth) {
+      left = event.clientX - tooltipWidth - 10;
+    }
+  
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${left}px`;
+  
+    event.target.addEventListener('mouseleave', () => {
+      document.body.removeChild(tooltip);
+    }, { once: true });
   }
 
   configureSorting() {
@@ -508,10 +567,10 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
 
     if(isCardBillPresent == 0) {
-      this.rows.data.push({ Nome: 'Cartão de crédito', Valor: 'R$ ' + creditCardTableAmount, Tipo: 'Passivo', Descricao: 'Soma da tabela de cartão de crédito', Data: this.formatData(this.billDate), Pago: localStorage.getItem("isCreditCardPaid") == "true" });
+      this.rows.data.push({ Nome: 'Cartão de crédito', Valor: 'R$ ' + creditCardTableAmount.toFixed(2), Tipo: 'Passivo', Descricao: 'Soma da tabela de cartão de crédito', Data: this.formatData(this.billDate), Pago: localStorage.getItem("isCreditCardPaid") == "true" });
     } else {
       let updatedRow = this.rows.data[cardBillIndex];
-      updatedRow.Valor = 'R$ ' + creditCardTableAmount;
+      updatedRow.Valor = 'R$ ' + creditCardTableAmount.toFixed(2);
     }
 
     this.rows.data = [...this.rows.data];
@@ -524,6 +583,9 @@ export class MainComponent implements OnInit, AfterViewInit {
 
     this.liquidStatus = this.currentlyAvailableIncome - this.totalPaid;
     this.liquidAndRightsStatus = this.getIncomeTotal() - this.totalDebit;
+    this.foreseenBalance = this.currentlyAvailableIncome - this.totalDebit;
+
+    this.updateSituation();
   }
 
   setTotals(): void {
