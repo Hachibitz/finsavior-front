@@ -10,6 +10,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 export class SuggestionPageComponent implements OnInit {
   darkMode: boolean = false;
   suggestionForm: FormGroup;
+  loading: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private themeService: ThemeService) { }
 
@@ -28,8 +29,10 @@ export class SuggestionPageComponent implements OnInit {
 
   submitSuggestion(): void {
     if (this.suggestionForm.valid) {
+      this.loading = true;
       console.log('Suggestion submitted:', this.suggestionForm.value);
       this.suggestionForm.reset();
+      this.loading = false;
     } else {
       console.log('Invalid form. Please check your inputs.');
     }

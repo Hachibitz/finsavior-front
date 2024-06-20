@@ -1,23 +1,39 @@
 <app-header-bar></app-header-bar>
-<div class="grid">
-  <div class="col-8" [class]="darkMode ? 'dark-mode' : ''">
-    <div class="box">
-      <div class="new-register">
-        <label>Usuário:</label>
-        <input class="input-box" type="text" placeholder="Usuário" [(ngModel)]="username">
+<div class="overlay" *ngIf="loading">
+  <div class="custom-loader"></div>
+</div>
 
-        <label>Senha:</label>
-        <input class="input-box" type="password" placeholder="Senha" [(ngModel)]="password">
+<div class="box" [class.dark-mode]="darkMode">
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
+      <form (ngSubmit)="login()">
+        <mat-form-field appearance="fill">
+          <mat-label>Usuário</mat-label>
+          <input matInput class="input-box" type="text" placeholder="Usuário" [(ngModel)]="username" name="username" required>
+          <mat-error *ngIf="!username">Usuário é obrigatório</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Senha</mat-label>
+          <input matInput class="input-box" type="password" placeholder="Senha" [(ngModel)]="password" name="password" required>
+          <mat-error *ngIf="!password">Senha é obrigatória</mat-error>
+        </mat-form-field>
 
         <div class="checkbox">
-          <input type="checkbox" id="terms" [(ngModel)]="rememberMe">
-          <label for="terms">Manter-me logado</label>
-          <button class="btn-register" (click)="login()">Login</button>
+          <input type="checkbox" id="rememberMe" [(ngModel)]="rememberMe" name="rememberMe">
+          <label for="rememberMe">Manter-me logado</label>
         </div>
 
-        <br>
-        <label class="register-link">Ainda não tem uma conta? <a href="javascript:void(0)" (click)="redirectToRegistration()">Cadastre-se</a></label>
-      </div>
-    </div>
-  </div>
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!username || !password">Login</button>
+        </div>
+
+        <div class="footer-details">
+          <label class="register-link">Ainda não tem uma conta? <a href="javascript:void(0)" (click)="redirectToRegistration()">Cadastre-se</a></label>
+          <a href="javascript:void(0)" (click)="redirectToForgottenPassword()">Esqueci minha senha</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

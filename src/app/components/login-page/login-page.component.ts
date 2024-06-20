@@ -10,22 +10,32 @@ import { DialogMessage } from 'src/app/services/dialog-message.service';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent implements OnInit{
+export class LoginPageComponent implements OnInit {
   loginRequest: LoginRequest;
   username: string;
   password: string;
-  isLoggedIn: boolean = false;
-  termsAcceptance: boolean;
   rememberMe: boolean;
   darkMode: boolean = false;
+  loading: boolean = false;
 
-  constructor(private themeService: ThemeService, private authService: AuthService, private router: Router, private dialogMessage: DialogMessage) { }
+  constructor(
+    private themeService: ThemeService, 
+    private authService: AuthService, 
+    private router: Router, 
+    private dialogMessage: DialogMessage
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.darkMode = this.themeService.checkDarkMode();
+    const isAuthenticated = await this.authService.isAuthenticated();
+
+    if(isAuthenticated) {
+      this.router.navigate(['fs/main']);
+    }
   }
 
   login(): void {
+    this.loading = true;
     this.loginRequest = {
       username: this.username,
       password: this.password,
@@ -33,13 +43,12 @@ export class LoginPageComponent implements OnInit{
     }
     
     this.authService.login(this.loginRequest).then((response) => {
-      this.isLoggedIn = true;
-      this.redirectToMain();
+      this.loading = false;
       this.dialogMessage.openInfoDialog('Login realizado com sucesso!');
-    })
-    .catch((error) => {
-      this.isLoggedIn = false;
-      this.dialogMessage.openErrorDialog('Erro no login: '+error);
+      this.router.navigate(['fs/main']);
+    }).catch((error) => {
+      this.loading = false;
+      this.dialogMessage.openErrorDialog('Erro no login: ' + error.message);
     })
   }
 
@@ -47,7 +56,7 @@ export class LoginPageComponent implements OnInit{
     this.router.navigate(['fs/cadastrar']);
   }
 
-  redirectToMain(): void {
-    this.router.navigate(['fs/main']);
+  redirectToForgottenPassword(): void {
+    this.router.navigate(['fs/forgotten-password']);
   }
 }

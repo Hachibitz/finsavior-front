@@ -104,4 +104,8 @@ export class LoginDropdownComponent implements OnInit{
   redirectToMyAccount(): void {
     this.router.navigate(['fs/account']);
   }
+
+  redirectToForgottenPassword(): void {
+    this.router.navigate(['fs/forgotten-password']);
+  }
 }

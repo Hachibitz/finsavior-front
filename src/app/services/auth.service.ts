@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { SERVICE_LOGIN, SIGNUP_SERVICE, VALIDATE_TOKEN_SERVICE } from 'src/environments/environment';
+import { PASSWORD_RESET, PASSWORD_RESET_REQUEST, SERVICE_LOGIN, SIGNUP_SERVICE, VALIDATE_TOKEN_SERVICE } from 'src/environments/environment';
 import {
     HttpClient,
     HttpErrorResponse
 } from '@angular/common/http';
 import { LoginRequest, SignUpRequest, SignUpResponse } from '../model/user.model';
 import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -66,6 +67,35 @@ export class AuthService {
         return promessa;
     }
 
+    resetPassword(token: string, newPassword: string): Promise<any> {
+        const promessa = new Promise<any>((resolve, reject) => {
+            this.http.post(PASSWORD_RESET, { token, newPassword }).subscribe({
+                next: (result: any) => {
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
+                    reject(e);
+                }
+            });
+        });
+        return promessa;
+    }
+
+    passwordRecovery(identifier: string): Promise<any> {
+        const url = PASSWORD_RESET_REQUEST+"?email="+identifier;
+        const promessa = new Promise<any>((resolve, reject) => {
+            this.http.post(url, null).subscribe({
+                next: (result: any) => {
+                    resolve(result);
+                },
+                error: (e: HttpErrorResponse) => {
+                    reject(e);
+                }
+            });
+        });
+        return promessa;
+    }
+
     async isAuthenticated(): Promise<boolean> {
         try {
           const result = await this.validateToken(this.getToken());
@@ -73,5 +103,5 @@ export class AuthService {
         } catch (error) {
           return false;
         }
-      }
+    }
 }
