@@ -10,6 +10,8 @@ import { PlansPageComponent } from './components/plans-page/plans-page.component
 import { AiAdvicesComponent } from './components/ai-advices/ai-advices.component';
 import { AiAnalysisListComponent } from './components/ai-analysis-list/ai-analysis-list.component';
 import { AiAnalysisDetailComponent } from './components/ai-analysis-detail/ai-analysis-detail.component';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
+import { PasswordForgottenComponent } from './components/password-forgotten/password-forgotten.component';
 
 
 const routes: Routes = [
@@ -43,23 +45,36 @@ const routes: Routes = [
   },
   {
     path: 'fs/suggestion',
+    canActivate: [AuthGuard],
     component: SuggestionPageComponent
   },
   {
     path: 'fs/plans',
+    canActivate: [AuthGuard],
     component: PlansPageComponent
   },
   {
     path: 'fs/ai-advices',
+    canActivate: [AuthGuard],
     component: AiAdvicesComponent
   },
   {
     path: 'fs/ai-analysis-list',
+    canActivate: [AuthGuard],
     component: AiAnalysisListComponent
   },
   {
     path: 'fs/ai-analysis-detail/:id',
+    canActivate: [AuthGuard],
     component: AiAnalysisDetailComponent
+  },
+  {
+    path: 'fs/reset-password/:token',
+    component: PasswordResetComponent
+  },
+  {
+    path: 'fs/forgotten-password',
+    component: PasswordForgottenComponent
   }
 ];
 

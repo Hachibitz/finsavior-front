@@ -63,6 +63,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { TermsAndPrivacyDialogComponent } from './components/terms-and-privacy-dialog/terms-and-privacy-dialog.component';
 import { TermsAndPrivacyService } from './services/terms-and-privacy-service';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
+import { PasswordForgottenComponent } from './components/password-forgotten/password-forgotten.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +86,9 @@ import { TermsAndPrivacyService } from './services/terms-and-privacy-service';
     AiAnalysisListComponent,
     AiAnalysisDetailComponent,
     ConfirmationDialogComponent,
-    TermsAndPrivacyDialogComponent
+    TermsAndPrivacyDialogComponent,
+    PasswordResetComponent,
+    PasswordForgottenComponent
   ],
   imports: [
     BrowserModule,

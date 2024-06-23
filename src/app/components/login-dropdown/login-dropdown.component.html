@@ -1,7 +1,7 @@
 <div class="dropdown" [class.show]="dropdownOpen" (click)="toggleDropdown($event)">
     <button class="dropdown-toggle" type="button">
       <img [src]="userProfilePicture || 'https://tds-images.thedailystar.net/sites/default/files/styles/amp_metadata_content_image_min_696px_wide/public/images/2022/10/14/ai_art_generator.png'" class="profile-picture" alt="Profile Picture">
-      <a>{{ userName }}</a>
+      <a>{{ userName || 'Usuário' }}</a>
     </button>
     <div class="dropdown-menu" *ngIf="dropdownOpen && !isLoggedIn" (click)="stopPropagation($event)" (mouseleave)="toggleDropdown($event)">
         <form class="px-4 py-3" (click)="preventClose($event)">
@@ -20,8 +20,8 @@
             <button type="submit" class="btn btn-primary" (click)="login()">Sign in</button>
         </form>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="javascript:void(0)">Forgot password?</a>
-        <a class="dropdown-item" href="javascript:void(0)" (click)="redirectToRegistration()">Create an account</a>
+        <a class="dropdown-item" href="javascript:void(0)" (click)="redirectToForgottenPassword()">Esqueceu sua senha?</a>
+        <a class="dropdown-item" href="javascript:void(0)" (click)="redirectToRegistration()">Crie uma conta</a>
     </div>
     <div class="dropdown-menu" *ngIf="dropdownOpen && isLoggedIn" (click)="stopPropagation($event)" (mouseleave)="toggleDropdown($event)">
         <div class="dropdown-divider"></div>
