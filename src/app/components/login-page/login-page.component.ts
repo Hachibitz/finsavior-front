@@ -12,16 +12,16 @@ import { DialogMessage } from 'src/app/services/dialog-message.service';
 })
 export class LoginPageComponent implements OnInit {
   loginRequest: LoginRequest;
-  username: string;
+  userLogin: string;
   password: string;
   rememberMe: boolean;
   darkMode: boolean = false;
   loading: boolean = false;
 
   constructor(
-    private themeService: ThemeService, 
-    private authService: AuthService, 
-    private router: Router, 
+    private themeService: ThemeService,
+    private authService: AuthService,
+    private router: Router,
     private dialogMessage: DialogMessage
   ) { }
 
@@ -37,11 +37,11 @@ export class LoginPageComponent implements OnInit {
   login(): void {
     this.loading = true;
     this.loginRequest = {
-      username: this.username,
+      userLogin: this.userLogin,
       password: this.password,
       rememberMe: this.rememberMe
     }
-    
+
     this.authService.login(this.loginRequest).then((response) => {
       this.loading = false;
       this.dialogMessage.openInfoDialog('Login realizado com sucesso!');
