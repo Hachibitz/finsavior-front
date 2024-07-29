@@ -12,7 +12,7 @@ import { DialogMessage } from 'src/app/services/dialog-message.service';
 })
 export class LoginPageComponent implements OnInit {
   loginRequest: LoginRequest;
-  username: string;
+  userLogin: string;
   password: string;
   rememberMe: boolean;
   darkMode: boolean = false;
@@ -37,7 +37,7 @@ export class LoginPageComponent implements OnInit {
   login(): void {
     this.loading = true;
     this.loginRequest = {
-      username: this.username,
+      userLogin: this.userLogin,
       password: this.password,
       rememberMe: this.rememberMe
     }

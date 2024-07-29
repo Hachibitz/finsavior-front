@@ -10,8 +10,8 @@
       <form (ngSubmit)="login()">
         <mat-form-field appearance="fill">
           <mat-label>Usuário</mat-label>
-          <input matInput class="input-box" type="text" placeholder="Usuário" [(ngModel)]="username" name="username" required>
-          <mat-error *ngIf="!username">Usuário é obrigatório</mat-error>
+          <input matInput class="input-box" type="text" placeholder="Usuário" [(ngModel)]="userLogin" name="username" required>
+          <mat-error *ngIf="!userLogin">Usuário é obrigatório</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -26,7 +26,7 @@
         </div>
 
         <div class="button-container">
-          <button mat-raised-button color="primary" type="submit" [disabled]="!username || !password">Login</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!userLogin || !password">Login</button>
         </div>
 
         <div class="footer-details">

@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 export class LoginDropdownComponent implements OnInit{
 
   loginRequest: LoginRequest;
-  username: string;
+  userLogin: string;
   password: string;
   rememberMe: boolean;
   isLoggedIn: boolean = false;
@@ -57,7 +57,7 @@ export class LoginDropdownComponent implements OnInit{
     this.dropdownOpen = !this.dropdownOpen;
 
     if (!this.dropdownOpen) {
-      this.username = '';
+      this.userLogin = '';
       this.password = '';
     }
   }
@@ -72,7 +72,7 @@ export class LoginDropdownComponent implements OnInit{
 
   login(): void {
     this.loginRequest = {
-      username: this.username,
+      userLogin: this.userLogin,
       password: this.password,
       rememberMe: this.rememberMe
     }
