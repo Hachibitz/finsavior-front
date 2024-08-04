@@ -91,7 +91,7 @@ export class PaypalComponent implements OnInit {
     this.loadingService.startLoading();
 
     this.paymentService.createSubscription(subscription).then((result) => {
-      this.dialogMessage.openInfoDialog("Sucesso na ativação do plano!");
+      this.dialogMessage.openInfoDialog("A ativação do plano será feita em breve!");
     }).catch ((error) => {
       this.dialogMessage.openErrorDialog(error.message);
     }).finally(() => {
