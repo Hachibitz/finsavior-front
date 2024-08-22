@@ -5,6 +5,8 @@ import { MainComponent } from '../main/main.component';
 import { UserService } from 'src/app/services/user.service';
 import { ChangeAccountPasswordRequest, DeleteAccountAndDataRequest, UploadProfilePictureRequest } from 'src/app/model/user.model';
 import { DialogMessage } from 'src/app/services/dialog-message.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-account',
@@ -40,7 +42,9 @@ export class MyAccountComponent implements OnInit{
     this.loadUserProfile();
   }
 
-  constructor(private headerBarComponent: HeaderBarComponent, private userService: UserService, private dialogMessage: DialogMessage) {
+  constructor(private headerBarComponent: HeaderBarComponent, private userService: UserService, 
+    private dialogMessage: DialogMessage, private authService: AuthService,
+    private router: Router) {
     
   }
 
@@ -103,13 +107,16 @@ export class MyAccountComponent implements OnInit{
 
     this.isLoading();
     this.userService.deleteAccountAndData(deleteAccountAndDataRequest).then(result => {
-      this.dialogMessage.openInfoDialog('Sucesso:' + result.message);
-      this.isLoading();
+      this.dialogMessage.openInfoDialog(result.message);
+      this.authService.logout();
+      this.router.navigate(['fs/login']);
     })
     .catch(error => {
-      this.dialogMessage.openErrorDialog('Error: ' + error.error);
+      this.dialogMessage.openErrorDialog(error.message);
+    })
+    .finally(() => {
       this.isLoading();
-    });;
+    });
   }
 
   changeAccountPassword() : void {
