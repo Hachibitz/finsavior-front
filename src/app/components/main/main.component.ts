@@ -389,21 +389,19 @@ export class MainComponent implements OnInit, AfterViewInit {
       data: null,
     });
 
+    const target = event.target as HTMLElement;
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'salvar') {
-        this.addRegisterMain(event);
-      } else {
-
+        target.id == 'recurrent-main' ? this.addRegisterMain(true) : this.addRegisterCard(true);
       }
     });
   }
 
-  addRegisterMain(event: Event) {
+  addRegisterMain(isRecurrent: boolean) {
     if(!this.isMainTableFormValid()) {
       return;
     }
 
-    const id = (event.target as HTMLElement).id;
     let billRegisterRequest: BillRegisterRequest = {
       id: null,
       billDate: this.formatData(this.billDate),
@@ -412,7 +410,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       billValue: this.billValue,
       billDescription: this.billDescription,
       billTable: this.tableTypes[0],
-      isRecurrent: id == 'recurrent' ? true : false,
+      isRecurrent: isRecurrent,
       paid: null
     };
 
@@ -430,7 +428,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       });
   }
 
-  addRegisterCard() {
+  addRegisterCard(isRecurrent: boolean) {
     if(!this.isCardTableFormValid()) {
       return;
     }
@@ -443,7 +441,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       billValue: this.cardBillValue,
       billDescription: this.cardBillDescription,
       billTable: this.tableTypes[1],
-      isRecurrent: false,
+      isRecurrent: isRecurrent,
       paid: null
     };
 
